@@ -1,0 +1,106 @@
+<div class="page-pad">
+
+  <div style="margin-bottom:28px;">
+    <h1 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#fff;margin:0;" class="sm:text-3xl">Presupuesto</h1>
+    <p style="color:rgba(255,255,255,0.4);font-size:0.875rem;margin-top:4px;font-family:'DM Mono',monospace;">{{ monthLabel() }}</p>
+  </div>
+
+  <!-- Set Budget + Summary: stacked on mobile, side by side on desktop -->
+  <div class="budget-grid" style="display:grid;gap:24px;margin-bottom:24px;">
+
+    <!-- Set Budget -->
+    <div class="card" style="padding:24px;">
+      <h3 style="font-size:0.75rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.05em;margin:0 0 24px;">
+        Presupuesto Global
+      </h3>
+      <label style="display:block;font-size:0.875rem;color:rgba(255,255,255,0.6);margin-bottom:8px;">
+        Presupuesto Mensual (COP)
+      </label>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <input class="input-field" style="flex:1;min-width:160px;" type="number" placeholder="Ej: 3000000" min="0"
+          [value]="budgetInput() ?? ''" (input)="budgetInput.set(+$any($event.target).value)">
+        <button class="btn-primary" (click)="saveBudget()" style="white-space:nowrap;">Guardar</button>
+      </div>
+      <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:8px;font-family:'DM Mono',monospace;">
+        Presupuesto actual: <span style="color:#2dd4bf;">{{ budgetFmt() }}</span>
+      </p>
+
+      <div style="margin-top:24px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.875rem;margin-bottom:8px;">
+          <span style="color:rgba(255,255,255,0.5);">Utilizado</span>
+          <span style="font-family:'DM Mono',monospace;color:#fff;">{{ pct() | number:'1.0-1' }}%</span>
+        </div>
+        <div class="progress-track" style="height:12px;">
+          <div class="progress-fill" [style.width.%]="pct()"
+            [style.background]="pct() > 90 ? '#ef4444' : pct() > 70 ? '#f59e0b' : 'linear-gradient(to right,#0d9488,#5eead4)'">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="card" style="padding:24px;">
+      <h3 style="font-size:0.75rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.05em;margin:0 0 24px;">
+        Resumen del Mes
+      </h3>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;justify-content:space-between;">
+          <span style="color:rgba(255,255,255,0.5);font-size:0.875rem;">Ingresos del mes</span>
+          <span style="font-family:'DM Mono',monospace;color:#4ade80;">{{ totalIncome() }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="color:rgba(255,255,255,0.5);font-size:0.875rem;">Gastos del mes</span>
+          <span style="font-family:'DM Mono',monospace;color:#f87171;">{{ totalExpense() }}</span>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;display:flex;justify-content:space-between;">
+          <span style="color:rgba(255,255,255,0.5);font-size:0.875rem;">Balance</span>
+          <span style="font-family:'DM Mono',monospace;font-weight:600;" [style.color]="isPositive() ? '#2dd4bf' : '#f87171'">{{ balance() }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="color:rgba(255,255,255,0.5);font-size:0.875rem;">Disponible del presupuesto</span>
+          <span style="font-family:'DM Mono',monospace;color:#fff;">{{ remaining() }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Limits -->
+  <div class="card" style="padding:24px;">
+    <h3 style="font-size:0.75rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.05em;margin:0 0 24px;">
+      Límites por Categoría (opcional)
+    </h3>
+    <div style="display:flex;flex-direction:column;gap:24px;">
+      @for (cat of expenseCategories(); track cat.id) {
+        @let spent = getCatSpent(cat.id);
+        @let limit = getCatLimit(cat.id);
+        @let pct   = getCatLimitPct(cat.id);
+        <div>
+          <!-- Category row: name left, spent + input right (wraps on very small screens) -->
+          <div class="flex flex-wrap items-center justify-between gap-3" style="margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <mat-icon style="font-size:16px;width:16px;height:16px;" [style.color]="cat.color">{{ cat.icon }}</mat-icon>
+              <span style="font-size:0.875rem;color:rgba(255,255,255,0.7);">{{ cat.name }}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-family:'DM Mono',monospace;font-size:0.75rem;color:rgba(255,255,255,0.4);">{{ formatCOP(spent) }}</span>
+              <input class="input-field" type="number"
+                style="width:130px;padding:6px 10px;font-size:0.8rem;text-align:right;font-family:'DM Mono',monospace;"
+                [value]="limit ?? ''" (change)="setCatLimit(cat.id, $event)" placeholder="Límite COP" min="0">
+            </div>
+          </div>
+          @if (limit) {
+            <div class="progress-track">
+              <div class="progress-fill" [style.width.%]="pct"
+                [style.background]="pct > 90 ? '#ef4444' : pct > 70 ? '#f59e0b' : 'linear-gradient(to right,' + cat.color + 'aa,' + cat.color + ')'">
+              </div>
+            </div>
+            <p style="font-size:0.7rem;color:rgba(255,255,255,0.3);font-family:'DM Mono',monospace;margin-top:4px;">
+              {{ pct | number:'1.0-0' }}% del límite
+            </p>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+</div>

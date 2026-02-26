@@ -1,0 +1,47 @@
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <!-- SVG Circle -->
+  <div style="position:relative;display:inline-flex;align-items:center;justify-content:center;">
+    <svg width="160" height="160" viewBox="0 0 160 160" style="transform:rotate(-90deg)">
+      <defs>
+        <linearGradient id="grad-ok" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#0d9488" />
+          <stop offset="100%" stop-color="#5eead4" />
+        </linearGradient>
+        <linearGradient id="grad-warn" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#d97706" />
+          <stop offset="100%" stop-color="#fbbf24" />
+        </linearGradient>
+        <linearGradient id="grad-danger" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#dc2626" />
+          <stop offset="100%" stop-color="#f87171" />
+        </linearGradient>
+      </defs>
+      <!-- Track -->
+      <circle cx="80" cy="80" [attr.r]="radius" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12" />
+      <!-- Fill -->
+      <circle cx="80" cy="80" [attr.r]="radius" fill="none" [attr.stroke]="strokeColor" stroke-width="12"
+        stroke-linecap="round" [attr.stroke-dasharray]="circumference" [attr.stroke-dashoffset]="offset"
+        style="transition:stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)" />
+    </svg>
+
+    <!-- Center label -->
+    <div style="position:absolute;text-align:center;">
+      <p style="font-family:'DM Mono',monospace;font-size:1.875rem;font-weight:700;color:#fff;margin:0;">
+        {{ percentage | number:'1.0-0' }}%
+      </p>
+      <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin:4px 0 0;">utilizado</p>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div style="width:100%;margin-top:16px;display:flex;flex-direction:column;gap:8px;">
+    <div style="display:flex;justify-content:space-between;font-size:0.875rem;">
+      <span style="color:rgba(255,255,255,0.5);">Gastado</span>
+      <span style="font-family:'DM Mono',monospace;color:#f87171;">{{ spent }}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:0.875rem;">
+      <span style="color:rgba(255,255,255,0.5);">Disponible</span>
+      <span style="font-family:'DM Mono',monospace;color:#2dd4bf;">{{ remaining }}</span>
+    </div>
+  </div>
+</div>

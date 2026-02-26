@@ -1,0 +1,50 @@
+<div class="page-pad">
+
+  <div style="margin-bottom:28px;">
+    <h1 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#fff;margin:0;" class="sm:text-3xl">Ajustes</h1>
+    <p style="color:rgba(255,255,255,0.4);font-size:0.875rem;margin-top:4px;font-family:'DM Mono',monospace;">Configuración de la aplicación</p>
+  </div>
+
+  <div style="max-width:480px;display:flex;flex-direction:column;gap:16px;">
+
+    <div class="card" style="padding:24px;">
+      <h3 style="font-size:0.75rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.05em;margin:0 0 24px;">
+        Gestión de Datos
+      </h3>
+
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <button class="btn-primary" style="width:100%;justify-content:center;" (click)="exportData()">
+          <mat-icon style="font-size:18px;width:18px;height:18px;">download</mat-icon> Exportar datos JSON
+        </button>
+
+        <button (click)="triggerImport()" style="width:100%;display:flex;align-items:center;gap:8px;padding:10px 24px;
+            background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+            border-radius:10px;color:rgba(255,255,255,0.5);cursor:pointer;font-family:'Sora',sans-serif;
+            font-size:0.9rem;transition:all .2s;"
+          onmouseover="this.style.borderColor='#14b8a6';this.style.color='#fff'"
+          onmouseout="this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='rgba(255,255,255,0.5)'">
+          <mat-icon style="font-size:18px;width:18px;height:18px;">upload</mat-icon> Importar datos JSON
+        </button>
+        <input type="file" id="import-input" accept=".json" style="display:none;" (change)="onImport($event)">
+
+        <button (click)="clearData()" class="btn-danger"
+          style="width:100%;padding:10px;display:flex;align-items:center;justify-content:center;gap:6px;">
+          <mat-icon style="font-size:16px;width:16px;height:16px;">delete_forever</mat-icon> Borrar todos los datos
+        </button>
+      </div>
+    </div>
+
+    <div class="card" style="padding:24px;">
+      <h3 style="font-size:0.75rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.05em;margin:0 0 16px;">
+        Acerca de
+      </h3>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.875rem;margin:0;">Finance Tracker v1.0</p>
+      <p style="color:rgba(255,255,255,0.3);font-size:0.75rem;margin:4px 0 0;font-family:'DM Mono',monospace;">
+        Desarrollado con ❤️ por
+        <a href="https://juliopoveda.com" target="_blank" title="Hi Everyone!, I'm Julio Poveda a Senior .NET Developer from Medellin, Colombia.">Julio Poveda</a>
+      </p>
+      <app-icon class="text-red-600" [icon]="'heart'" [size]="14" />
+    </div>
+
+  </div>
+</div>

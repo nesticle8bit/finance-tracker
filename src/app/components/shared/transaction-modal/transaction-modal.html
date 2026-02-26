@@ -1,0 +1,123 @@
+<div class="modal-box">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+    <h2 style="font-size:1.125rem;font-weight:600;color:#fff;margin:0;">{{ title }}</h2>
+    <button style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.4);display:flex;"
+      (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Type Tabs -->
+  @if (!isEdit) {
+  <div
+    style="display:flex;gap:8px;margin-bottom:20px;padding:4px;background:rgba(255,255,255,0.04);border-radius:12px;">
+    <button class="tab-btn" [class.active]="activeTab === 'expense'" (click)="setTab('expense')">
+      <mat-icon style="font-size:16px;width:16px;height:16px;">arrow_upward</mat-icon> Gasto
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'income'" (click)="setTab('income')">
+      <mat-icon style="font-size:16px;width:16px;height:16px;">arrow_downward</mat-icon> Ingreso
+    </button>
+  </div>
+  } @else {
+  <div style="margin-bottom:20px;">
+    <span class="badge" [class.badge-income]="activeTab === 'income'" [class.badge-expense]="activeTab === 'expense'"
+      style="font-size:0.8rem;padding:4px 12px;">
+      {{ activeTab === 'income' ? '↓ Ingreso' : '↑ Gasto' }}
+    </span>
+  </div>
+  }
+
+  <!-- Form -->
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <div>
+      <label
+        style="display:block;font-size:0.7rem;color:rgba(255,255,255,0.5);margin-bottom:6px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;">Fecha</label>
+      <app-date-picker [(value)]="form.date" />
+    </div>
+
+    <div>
+      <label
+        style="display:block;font-size:0.7rem;color:rgba(255,255,255,0.5);margin-bottom:6px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;">Descripción</label>
+      <input class="input-field" type="text" [(ngModel)]="form.desc" placeholder="Ej: Almuerzo, Salario...">
+    </div>
+
+    <div>
+      <label
+        style="display:block;font-size:0.7rem;color:rgba(255,255,255,0.5);margin-bottom:6px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;">
+        Monto (COP)
+      </label>
+
+      <input class="input-field" type="number" [(ngModel)]="form.amount" placeholder="0" min="0">
+    </div>
+
+    <div style="position:relative;">
+      <label
+        style="display:block;font-size:0.7rem;color:rgba(255,255,255,0.5);margin-bottom:6px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;">Categoría</label>
+
+      <button type="button" (click)="catOpen = !catOpen" style="width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;
+                     background:rgba(255,255,255,0.06);border:1px solid;
+                     border-radius:10px;cursor:pointer;transition:border .2s;text-align:left;"
+        [style.border-color]="catOpen ? '#14b8a6' : 'rgba(255,255,255,0.12)'">
+        @if (selectedCat) {
+        <div
+          style="width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"
+          [style.background]="selectedCat.color + '25'">
+          <mat-icon style="font-size:13px;width:13px;height:13px;" [style.color]="selectedCat.color">{{ selectedCat.icon
+            }}</mat-icon>
+        </div>
+        <span [style.color]="selectedCat.color"
+          style="font-size:0.9rem;font-family:'Sora',sans-serif;font-weight:500;flex:1;">
+          {{ selectedCat.name }}
+        </span>
+        } @else {
+        <span style="color:rgba(255,255,255,0.3);font-size:0.9rem;flex:1;">Seleccionar categoría...</span>
+        }
+        <mat-icon style="font-size:18px;width:18px;height:18px;color:rgba(255,255,255,0.3);transition:transform .2s;"
+          [style.transform]="catOpen ? 'rotate(180deg)' : 'rotate(0)'">expand_more</mat-icon>
+      </button>
+
+      @if (catOpen) {
+      <div style="position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:200;
+                    background:#1c1c1e;border:1px solid rgba(255,255,255,0.1);border-radius:12px;
+                    overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.5);">
+        @for (cat of filteredCategories; track cat.id) {
+        <button type="button" (click)="selectCat(cat)" style="width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;
+                           border:none;cursor:pointer;transition:background .15s;"
+          [style.background]="form.categoryId === cat.id ? 'rgba(20,184,166,0.12)' : 'transparent'"
+          onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+          <div
+            style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"
+            [style.background]="cat.color + '25'">
+            <mat-icon style="font-size:15px;width:15px;height:15px;" [style.color]="cat.color">{{ cat.icon }}</mat-icon>
+          </div>
+          <span style="font-size:0.875rem;font-family:'Sora',sans-serif;font-weight:500;flex:1;"
+            [style.color]="form.categoryId === cat.id ? cat.color : 'rgba(255,255,255,0.8)'">
+            {{ cat.name }}
+          </span>
+          @if (form.categoryId === cat.id) {
+          <mat-icon style="font-size:16px;width:16px;height:16px;color:#14b8a6;margin-left:auto;">check</mat-icon>
+          }
+        </button>
+        }
+      </div>
+      <div style="position:fixed;inset:0;z-index:199;" (click)="catOpen = false"></div>
+      }
+    </div>
+  </div>
+
+  <!-- Botones -->
+  <div style="display:flex;gap:12px;margin-top:24px;">
+    <button (click)="close()" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);
+                   background:transparent;color:rgba(255,255,255,0.5);cursor:pointer;
+                   font-family:'Sora',sans-serif;font-size:0.9rem;">
+      Cancelar
+    </button>
+
+    <button class="btn-primary" style="flex:2;justify-content:center;" (click)="save()">
+      <mat-icon style="font-size:18px;width:18px;height:18px;">
+        {{ isEdit ? 'save' : 'check' }}
+      </mat-icon>
+      {{saveLabel}}
+    </button>
+  </div>
+</div>
