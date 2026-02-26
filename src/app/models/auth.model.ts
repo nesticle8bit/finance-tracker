@@ -14,3 +14,13 @@ export interface AuthUser {
   email: string;
   name: string;
 }
+
+export interface UpdateProfileRequest {
+  name: string;
+  email: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}

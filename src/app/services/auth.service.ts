@@ -2,7 +2,7 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { AuthUser, LoginRequest, RegisterRequest } from '../models/auth.model';
+import { AuthUser, LoginRequest, RegisterRequest, UpdateProfileRequest, ChangePasswordRequest } from '../models/auth.model';
 import { environment } from '../../environments/environment';
 import { ApiResponse } from '../models/base/api-response.model';
 
@@ -49,6 +49,21 @@ export class AuthService {
   async register(credentials: RegisterRequest): Promise<void> {
     await firstValueFrom(
       this.http.post<ApiResponse<string>>(`${API}/api/auth/register`, credentials),
+    );
+  }
+
+  async updateProfile(req: UpdateProfileRequest): Promise<void> {
+    const res = await firstValueFrom(
+      this.http.put<ApiResponse<AuthUser>>(`${API}/api/auth/profile`, req),
+    );
+    if (res.data) {
+      this._setSession(this.token()!, res.data);
+    }
+  }
+
+  async changePassword(req: ChangePasswordRequest): Promise<void> {
+    await firstValueFrom(
+      this.http.post<ApiResponse<null>>(`${API}/api/auth/change-password`, req),
     );
   }
 

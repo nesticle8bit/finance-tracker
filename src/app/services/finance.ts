@@ -250,28 +250,36 @@ export class FinanceService {
   }
 
   // ── Data management (settings page) ────────────────────────────────────────
-  exportData(): void {
-    this.storage.export({
-      budget: this._budget(),
-      categoryLimits: this._categoryLimits(),
-      categories: this._categories(),
-      transactions: this._transactions(),
-    });
-  }
-
-  async importData(file: File): Promise<void> {
-    const data = await this.storage.import(file);
-    this._transactions.set(data.transactions);
-    this._currentMonthTxns.set(
-      data.transactions.filter((t) => t.date.startsWith(this.currentMonthKey())),
+  async exportJson(): Promise<void> {
+    const blob = await firstValueFrom(
+      this.http.get(`${API}/api/export/json`, { responseType: 'blob' }),
     );
-    this._categories.set(data.categories);
-    this._budget.set(data.budget);
-    this._categoryLimits.set(data.categoryLimits);
+    this._downloadBlob(blob, 'finance-tracker.json');
   }
 
-  clearData(): void {
-    this._reset();
+  async exportCsv(): Promise<void> {
+    const blob = await firstValueFrom(
+      this.http.get(`${API}/api/export/csv`, { responseType: 'blob' }),
+    );
+    this._downloadBlob(blob, 'finance-tracker.csv');
+  }
+
+  async importJson(file: File): Promise<void> {
+    const form = new FormData();
+    form.append('file', file);
+    await firstValueFrom(
+      this.http.post<ApiResponse<null>>(`${API}/api/import`, form),
+    );
+    await this.loadAll();
+  }
+
+  private _downloadBlob(blob: Blob, filename: string): void {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   // ── Utils ──────────────────────────────────────────────────────────────────
