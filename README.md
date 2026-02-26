@@ -1,59 +1,170 @@
-# FinanceControl
+# Finance Tracker
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.9.
+> Aplicación web de control financiero personal — construida con **Angular 20**, **Tailwind CSS** y un backend **ASP.NET Core**.
 
-## Development server
+---
 
-To start a local development server, run:
+## ✨ Características
+
+| Módulo | Descripción |
+|---|---|
+| **Dashboard** | KPIs del mes (presupuesto, ingresos, gastos, balance), gráfico de barras diarias, gastos por categoría y transacciones recientes |
+| **Transacciones** | Historial completo con filtros por tipo, categoría, mes y búsqueda. Vista tabla en desktop, tarjetas en móvil |
+| **Categorías** | CRUD de categorías de ingresos y gastos con ícono y color personalizados |
+| **Presupuesto** | Presupuesto mensual global y límites individuales por categoría con barras de progreso |
+| **Ajustes** | Exportar/importar datos en JSON |
+| **Autenticación** | Login con JWT — cada usuario ve únicamente sus propios datos |
+| **Responsive** | Diseño adaptado para móvil, tablet y escritorio con sidebar deslizable en móvil |
+
+---
+
+## 🖥️ Stack tecnológico
+
+**Frontend**
+- [Angular 20](https://angular.dev) — standalone components, Signals, zoneless
+- [Tailwind CSS](https://tailwindcss.com) — utilidades CSS
+- [Angular Material](https://material.angular.io) — componentes UI
+- [@tabler/icons](https://tabler.io/icons) — sistema de íconos SVG
+
+**Backend** *(repositorio separado)*
+- ASP.NET Core — REST API con autenticación JWT
+- Patrón de respuesta genérico `ApiResponse<T>`
+
+**Infraestructura**
+- Docker + Docker Compose — despliegue en contenedores
+- Nginx — servidor de archivos estáticos + proxy inverso a la API
+
+---
+
+## 🚀 Inicio rápido (desarrollo local)
+
+### Requisitos
+- Node.js 20+
+- Angular CLI `npm i -g @angular/cli`
+- Backend corriendo en `http://localhost:5197`
 
 ```bash
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/finance-tracker.git
+cd finance-tracker
+
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Abre `http://localhost:4200` en el navegador.
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🐳 Despliegue con Docker
 
-```bash
-ng generate component component-name
+### Variables de entorno
+
+Crea un archivo `.env` en la raíz del proyecto:
+
+```env
+DB_PASSWORD=TuPasswordSegura123!
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Levantar los servicios
 
 ```bash
-ng generate --help
+docker compose up -d --build
 ```
 
-## Building
+La aplicación estará disponible en `http://tu-servidor:1995`.
 
-To build the project run:
+### Arquitectura de red
 
-```bash
-ng build
+```
+Navegador → :1995 → Nginx
+                      ├── /          → Angular SPA (index.html)
+                      ├── /api/*     → proxy → backend:8080
+                      └── *.js/css   → archivos estáticos (caché 1 año)
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Nginx actúa como proxy inverso hacia el backend, por lo que **no hay configuración de URL en el frontend para producción** ni problemas de CORS.
 
-## Running unit tests
+---
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 📁 Estructura del proyecto
 
-```bash
-ng test
+```
+src/
+├── app/
+│   ├── components/
+│   │   ├── layout/
+│   │   │   ├── sidebar/          # Barra lateral con navegación
+│   │   │   └── topbar/           # Barra superior móvil
+│   │   └── shared/
+│   │       ├── icon/             # Sistema de íconos Tabler SVG
+│   │       ├── kpi-card/         # Tarjeta de indicador clave
+│   │       ├── category-bar/     # Barra de progreso por categoría
+│   │       ├── circular-progress/# Indicador circular de presupuesto
+│   │       ├── transaction-modal/# Modal de nueva/editar transacción
+│   │       ├── category-modal/   # Modal de nueva/editar categoría
+│   │       ├── date-picker/      # Selector de fecha personalizado
+│   │       └── toast/            # Notificaciones
+│   ├── core/
+│   │   ├── guards/               # AuthGuard
+│   │   ├── interceptors/         # JWT interceptor
+│   │   └── services/             # LayoutService
+│   ├── models/                   # Interfaces TypeScript
+│   ├── pages/
+│   │   ├── dashboard/
+│   │   ├── transactions/
+│   │   ├── categories/
+│   │   ├── budget/
+│   │   ├── settings/
+│   │   └── login/
+│   └── services/
+│       ├── auth.service.ts       # Estado de autenticación (Signals)
+│       ├── finance.ts            # Datos financieros y llamadas a API
+│       └── toast.service.ts
+├── environments/
+│   ├── environment.ts            # Desarrollo
+│   └── environment.prod.ts      # Producción
+└── styles.scss                   # Estilos globales y tokens de diseño
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## 📡 API Endpoints
 
-```bash
-ng e2e
+| Método | Ruta | Descripción |
+|---|---|---|
+| `POST` | `/api/auth/login` | Iniciar sesión |
+| `POST` | `/api/auth/register` | Registrar usuario |
+| `GET` | `/api/auth/me` | Usuario actual |
+| `GET` | `/api/transactions` | Listar transacciones |
+| `POST` | `/api/transactions` | Crear transacción |
+| `PUT` | `/api/transactions/:id` | Actualizar transacción |
+| `DELETE` | `/api/transactions/:id` | Eliminar transacción |
+| `GET` | `/api/categories` | Listar categorías |
+| `POST` | `/api/categories` | Crear categoría |
+| `PUT` | `/api/categories/:id` | Actualizar categoría |
+| `DELETE` | `/api/categories/:id` | Eliminar categoría |
+| `GET` | `/api/budget` | Obtener presupuesto |
+| `POST` | `/api/budget` | Guardar presupuesto |
+| `GET` | `/api/budget/limits` | Obtener límites por categoría |
+| `POST` | `/api/budget/limits` | Guardar límite de categoría |
+
+Todas las respuestas siguen el formato:
+
+```json
+{
+  "status": 200,
+  "errors": null,
+  "data": { }
+}
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 👨‍💻 Autor
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+**Julio Poveda** — Senior .NET Developer · Medellín, Colombia
+[juliopoveda.com](https://juliopoveda.com)
