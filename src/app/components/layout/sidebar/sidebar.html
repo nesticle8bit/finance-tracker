@@ -1,4 +1,4 @@
-<aside class="sidebar flex flex-col py-6">
+<aside class="sidebar flex flex-col py-6" [class.sidebar--open]="layout.navOpen()">
 
   <!-- Logo row (+ mobile close button) -->
   <div style="padding: 0 24px; margin-bottom: 32px;">
@@ -7,18 +7,19 @@
         <div style="width:32px;height:32px;border-radius:8px;background:#14b8a6;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
           <mat-icon style="color:#000;font-size:18px;width:18px;height:18px;">trending_up</mat-icon>
         </div>
+
         <span [routerLink]="['/']"
-          style="cursor:pointer;font-family:'Playfair Display',serif;font-size:1.125rem;font-weight:700;color:#fff;">
+          style="margin-left:.5rem;cursor:pointer;font-family:'Playfair Display',serif;font-size:1.125rem;font-weight:700;color:#fff;">
           Finance Tracker
         </span>
       </div>
 
       <!-- Close button — only visible on mobile -->
       <button
-        class="lg:hidden"
+        class="sidebar-close-btn"
         (click)="layout.close()"
         style="background:none;border:none;cursor:pointer;padding:4px;border-radius:8px;
-               color:rgba(255,255,255,0.4);display:flex;align-items:center;transition:color .2s;"
+               color:rgba(255,255,255,0.4);align-items:center;transition:color .2s;"
         onmouseover="this.style.color='#fff'"
         onmouseout="this.style.color='rgba(255,255,255,0.4)'">
         <mat-icon style="font-size:20px;width:20px;height:20px;">close</mat-icon>

@@ -18,7 +18,6 @@ interface NavItem {
   standalone: true,
   imports: [CommonModule, RouterModule, RouterLinkActive, MatIconModule],
   templateUrl: './sidebar.html',
-  host: { '[class.sidebar--open]': 'layout.navOpen()' },
 })
 export class SidebarComponent {
   finance = inject(FinanceService);
