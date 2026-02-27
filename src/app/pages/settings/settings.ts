@@ -5,30 +5,27 @@ import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
 import { FinanceService } from '../../services/finance';
 import { ToastService } from '../../services/toast.service';
-import { IconComponent } from '../../components/shared/icon/icon.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, IconComponent, MatTooltipModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatTooltipModule],
   templateUrl: './settings.html',
 })
 export class SettingsComponent implements OnInit {
-  private auth    = inject(AuthService);
+  private auth = inject(AuthService);
   private finance = inject(FinanceService);
-  private toast   = inject(ToastService);
+  private toast = inject(ToastService);
 
-  // ── Profile ────────────────────────────────────────────────────────────────
-  profileName  = signal('');
+  profileName = signal('');
   profileEmail = signal('');
   savingProfile = signal(false);
-  profileError  = signal<string | null>(null);
+  profileError = signal<string | null>(null);
 
   readonly profileDirty = computed(() => {
     const u = this.auth.currentUser();
-    return this.profileName() !== (u?.name ?? '') ||
-           this.profileEmail() !== (u?.email ?? '');
+    return this.profileName() !== (u?.name ?? '') || this.profileEmail() !== (u?.email ?? '');
   });
 
   ngOnInit(): void {
@@ -42,7 +39,7 @@ export class SettingsComponent implements OnInit {
     this.savingProfile.set(true);
     try {
       await this.auth.updateProfile({
-        name:  this.profileName(),
+        name: this.profileName(),
         email: this.profileEmail(),
       });
       this.toast.success('Perfil actualizado ✓');
@@ -53,17 +50,17 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  // ── Password ───────────────────────────────────────────────────────────────
-  currentPwd   = signal('');
-  newPwd       = signal('');
-  confirmPwd   = signal('');
-  savingPwd    = signal(false);
+  currentPwd = signal('');
+  newPwd = signal('');
+  confirmPwd = signal('');
+  savingPwd = signal(false);
   passwordError = signal<string | null>(null);
 
-  readonly passwordValid = computed(() =>
-    this.currentPwd().length > 0 &&
-    this.newPwd().length >= 6 &&
-    this.newPwd() === this.confirmPwd(),
+  readonly passwordValid = computed(
+    () =>
+      this.currentPwd().length > 0 &&
+      this.newPwd().length >= 6 &&
+      this.newPwd() === this.confirmPwd(),
   );
 
   async changePassword(): Promise<void> {
@@ -76,7 +73,7 @@ export class SettingsComponent implements OnInit {
     try {
       await this.auth.changePassword({
         currentPassword: this.currentPwd(),
-        newPassword:     this.newPwd(),
+        newPassword: this.newPwd(),
       });
       this.currentPwd.set('');
       this.newPwd.set('');
@@ -89,10 +86,9 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  // ── Data ──────────────────────────────────────────────────────────────────
   exportingJson = signal(false);
-  exportingCsv  = signal(false);
-  importing     = signal(false);
+  exportingCsv = signal(false);
+  importing = signal(false);
 
   async exportJson(): Promise<void> {
     this.exportingJson.set(true);

@@ -19,7 +19,7 @@ const DEFAULT_CATEGORY_IDS = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c
 export class FinanceService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
-  private storage = inject(StorageService); // kept for export / import
+  private storage = inject(StorageService);
 
   // ── State ───────────────────────────────────────────────────────────────────
   // _currentMonthTxns: always the current calendar month — powers KPIs & dashboard
@@ -152,9 +152,7 @@ export class FinanceService {
       this._budget.set(parseFloat(cached));
     }
 
-    const res = await firstValueFrom(
-      this.http.get<ApiResponse<BudgetDto>>(`${API}/api/budget`),
-    );
+    const res = await firstValueFrom(this.http.get<ApiResponse<BudgetDto>>(`${API}/api/budget`));
     const amount = res.data?.amount ?? 0;
     this._budget.set(amount);
     if (amount > 0) {
@@ -195,9 +193,7 @@ export class FinanceService {
   }
 
   async deleteTransaction(id: string): Promise<void> {
-    await firstValueFrom(
-      this.http.delete<ApiResponse<null>>(`${API}/api/transactions/${id}`),
-    );
+    await firstValueFrom(this.http.delete<ApiResponse<null>>(`${API}/api/transactions/${id}`));
     this._transactions.update((list) => list.filter((t) => t.id !== id));
     this._currentMonthTxns.update((list) => list.filter((t) => t.id !== id));
   }
@@ -213,24 +209,18 @@ export class FinanceService {
   }
 
   async updateCategory(c: Category): Promise<void> {
-    await firstValueFrom(
-      this.http.put<ApiResponse<Category>>(`${API}/api/categories/${c.id}`, c),
-    );
+    await firstValueFrom(this.http.put<ApiResponse<Category>>(`${API}/api/categories/${c.id}`, c));
     this._categories.update((list) => list.map((x) => (x.id === c.id ? c : x)));
   }
 
   async deleteCategory(id: string): Promise<void> {
-    await firstValueFrom(
-      this.http.delete<ApiResponse<null>>(`${API}/api/categories/${id}`),
-    );
+    await firstValueFrom(this.http.delete<ApiResponse<null>>(`${API}/api/categories/${id}`));
     this._categories.update((list) => list.filter((c) => c.id !== id));
   }
 
   // ── Budget ─────────────────────────────────────────────────────────────────
   async setBudget(amount: number): Promise<void> {
-    await firstValueFrom(
-      this.http.put<ApiResponse<null>>(`${API}/api/budget`, { amount }),
-    );
+    await firstValueFrom(this.http.put<ApiResponse<null>>(`${API}/api/budget`, { amount }));
     this._budget.set(amount);
     localStorage.setItem(BUDGET_CACHE_KEY, String(amount));
   }
@@ -279,9 +269,7 @@ export class FinanceService {
   async importJson(file: File): Promise<void> {
     const form = new FormData();
     form.append('file', file);
-    await firstValueFrom(
-      this.http.post<ApiResponse<null>>(`${API}/api/import`, form),
-    );
+    await firstValueFrom(this.http.post<ApiResponse<null>>(`${API}/api/import`, form));
     await this.loadAll();
   }
 
@@ -301,8 +289,18 @@ export class FinanceService {
 
   getMonthLabel(date: Date = new Date()): string {
     const months = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
     ];
     return `${months[date.getMonth()]} ${date.getFullYear()}`;
   }
