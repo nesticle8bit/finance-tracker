@@ -20,8 +20,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans:    ['Sora', 'sans-serif'],
-        mono:    ['DM Mono', 'monospace'],
+        sans: ['Sora', 'sans-serif'],
+        mono: ['DM Mono', 'monospace'],
         display: ['Playfair Display', 'serif'],
       },
       colors: {
@@ -35,7 +35,7 @@ module.exports = {
       },
       animation: {
         'slide-left': 'slideLeft 0.3s ease',
-        'slide-up':   'slideUp 0.25s ease',
+        'slide-up': 'slideUp 0.25s ease',
       },
     },
   },
