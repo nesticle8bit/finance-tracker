@@ -1,52 +1,38 @@
 <aside class="sidebar flex flex-col py-6" [class.sidebar--open]="layout.navOpen()">
 
   <!-- Logo row (+ mobile close button) -->
-  <div style="padding: 0 24px; margin-bottom: 32px;">
+  <div class="sidebar-logo">
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div style="width:32px;height:32px;border-radius:8px;background:#14b8a6;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          <mat-icon style="color:#000;font-size:18px;width:18px;height:18px;">trending_up</mat-icon>
+        <div class="logo-icon">
+          <mat-icon class="icon-md">trending_up</mat-icon>
         </div>
-
-        <span [routerLink]="['/']"
-          style="margin-left:.5rem;cursor:pointer;font-family:'Playfair Display',serif;font-size:1.125rem;font-weight:700;color:#fff;">
-          Finance Tracker
-        </span>
+        <span [routerLink]="['/']" class="logo-text">Finance Tracker</span>
       </div>
 
       <!-- Close button — only visible on mobile -->
-      <button
-        class="sidebar-close-btn"
-        (click)="layout.close()"
-        style="background:none;border:none;cursor:pointer;padding:4px;border-radius:8px;
-               color:rgba(255,255,255,0.4);align-items:center;transition:color .2s;"
-        onmouseover="this.style.color='#fff'"
-        onmouseout="this.style.color='rgba(255,255,255,0.4)'">
-        <mat-icon style="font-size:20px;width:20px;height:20px;">close</mat-icon>
+      <button class="sidebar-close-btn" (click)="layout.close()">
+        <mat-icon class="icon-lg">close</mat-icon>
       </button>
     </div>
 
-    <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:4px;font-family:'DM Mono',monospace;margin-left:44px;">
+    <p class="mono text-dim" style="font-size:0.75rem;margin-top:4px;margin-left:44px;">
       {{ monthLabel() }}
     </p>
   </div>
 
   <!-- Nav -->
-  <nav style="flex:1;padding:0 8px;">
-    <p style="font-size:0.7rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.25);padding:0 16px;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.1em;">
-      Principal
-    </p>
+  <nav class="flex-1" style="padding:0 8px;">
+    <p class="nav-section-label">Principal</p>
 
     @for (item of navItems.slice(0, 4); track item.route) {
-    <a [routerLink]="item.route" routerLinkActive="active-nav" class="nav-item">
-      <mat-icon>{{ item.icon }}</mat-icon>
-      {{ item.label }}
-    </a>
+      <a [routerLink]="item.route" routerLinkActive="active-nav" class="nav-item">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        {{ item.label }}
+      </a>
     }
 
-    <p style="font-size:0.7rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.25);padding:0 16px;margin-top:24px;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.1em;">
-      Configuración
-    </p>
+    <p class="nav-section-label" style="margin-top:24px;">Configuración</p>
 
     <a [routerLink]="navItems[4].route" routerLinkActive="active-nav" class="nav-item">
       <mat-icon>{{ navItems[4].icon }}</mat-icon>
@@ -55,46 +41,31 @@
   </nav>
 
   <!-- Balance Card -->
-  <div style="padding: 0 16px; margin-top: 24px;">
+  <div class="sidebar-balance">
     <div class="balance-card">
-      <p style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:4px;">Saldo disponible</p>
-      <p style="font-family:'DM Mono',monospace;font-size:1.25rem;font-weight:700;"
-        [style.color]="isPositive ? '#2dd4bf' : '#f87171'">
-        {{ balance() }}
-      </p>
+      <p class="balance-card-label">Saldo disponible</p>
+      <p class="value-lg" [style.color]="isPositive ? '#2dd4bf' : '#f87171'">{{ balance() }}</p>
 
       <div class="progress-track" style="margin-top:12px;">
         <div class="progress-fill" [style.width.%]="pct()"
           [style.background]="pct() > 90 ? '#ef4444' : pct() > 70 ? '#f59e0b' : 'linear-gradient(to right,#0d9488,#5eead4)'">
         </div>
       </div>
-      <p style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:4px;font-family:'DM Mono',monospace;">
-        {{ pctLabel }}
-      </p>
+      <p class="balance-card-pct">{{ pctLabel }}</p>
     </div>
   </div>
 
   <!-- User + Logout -->
-  <div style="padding: 12px 16px 0; margin-top: 16px; border-top: 1px solid rgba(255,255,255,0.06);">
-    <div style="display:flex;align-items:center;justify-content:space-between;">
-      <div style="display:flex;align-items:center;gap:8px;overflow:hidden;">
-        <div style="width:28px;height:28px;border-radius:50%;background:rgba(20,184,166,0.15);
-                    display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          <mat-icon style="font-size:14px;width:14px;height:14px;color:#14b8a6;">person</mat-icon>
+  <div class="sidebar-user">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2" style="overflow:hidden;">
+        <div class="user-avatar">
+          <mat-icon class="icon-xs text-teal">person</mat-icon>
         </div>
-        <span style="font-size:0.8rem;color:rgba(255,255,255,0.55);white-space:nowrap;
-                     overflow:hidden;text-overflow:ellipsis;font-family:'Sora',sans-serif;">
-          {{ userName() }}
-        </span>
+        <span class="user-name">{{ userName() }}</span>
       </div>
-      <button
-        (click)="logout()"
-        title="Cerrar sesión"
-        style="background:none;border:none;cursor:pointer;padding:4px;border-radius:6px;
-               color:rgba(255,255,255,0.3);display:flex;align-items:center;transition:color .2s;"
-        onmouseover="this.style.color='#f87171'"
-        onmouseout="this.style.color='rgba(255,255,255,0.3)'">
-        <mat-icon style="font-size:18px;width:18px;height:18px;">logout</mat-icon>
+      <button class="btn-logout" (click)="logout()" [matTooltip]="'Cerrar sesión'">
+        <mat-icon class="icon-md">logout</mat-icon>
       </button>
     </div>
   </div>

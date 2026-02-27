@@ -6,6 +6,7 @@ import { filter } from 'rxjs/operators';
 import { FinanceService } from '../../../services/finance';
 import { AuthService } from '../../../services/auth.service';
 import { LayoutService } from '../../../core/services/layout.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 interface NavItem {
   label: string;
@@ -16,26 +17,26 @@ interface NavItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, RouterLinkActive, MatIconModule],
+  imports: [CommonModule, RouterModule, RouterLinkActive, MatIconModule, MatTooltipModule],
   templateUrl: './sidebar.html',
 })
 export class SidebarComponent {
   finance = inject(FinanceService);
-  auth    = inject(AuthService);
-  layout  = inject(LayoutService);
+  auth = inject(AuthService);
+  layout = inject(LayoutService);
 
   navItems: NavItem[] = [
-    { label: 'Dashboard',      icon: 'dashboard',      route: '/dashboard' },
-    { label: 'Transacciones',  icon: 'receipt_long',   route: '/transactions' },
-    { label: 'Categorías',     icon: 'category',       route: '/categories' },
-    { label: 'Presupuesto',    icon: 'savings',         route: '/budget' },
-    { label: 'Ajustes',        icon: 'tune',            route: '/settings' },
+    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
+    { label: 'Transacciones', icon: 'receipt_long', route: '/transactions' },
+    { label: 'Categorías', icon: 'category', route: '/categories' },
+    { label: 'Presupuesto', icon: 'savings', route: '/budget' },
+    { label: 'Ajustes', icon: 'tune', route: '/settings' },
   ];
 
   monthLabel = computed(() => this.finance.getMonthLabel());
-  balance    = computed(() => this.finance.formatCOP(this.finance.balance()));
-  pct        = computed(() => this.finance.budgetUsedPct());
-  userName   = computed(() => this.auth.currentUser()?.name ?? '');
+  balance = computed(() => this.finance.formatCOP(this.finance.balance()));
+  pct = computed(() => this.finance.budgetUsedPct());
+  userName = computed(() => this.auth.currentUser()?.name ?? '');
 
   get pctLabel(): string {
     return `${Math.round(this.pct())}% del presupuesto usado`;
@@ -51,7 +52,7 @@ export class SidebarComponent {
   /** Close the mobile drawer on every route change */
   constructor(router: Router) {
     router.events
-      .pipe(filter(e => e instanceof NavigationEnd))
+      .pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe(() => this.layout.close());
   }
 }

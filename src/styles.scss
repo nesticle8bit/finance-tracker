@@ -507,16 +507,22 @@ app-kpi-card {
 }
 
 // Dashboard: 1-col stack on mobile → 2-col on tablet → 4-col on desktop
-// Handled via inline style grid-template-columns:repeat(2,1fr)
-// Extra columns unlocked at lg breakpoint:
-@media (min-width: 1024px) {
-  .kpi-grid {
-    grid-template-columns: repeat(4, 1fr) !important;
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
 // Dashboard: 1-col on mobile → 1+2 cols on tablet+
 .dash-grid-1-2 {
+  display: grid;
+  gap: 24px;
+  margin-bottom: 24px;
   grid-template-columns: 1fr;
 
   @media (min-width: 768px) {
@@ -526,6 +532,8 @@ app-kpi-card {
 
 // Dashboard: 1-col on mobile → 2-col on tablet+
 .dash-grid-1-1 {
+  display: grid;
+  gap: 24px;
   grid-template-columns: 1fr;
 
   @media (min-width: 768px) {
@@ -535,6 +543,9 @@ app-kpi-card {
 
 // Budget: 1-col on mobile → 2-col on tablet+
 .budget-grid {
+  display: grid;
+  gap: 24px;
+  margin-bottom: 24px;
   grid-template-columns: 1fr;
 
   @media (min-width: 768px) {
@@ -558,3 +569,653 @@ app-kpi-card {
   @media (min-width: 640px) { padding: 24px; }
   @media (min-width: 1024px) { padding: 32px; }
 }
+
+// Card padding variants
+.card-p    { padding: 24px; }
+.card-p-sm { padding: 20px; }
+.card-p-xs { padding: 16px; }
+
+// Flex helpers
+.flex-min  { flex: 1; min-width: 0; }
+.card-flex { display: flex; flex-direction: column; gap: 12px; }
+
+// ── 14. Typography ────────────────────────────────────────────────────────────
+
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+
+  &--lg { font-size: 1.75rem; }
+}
+
+.page-subtitle {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.875rem;
+  margin-top: 4px;
+  font-family: 'DM Mono', monospace;
+}
+
+.card-title {
+  font-size: 0.75rem;
+  font-family: 'DM Mono', monospace;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 6px;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.text-muted   { color: rgba(255, 255, 255, 0.5); }
+.text-dim     { color: rgba(255, 255, 255, 0.3); }
+.text-faint   { color: rgba(255, 255, 255, 0.25); }
+.text-brand   { color: #2dd4bf; }
+.text-teal    { color: #14b8a6; }
+.text-income  { color: #4ade80; }
+.text-expense { color: #f87171; }
+.mono         { font-family: 'DM Mono', monospace; }
+
+.value-lg {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.value-xl {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+// ── 15. Layout helpers ────────────────────────────────────────────────────────
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.form-stack    { display: flex; flex-direction: column; gap: 16px; }
+.form-stack-sm { display: flex; flex-direction: column; gap: 12px; }
+
+.settings-stack {
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// ── 16. Icon sizes ────────────────────────────────────────────────────────────
+
+mat-icon.icon-xs { font-size: 14px !important; width: 14px !important; height: 14px !important; }
+mat-icon.icon-sm { font-size: 16px !important; width: 16px !important; height: 16px !important; }
+mat-icon.icon-md { font-size: 18px !important; width: 18px !important; height: 18px !important; }
+mat-icon.icon-lg { font-size: 20px !important; width: 20px !important; height: 20px !important; }
+
+.icon-box-xs {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+.icon-box-sm {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+.icon-box {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+.icon-box-md {
+  width: 40px; height: 40px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+// ── 17. Buttons ───────────────────────────────────────────────────────────────
+
+.btn-edit {
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.2);
+  color: #2dd4bf;
+  border-radius: 8px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all .2s;
+
+  &:hover { background: rgba(45, 212, 191, 0.2); }
+}
+
+.btn-icon-edit {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 8px; cursor: pointer;
+  background: rgba(45, 212, 191, 0.08);
+  border: 1px solid rgba(45, 212, 191, 0.15);
+  color: #2dd4bf;
+  transition: all .2s;
+  &:hover { background: rgba(45, 212, 191, 0.18); }
+}
+
+.btn-icon-delete {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 8px; cursor: pointer;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  transition: all .2s;
+  &:hover { background: rgba(239, 68, 68, 0.18); }
+}
+
+.btn-ghost-close {
+  background: none; border: none; cursor: pointer;
+  color: rgba(255, 255, 255, 0.4);
+  display: flex; align-items: center; padding: 0;
+  transition: color .2s;
+  &:hover { color: #fff; }
+}
+
+.btn-cancel {
+  flex: 1; padding: 10px; border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent; color: rgba(255, 255, 255, 0.5);
+  cursor: pointer; font-family: 'Sora', sans-serif; font-size: 0.9rem;
+  transition: all .2s;
+  &:hover { border-color: rgba(255, 255, 255, 0.25); color: #fff; }
+}
+
+.btn-teal-outline {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 10px 24px;
+  background: rgba(20, 184, 166, 0.08);
+  border: 1px solid rgba(20, 184, 166, 0.2);
+  border-radius: 10px; color: #2dd4bf; cursor: pointer;
+  font-family: 'Sora', sans-serif; font-size: 0.9rem; font-weight: 600;
+  transition: all .2s;
+  &:hover { background: rgba(20, 184, 166, 0.15); }
+}
+
+.btn-ghost-import {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 10px 24px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px; color: rgba(255, 255, 255, 0.5); cursor: pointer;
+  font-family: 'Sora', sans-serif; font-size: 0.9rem;
+  transition: all .2s;
+  &:hover { border-color: #14b8a6; color: #fff; }
+}
+
+.btn-icon-ghost {
+  background: rgba(255, 255, 255, 0.06); border: none; border-radius: 8px;
+  width: 32px; height: 32px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255, 255, 255, 0.6); transition: background .2s;
+  &:hover { background: rgba(255, 255, 255, 0.12); }
+}
+
+.btn-teal-sm {
+  background: rgba(20, 184, 166, 0.1);
+  border: 1px solid rgba(20, 184, 166, 0.2);
+  color: #14b8a6; border-radius: 8px; padding: 6px 16px; cursor: pointer;
+  font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 600;
+  transition: all .2s;
+  &:hover { background: rgba(20, 184, 166, 0.2); }
+}
+
+.btn-logout {
+  background: none; border: none; cursor: pointer;
+  padding: 4px; border-radius: 6px;
+  color: rgba(255, 255, 255, 0.3);
+  display: flex; align-items: center; transition: color .2s;
+  &:hover { color: #f87171; }
+}
+
+// ── 18. Modal header ─────────────────────────────────────────────────────────
+
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;
+}
+
+.modal-title { font-size: 1.125rem; font-weight: 600; color: #fff; margin: 0; }
+
+// ── 19. Toast ─────────────────────────────────────────────────────────────────
+
+.toast-container {
+  position: fixed; bottom: 24px; right: 24px; z-index: 2000;
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.toast-item {
+  display: flex; align-items: center; gap: 8px; padding: 12px 20px;
+  border-radius: 12px; background: #27272a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.875rem; animation: slideLeft .3s ease;
+  border-left-width: 2px;
+}
+
+.toast-close {
+  background: none; border: none; cursor: pointer;
+  color: rgba(255, 255, 255, 0.3); margin-left: 8px; display: flex;
+}
+
+// ── 20. Alert ─────────────────────────────────────────────────────────────────
+
+.alert-error {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 10px; padding: 10px 14px; color: #f87171;
+  font-size: 0.875rem; margin-bottom: 16px;
+}
+
+// ── 21. Sidebar extras ────────────────────────────────────────────────────────
+
+.sidebar-logo {
+  padding: 0 24px;
+  margin-bottom: 32px;
+}
+
+.sidebar-balance {
+  padding: 0 16px;
+  margin-top: 24px;
+}
+
+.sidebar-user {
+  padding: 12px 16px 0;
+  margin-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.nav-section-label {
+  font-size: 0.7rem; font-family: 'DM Mono', monospace;
+  color: rgba(255, 255, 255, 0.25);
+  padding: 0 16px; margin-bottom: 8px;
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+
+.logo-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: #14b8a6;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+
+  mat-icon { color: #000; }
+}
+
+.logo-text {
+  cursor: pointer; font-family: 'Playfair Display', serif;
+  font-size: 1.125rem; font-weight: 700; color: #fff; margin-left: 0.5rem;
+}
+
+.user-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(20, 184, 166, 0.15);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+.user-name {
+  font-size: 0.8rem; color: rgba(255, 255, 255, 0.55);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-family: 'Sora', sans-serif;
+  margin-left: .4rem;
+}
+
+// ── 22. Date picker ───────────────────────────────────────────────────────────
+
+.cal-dropdown {
+  position: absolute; top: calc(100% + 8px); left: 0; z-index: 300;
+  background: #1c1c1e; border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px; padding: 16px; width: 300px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+}
+
+.cal-nav {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
+}
+
+.cal-header-grid { display: grid; grid-template-columns: repeat(7, 1fr); margin-bottom: 8px; }
+.cal-grid        { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+
+.cal-weekday {
+  text-align: center; font-size: 0.7rem; font-family: 'DM Mono', monospace;
+  color: rgba(255, 255, 255, 0.3); padding: 4px 0;
+}
+
+.cal-footer {
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex; justify-content: center;
+}
+
+// ── 23. Dashboard charts ──────────────────────────────────────────────────────
+
+.daily-chart {
+  display: flex; align-items: flex-end; gap: 4px; height: 160px; padding: 0 8px;
+}
+
+.daily-labels { display: flex; gap: 4px; padding: 0 8px; margin-top: 4px; }
+
+.daily-label {
+  flex: 1; text-align: center;
+  color: rgba(255, 255, 255, 0.25);
+  font-family: 'DM Mono', monospace; font-size: 10px;
+}
+
+.daily-bar-col {
+  display: flex; flex-direction: column; align-items: center; flex: 1; gap: 4px; cursor: pointer;
+}
+
+.daily-bar-track { flex: 1; width: 100%; display: flex; align-items: flex-end; }
+
+.daily-bar {
+  width: 100%; border-radius: 6px 6px 0 0;
+  transition: height .6s cubic-bezier(0.4, 0, 0.2, 1); min-height: 4px;
+}
+
+// ── 24. Transaction row ───────────────────────────────────────────────────────
+
+.txn-row   { display: flex; align-items: center; gap: 12px; }
+
+.txn-desc {
+  font-size: 0.875rem; color: #fff; margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.txn-meta {
+  font-size: 0.75rem; color: rgba(255, 255, 255, 0.3);
+  font-family: 'DM Mono', monospace; margin: 0;
+}
+
+.txn-amount {
+  font-family: 'DM Mono', monospace; font-size: 0.875rem; font-weight: 600; flex-shrink: 0;
+}
+
+// ── 25. Spin animation ────────────────────────────────────────────────────────
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spin { animation: spin 1s linear infinite; }
+
+// ── 26. Table styles ──────────────────────────────────────────────────────────
+
+.th-cell {
+  text-align: left; font-size: 0.7rem; font-family: 'DM Mono', monospace;
+  color: rgba(255, 255, 255, 0.3); text-transform: uppercase;
+  letter-spacing: 0.05em; padding: 16px 24px; font-weight: 500;
+}
+
+.td-cell { padding: 14px 24px; font-family: 'DM Mono', monospace; font-size: 0.875rem; }
+
+.tr-hover {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04); transition: background .15s;
+  &:hover { background: rgba(255, 255, 255, 0.02); }
+}
+
+// ── 27. Misc ──────────────────────────────────────────────────────────────────
+
+.dot-today {
+  position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%; background: #14b8a6;
+}
+
+.balance-card-label {
+  font-size: 0.75rem; color: rgba(255, 255, 255, 0.5); margin-bottom: 4px;
+}
+
+.balance-card-pct {
+  font-size: 0.7rem; color: rgba(255, 255, 255, 0.3);
+  margin-top: 4px; font-family: 'DM Mono', monospace;
+}
+
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.filter-bar {
+  display: flex; flex-wrap: wrap; gap: 12px;
+}
+
+.filter-select {
+  width: auto; min-width: 140px; flex: 1 1 140px;
+}
+
+.filter-select-wide {
+  width: auto; min-width: 160px; flex: 1 1 160px;
+}
+
+.filter-search {
+  flex: 2 1 200px;
+}
+
+.empty-state {
+  padding: 64px 24px; text-align: center;
+  color: rgba(255, 255, 255, 0.3); font-size: 0.875rem;
+}
+
+.empty-chart {
+  color: rgba(255, 255, 255, 0.3); font-size: 0.875rem;
+  text-align: center; padding: 32px 0;
+}
+
+.link-brand {
+  color: #2dd4bf; text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+.tab-container {
+  display: flex; gap: 8px; margin-bottom: 20px;
+  padding: 4px; background: rgba(255, 255, 255, 0.04); border-radius: 12px;
+}
+
+.cat-preview {
+  padding: 12px; border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex; align-items: center; gap: 12px;
+}
+
+.modal-actions {
+  display: flex; gap: 12px; margin-top: 24px;
+}
+
+.budget-row {
+  display: flex; justify-content: space-between; font-size: 0.875rem;
+}
+
+.budget-row-border {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 16px;
+}
+
+.cat-limit-input {
+  width: 130px; padding: 6px 10px;
+  font-size: 0.8rem; text-align: right; font-family: 'DM Mono', monospace;
+}
+
+.cat-limit-pct {
+  font-size: 0.7rem; color: rgba(255, 255, 255, 0.3);
+  font-family: 'DM Mono', monospace; margin-top: 4px;
+}
+
+// ── 28. Circular progress ─────────────────────────────────────────────────────
+
+.cp-outer  { display: flex; flex-direction: column; align-items: center; }
+.cp-wrap   { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+.cp-center { position: absolute; text-align: center; }
+.cp-stats  { width: 100%; margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+.cp-row    { display: flex; justify-content: space-between; font-size: 0.875rem; }
+
+// ── 29. Picker / custom select ────────────────────────────────────────────────
+
+// Shared trigger button for date-picker and category select
+.picker-btn {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.06); border: 1px solid;
+  border-radius: 10px; cursor: pointer; transition: border-color .2s; text-align: left;
+}
+
+// Category dropdown panel (transaction modal)
+.cat-dropdown-panel {
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 200;
+  background: #1c1c1e; border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-item {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border: none; cursor: pointer; transition: background .15s;
+}
+
+// Calendar title
+.cal-title {
+  font-family: 'Sora', sans-serif; font-size: 0.875rem; font-weight: 600;
+  color: #fff; text-transform: capitalize;
+}
+
+// Transparent overlay to capture outside-click
+.overlay-close { position: fixed; inset: 0; }
+
+// Row top divider
+.row-divider-top { border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px; }
+
+// Button: link style, brand color
+.btn-link-brand {
+  color: #2dd4bf; font-size: 0.75rem; font-family: 'DM Mono', monospace;
+  background: none; border: none; cursor: pointer;
+}
+
+// ── 30. Final utilities ───────────────────────────────────────────────────────
+
+// Full-width centered button (form submit, modal save)
+.btn-full { width: 100%; justify-content: center; }
+
+// Align button to the end of its flex container
+.btn-end { align-self: flex-end; margin-top: 4px; }
+
+// Column flex centered (budget circle card, etc.)
+.col-center { display: flex; flex-direction: column; align-items: center; }
+
+// Tiny icon box (22px — inline category icon inside picker)
+.icon-box-xxs {
+  width: 22px; height: 22px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+// Color swatch button in palette picker
+.color-swatch {
+  width: 32px; height: 32px; border-radius: 50%; cursor: pointer; transition: all .2s;
+}
+
+// Date-picker selected date display span
+.picker-display {
+  flex: 1; font-family: 'Sora', sans-serif; font-size: 0.9rem;
+  color: #fff; text-transform: capitalize;
+}
+
+// Category picker selected text
+.picker-selected-text {
+  font-size: 0.9rem; font-family: 'Sora', sans-serif; font-weight: 500; flex: 1;
+}
+
+// Dropdown list item label
+.dropdown-item-text { font-size: 0.875rem; font-weight: 500; flex: 1; }
+
+// Table: description cell overrides
+.td-desc { color: #fff; font-weight: 500; font-family: 'Sora', sans-serif; }
+
+// Table: amount cell alignment
+.td-amount { text-align: right; font-weight: 600; }
+
+// Mobile transaction card — description line
+.txn-mobile-desc {
+  font-size: 0.9rem; color: #fff; margin: 0; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+// Mobile transaction card — amount
+.txn-mobile-amount { font-size: 1rem; font-weight: 700; flex-shrink: 0; }
+
+// Category modal preview name
+.preview-name { font-size: 0.875rem; font-weight: 600; color: #fff; margin: 0; }
+
+// Tiny hint text (below labels)
+.text-hint { font-size: 0.5rem; color: rgba(255,255,255,0.4); }
+
+// ── 31. Text utility helpers ──────────────────────────────────────────────────
+
+// Soft body text (0.875rem, 70% white)
+.text-sm-faint { font-size: 0.875rem; color: rgba(255,255,255,0.7); }
+
+// Bold emphasized text at 0.875rem
+.text-sm-bold  { font-size: 0.875rem; font-weight: 600; }
+
+// Tiny text with top margin (sub-labels, captions)
+.text-xs-indent { font-size: 0.75rem; margin: 4px 0 0; }
+
+// Tiny text, zero margin
+.text-xs-0 { font-size: 0.75rem; margin: 0; }
+
+// White text at 90% opacity (toast message body)
+.text-white-90 { color: rgba(255,255,255,0.9); }
+
+// Serif title (mobile topbar brand name)
+.title-serif {
+  font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: #fff;
+}
+
+// Picker / select placeholder (flex text)
+.picker-placeholder { flex: 1; font-size: 0.9rem; }
+
+// Table thead row bottom divider
+.tr-header { border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+// Modal primary-action button (wider flex weight)
+.btn-save { flex: 2; justify-content: center; }
+
+// Inline flex input (fills remaining row space)
+.input-flex { flex: 1; min-width: 160px; }
+
+// Form label without uppercase transform (budget heading variant)
+.form-label-plain { font-size: 0.875rem; text-transform: none; letter-spacing: 0; }
+
+// Mobile topbar menu toggle button
+.btn-menu {
+  background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px;
+  color: rgba(255,255,255,0.7); display: flex; align-items: center; transition: color .2s;
+  &:hover { color: #fff; }
+}
+
+// Vertically centre mat-icon inline
+.icon-v-mid { vertical-align: middle; }
+
+// Small body text with no margin (footer / about text)
+.text-sm-0 { font-size: 0.875rem; margin: 0; }
+
+// Compact badge (type badge in edit modal)
+.badge-sm { font-size: 0.8rem; padding: 4px 12px; }

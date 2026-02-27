@@ -1,22 +1,19 @@
 <div>
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-    <div style="display:flex;align-items:center;gap:8px;">
-      <mat-icon style="font-size:16px;width:16px;height:16px;" [style.color]="color">{{ icon }}</mat-icon>
-      <span style="font-size:0.875rem;color:rgba(255,255,255,0.7);">{{ name }}</span>
+  <div class="flex items-center justify-between" style="margin-bottom:6px;">
+    <div class="flex items-center" style="gap:8px;">
+      <mat-icon class="icon-sm" [style.color]="color">{{ icon }}</mat-icon>
+      <span class="text-sm-faint">{{ name }}</span>
       @if (limit) {
-      <span style="font-size:0.75rem;color:rgba(255,255,255,0.3);font-family:'DM Mono',monospace;">/ {{ limit }}</span>
+        <span class="mono text-dim" style="font-size:0.75rem;">/ {{ limit }}</span>
       }
     </div>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <span style="font-size:0.75rem;color:rgba(255,255,255,0.3);font-family:'DM Mono',monospace;">
-        {{ percentage | number:'1.0-0' }}%
-      </span>
-      <span style="font-family:'DM Mono',monospace;font-size:0.875rem;color:#fff;">{{ amount }}</span>
+    <div class="flex items-center" style="gap:12px;">
+      <span class="mono text-dim" style="font-size:0.75rem;">{{ percentage | number:'1.0-0' }}%</span>
+      <span class="mono text-sm-bold" style="color:#fff;">{{ amount }}</span>
     </div>
   </div>
 
   <div class="progress-track">
-    <div class="progress-fill" [style.width.%]="fillPct" [style.background]="barColor">
-    </div>
+    <div class="progress-fill" [style.width.%]="fillPct" [style.background]="barColor"></div>
   </div>
 </div>

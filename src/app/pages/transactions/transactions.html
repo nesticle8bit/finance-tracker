@@ -1,27 +1,27 @@
 <div class="page-pad">
 
   <!-- Header -->
-  <div class="flex flex-wrap items-center justify-between gap-3 mb-6 sm:mb-8">
+  <div class="page-header">
     <div>
-      <h1 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#fff;margin:0;" class="sm:text-3xl">Transacciones</h1>
-      <p style="color:rgba(255,255,255,0.4);font-size:0.875rem;margin-top:4px;font-family:'DM Mono',monospace;">Historial completo</p>
+      <h1 class="page-title">Transacciones</h1>
+      <p class="page-subtitle">Historial completo</p>
     </div>
     <button class="btn-primary" (click)="openAdd()">
-      <mat-icon style="font-size:18px;width:18px;height:18px;">add</mat-icon> Agregar
+      <mat-icon class="icon-md">add</mat-icon> Agregar
     </button>
   </div>
 
   <!-- Filters -->
-  <div class="card" style="padding:16px;margin-bottom:24px;">
-    <div style="display:flex;flex-wrap:wrap;gap:12px;">
-      <select class="input-field" style="width:auto;min-width:140px;flex:1 1 140px;" [value]="filterType()"
+  <div class="card card-p-xs" style="margin-bottom:24px;">
+    <div class="filter-bar">
+      <select class="input-field filter-select" [value]="filterType()"
         (change)="filterType.set($any($event.target).value)">
         <option value="">Todos los tipos</option>
         <option value="income">Ingresos</option>
         <option value="expense">Gastos</option>
       </select>
 
-      <select class="input-field" style="width:auto;min-width:160px;flex:1 1 160px;" [value]="filterCat()"
+      <select class="input-field filter-select-wide" [value]="filterCat()"
         (change)="filterCat.set($any($event.target).value)">
         <option value="">Todas las categorías</option>
         @for (cat of finance.categories(); track cat.id) {
@@ -29,7 +29,7 @@
         }
       </select>
 
-      <select class="input-field" style="width:auto;min-width:160px;flex:1 1 160px;" [value]="filterMonth()"
+      <select class="input-field filter-select-wide" [value]="filterMonth()"
         (change)="filterMonth.set($any($event.target).value)">
         <option value="">Todos los meses</option>
         @for (m of availableMonths(); track m.key) {
@@ -37,47 +37,41 @@
         }
       </select>
 
-      <input class="input-field" style="flex:2 1 200px;" type="text" placeholder="Buscar descripción..."
+      <input class="input-field filter-search" type="text" placeholder="Buscar descripción..."
         [value]="filterSearch()" (input)="filterSearch.set($any($event.target).value)">
     </div>
   </div>
 
   @if (filtered().length === 0) {
-    <div class="card" style="padding:64px 24px;text-align:center;color:rgba(255,255,255,0.3);font-size:0.875rem;">
-      Sin transacciones registradas
-    </div>
+    <div class="card empty-state">Sin transacciones registradas</div>
   } @else {
 
     <!-- Desktop table (md and up) -->
     <div class="card txn-table" style="overflow:hidden;">
       <table>
         <thead>
-          <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
-            <th style="text-align:left;font-size:0.7rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.05em;padding:16px 24px;font-weight:500;">Fecha</th>
-            <th style="text-align:left;font-size:0.7rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.05em;padding:16px 24px;font-weight:500;">Descripción</th>
-            <th style="text-align:left;font-size:0.7rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.05em;padding:16px 24px;font-weight:500;">Categoría</th>
-            <th style="text-align:left;font-size:0.7rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.05em;padding:16px 24px;font-weight:500;">Tipo</th>
-            <th style="text-align:right;font-size:0.7rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.05em;padding:16px 24px;font-weight:500;">Monto</th>
-            <th style="padding:16px 24px;text-align:right;font-size:0.7rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.05em;font-weight:500;">Acciones</th>
+          <tr class="tr-header">
+            <th class="th-cell">Fecha</th>
+            <th class="th-cell">Descripción</th>
+            <th class="th-cell">Categoría</th>
+            <th class="th-cell">Tipo</th>
+            <th class="th-cell" style="text-align:right;">Monto</th>
+            <th class="th-cell" style="text-align:right;">Acciones</th>
           </tr>
         </thead>
         <tbody>
           @for (t of filtered(); track t.id) {
             @let cat = getCategory(t.categoryId);
-            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);transition:background .15s;"
-              onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+            <tr class="tr-hover">
 
-              <td style="padding:14px 24px;font-family:'DM Mono',monospace;font-size:0.875rem;color:rgba(255,255,255,0.5);">
-                {{ formatDate(t.date) }}
-              </td>
+              <td class="td-cell text-muted">{{ formatDate(t.date) }}</td>
 
-              <td style="padding:14px 24px;font-size:0.875rem;color:#fff;font-weight:500;">{{ t.desc }}</td>
+              <td class="td-cell td-desc">{{ t.desc }}</td>
 
-              <td style="padding:14px 24px;">
-                <div style="display:flex;align-items:center;gap:8px;">
-                  <div style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;"
-                    [style.background]="(cat?.color ?? '#6b7280') + '20'">
-                    <mat-icon style="font-size:14px;width:14px;height:14px;" [style.color]="cat?.color ?? '#6b7280'">
+              <td class="td-cell">
+                <div class="flex items-center" style="gap:8px;">
+                  <div class="icon-box-xs" [style.background]="(cat?.color ?? '#6b7280') + '20'">
+                    <mat-icon class="icon-xs" [style.color]="cat?.color ?? '#6b7280'">
                       {{ cat?.icon ?? 'more_horiz' }}
                     </mat-icon>
                   </div>
@@ -85,30 +79,25 @@
                 </div>
               </td>
 
-              <td style="padding:14px 24px;">
+              <td class="td-cell">
                 <span class="badge" [class.badge-income]="t.type === 'income'" [class.badge-expense]="t.type === 'expense'">
                   {{ t.type === 'income' ? 'Ingreso' : 'Gasto' }}
                 </span>
               </td>
 
-              <td style="padding:14px 24px;text-align:right;font-family:'DM Mono',monospace;font-weight:600;"
+              <td class="td-cell mono td-amount"
                 [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
                 {{ t.type === 'income' ? '+' : '-' }}{{ formatCOP(t.amount) }}
               </td>
 
-              <td style="padding:14px 24px;text-align:right;">
-                <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;">
-                  <button (click)="openEdit(t)" style="background:rgba(45,212,191,0.1);border:1px solid rgba(45,212,191,0.2);
-                      color:#2dd4bf;border-radius:8px;padding:4px 10px;cursor:pointer;
-                      font-family:'Sora',sans-serif;font-size:0.8rem;display:flex;
-                      align-items:center;gap:4px;transition:all .2s;"
-                    onmouseover="this.style.background='rgba(45,212,191,0.2)'"
-                    onmouseout="this.style.background='rgba(45,212,191,0.1)'">
-                    <mat-icon style="font-size:14px;width:14px;height:14px;">edit</mat-icon>
+              <td class="td-cell" style="text-align:right;">
+                <div class="flex items-center justify-end" style="gap:8px;">
+                  <button class="btn-edit" (click)="openEdit(t)">
+                    <mat-icon class="icon-xs">edit</mat-icon>
                     Editar
                   </button>
                   <button class="btn-danger" (click)="delete(t.id)">
-                    <mat-icon style="font-size:14px;width:14px;height:14px;vertical-align:middle;">delete</mat-icon>
+                    <mat-icon class="icon-xs icon-v-mid">delete</mat-icon>
                     Eliminar
                   </button>
                 </div>
@@ -123,39 +112,36 @@
     <div class="txn-cards">
       @for (t of filtered(); track t.id) {
         @let cat = getCategory(t.categoryId);
-        <div class="card" style="padding:16px;">
+        <div class="card card-p-xs">
           <!-- Top row: icon + desc + amount -->
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-            <div style="width:40px;height:40px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;"
-              [style.background]="(cat?.color ?? '#6b7280') + '22'">
-              <mat-icon style="font-size:18px;width:18px;height:18px;" [style.color]="cat?.color ?? '#6b7280'">
+          <div class="txn-row" style="margin-bottom:10px;">
+            <div class="icon-box-md" [style.background]="(cat?.color ?? '#6b7280') + '22'">
+              <mat-icon class="icon-md" [style.color]="cat?.color ?? '#6b7280'">
                 {{ cat?.icon ?? 'more_horiz' }}
               </mat-icon>
             </div>
-            <div style="flex:1;min-width:0;">
-              <p style="font-size:0.9rem;color:#fff;margin:0;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ t.desc }}</p>
-              <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);font-family:'DM Mono',monospace;margin:2px 0 0;">
+            <div class="flex-min">
+              <p class="txn-mobile-desc">{{ t.desc }}</p>
+              <p class="mono text-dim" style="font-size:0.75rem;margin:2px 0 0;">
                 {{ cat?.name ?? '—' }} · {{ formatDate(t.date) }}
               </p>
             </div>
-            <span style="font-family:'DM Mono',monospace;font-size:1rem;font-weight:700;flex-shrink:0;"
+            <span class="mono txn-mobile-amount"
               [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
               {{ t.type === 'income' ? '+' : '-' }}{{ formatCOP(t.amount) }}
             </span>
           </div>
           <!-- Bottom row: type badge + actions -->
-          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);">
+          <div class="flex items-center justify-between row-divider-top" style="padding-top:10px;">
             <span class="badge" [class.badge-income]="t.type === 'income'" [class.badge-expense]="t.type === 'expense'">
               {{ t.type === 'income' ? 'Ingreso' : 'Gasto' }}
             </span>
-            <div style="display:flex;gap:8px;">
-              <button (click)="openEdit(t)" style="background:rgba(45,212,191,0.1);border:1px solid rgba(45,212,191,0.2);
-                  color:#2dd4bf;border-radius:8px;padding:5px 10px;cursor:pointer;
-                  display:flex;align-items:center;gap:4px;font-family:'Sora',sans-serif;font-size:0.8rem;transition:all .2s;">
-                <mat-icon style="font-size:14px;width:14px;height:14px;">edit</mat-icon>
+            <div class="flex" style="gap:8px;">
+              <button class="btn-edit" (click)="openEdit(t)">
+                <mat-icon class="icon-xs">edit</mat-icon>
               </button>
-              <button class="btn-danger" (click)="delete(t.id)" style="display:flex;align-items:center;gap:4px;">
-                <mat-icon style="font-size:14px;width:14px;height:14px;vertical-align:middle;">delete</mat-icon>
+              <button class="btn-danger flex items-center" style="gap:4px;" (click)="delete(t.id)">
+                <mat-icon class="icon-xs icon-v-mid">delete</mat-icon>
               </button>
             </div>
           </div>

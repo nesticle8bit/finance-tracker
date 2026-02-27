@@ -1,49 +1,45 @@
 <div class="modal-box">
   <!-- Header -->
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
-    <h2 style="font-size:1.125rem;font-weight:600;color:#fff;margin:0;">Nueva Categoría</h2>
-    <button style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.4);display:flex;"
-      (click)="close()">
+  <div class="modal-header">
+    <h2 class="modal-title">Nueva Categoría</h2>
+    <button class="btn-ghost-close" (click)="close()">
       <mat-icon>close</mat-icon>
     </button>
   </div>
 
-  <div style="display:flex;flex-direction:column;gap:16px;">
+  <div class="form-stack">
 
     <div>
-      <label
-        style="display:block;font-size:0.7rem;color:rgba(255,255,255,0.5);margin-bottom:6px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;">Nombre</label>
+      <label class="form-label">Nombre</label>
       <input class="input-field" type="text" [(ngModel)]="form.name" placeholder="Ej: Restaurante, Salud...">
     </div>
 
     <div>
-      <label
-        style="display:block;font-size:0.7rem;color:rgba(255,255,255,0.5);margin-bottom:6px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;">
+      <label class="form-label">
         Ícono Material <br>
-        <span style="font-size:0.5rem;color:rgba(255,255,255,0.4);">Busca el nombre del ícono en <a
-            href="https://fonts.google.com/icons" target="_blank" style="color:#2dd4bf;">Google Fonts</a></span>
+        <span class="text-hint">
+          Busca el nombre del ícono en
+          <a href="https://fonts.google.com/icons" target="_blank" class="link-brand">Google Fonts</a>
+        </span>
       </label>
       <input class="input-field" type="text" [(ngModel)]="form.icon" placeholder="Ej: restaurant, local_hospital">
     </div>
 
     <!-- Color Picker -->
     <div>
-      <label
-        style="display:block;font-size:0.7rem;color:rgba(255,255,255,0.5);margin-bottom:8px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;">Color</label>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <label class="form-label">Color</label>
+      <div class="flex flex-wrap" style="gap:8px;">
         @for (c of palette; track c) {
-        <button (click)="selectColor(c)" [style.background]="c"
-          [style.border]="form.color === c ? '3px solid #fff' : '3px solid transparent'"
-          [style.transform]="form.color === c ? 'scale(1.15)' : 'scale(1)'"
-          style="width:32px;height:32px;border-radius:50%;cursor:pointer;transition:all .2s;">
-        </button>
+          <button class="color-swatch" (click)="selectColor(c)" [style.background]="c"
+            [style.border]="form.color === c ? '3px solid #fff' : '3px solid transparent'"
+            [style.transform]="form.color === c ? 'scale(1.15)' : 'scale(1)'">
+          </button>
         }
       </div>
     </div>
 
     <div>
-      <label
-        style="display:block;font-size:0.7rem;color:rgba(255,255,255,0.5);margin-bottom:6px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;">Tipo</label>
+      <label class="form-label">Tipo</label>
       <select class="input-field" [(ngModel)]="form.type">
         <option value="expense">Gasto</option>
         <option value="income">Ingreso</option>
@@ -52,15 +48,13 @@
     </div>
 
     <!-- Preview -->
-    <div
-      style="padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:12px;">
-      <div [style.background]="form.color + '22'"
-        style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;">
+    <div class="cat-preview">
+      <div class="icon-box-md" [style.background]="form.color + '22'">
         <mat-icon [style.color]="form.color">{{ form.icon || 'more_horiz' }}</mat-icon>
       </div>
       <div>
-        <p style="font-size:0.875rem;font-weight:600;color:#fff;margin:0;">{{ form.name || 'Vista previa' }}</p>
-        <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);margin:0;">
+        <p class="preview-name">{{ form.name || 'Vista previa' }}</p>
+        <p class="text-dim text-xs-0">
           {{ form.type === 'income' ? 'Ingreso' : form.type === 'expense' ? 'Gasto' : 'Ambos' }}
         </p>
       </div>
@@ -68,8 +62,8 @@
 
   </div>
 
-  <button class="btn-primary" style="width:100%;margin-top:24px;justify-content:center;" (click)="save()">
-    <mat-icon style="font-size:18px;width:18px;height:18px;">check</mat-icon>
+  <button class="btn-primary btn-full" style="margin-top:24px;" (click)="save()">
+    <mat-icon class="icon-md">check</mat-icon>
     Crear categoría
   </button>
 </div>

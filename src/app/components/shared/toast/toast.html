@@ -1,17 +1,13 @@
-<div style="position:fixed;bottom:24px;right:24px;z-index:2000;display:flex;flex-direction:column;gap:8px;">
+<div class="toast-container">
   @for (msg of toast.messages(); track msg.id) {
-  <div style="display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;
-                background:#27272a;border:1px solid rgba(255,255,255,0.1);font-size:0.875rem;
-                animation:slideLeft .3s ease;"
-    [style.border-left-color]="msg.type === 'success' ? '#14b8a6' : msg.type === 'error' ? '#ef4444' : 'rgba(255,255,255,0.2)'"
-    [style.color]="msg.type === 'success' ? '#2dd4bf' : msg.type === 'error' ? '#f87171' : 'rgba(255,255,255,0.8)'"
-    style="border-left-width:2px;">
-    <mat-icon style="font-size:18px;width:18px;height:18px;">{{ iconMap[msg.type] }}</mat-icon>
-    <span style="color:rgba(255,255,255,0.9);">{{ msg.message }}</span>
-    <button (click)="toast.remove(msg.id)"
-      style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.3);margin-left:8px;display:flex;">
-      <mat-icon style="font-size:16px;width:16px;height:16px;">close</mat-icon>
-    </button>
-  </div>
+    <div class="toast-item"
+      [style.border-left-color]="msg.type === 'success' ? '#14b8a6' : msg.type === 'error' ? '#ef4444' : 'rgba(255,255,255,0.2)'"
+      [style.color]="msg.type === 'success' ? '#2dd4bf' : msg.type === 'error' ? '#f87171' : 'rgba(255,255,255,0.8)'">
+      <mat-icon class="icon-md">{{ iconMap[msg.type] }}</mat-icon>
+      <span class="text-white-90">{{ msg.message }}</span>
+      <button class="toast-close" (click)="toast.remove(msg.id)">
+        <mat-icon class="icon-sm">close</mat-icon>
+      </button>
+    </div>
   }
 </div>

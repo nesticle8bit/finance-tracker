@@ -1,26 +1,24 @@
 <div style="position:relative;">
 
   <!-- Trigger button -->
-  <button type="button" (click)="isOpen ? close() : open()" style="width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;
-                 background:rgba(255,255,255,0.06);border:1px solid;border-radius:10px;
-                 cursor:pointer;transition:border-color .2s;text-align:left;"
+  <button type="button" class="picker-btn" (click)="isOpen ? close() : open()"
     [style.border-color]="isOpen ? '#14b8a6' : 'rgba(255,255,255,0.12)'">
 
-    <mat-icon style="font-size:18px;width:18px;height:18px;flex-shrink:0;"
+    <mat-icon class="icon-md"
       [style.color]="selDay ? '#14b8a6' : 'rgba(255,255,255,0.3)'">
       calendar_today
     </mat-icon>
 
     @if (selDay) {
-    <span style="flex:1;font-family:'Sora',sans-serif;font-size:0.9rem;color:#fff;text-transform:capitalize;">
-      {{ displayValue }}
-    </span>
+      <span class="picker-display">
+        {{ displayValue }}
+      </span>
     } @else {
-    <span style="flex:1;font-size:0.9rem;color:rgba(255,255,255,0.3);">Seleccionar fecha...</span>
+      <span class="text-dim picker-placeholder">Seleccionar fecha...</span>
     }
 
-    <mat-icon style="font-size:18px;width:18px;height:18px;color:rgba(255,255,255,0.3);
-                     transition:transform .2s;flex-shrink:0;"
+    <mat-icon class="icon-md text-dim"
+      style="transition:transform .2s;flex-shrink:0;"
       [style.transform]="isOpen ? 'rotate(180deg)' : 'rotate(0)'">
       expand_more
     </mat-icon>
@@ -28,84 +26,62 @@
 
   <!-- Calendar dropdown -->
   @if (isOpen) {
-  <!-- Overlay to close on outside click -->
-  <div style="position:fixed;inset:0;z-index:299;" (click)="close()"></div>
+    <div class="overlay-close" style="z-index:299;" (click)="close()"></div>
 
-  <div style="position:absolute;top:calc(100% + 8px);left:0;z-index:300;
-                background:#1c1c1e;border:1px solid rgba(255,255,255,0.1);
-                border-radius:16px;padding:16px;width:300px;
-                box-shadow:0 16px 48px rgba(0,0,0,0.6);">
+    <div class="cal-dropdown">
 
-    <!-- Month navigation -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-      <button type="button" (click)="prevMonth(); $event.stopPropagation()" style="background:rgba(255,255,255,0.06);border:none;border-radius:8px;
-                       width:32px;height:32px;cursor:pointer;display:flex;align-items:center;
-                       justify-content:center;color:rgba(255,255,255,0.6);transition:background .2s;"
-        onmouseover="this.style.background='rgba(255,255,255,0.12)'"
-        onmouseout="this.style.background='rgba(255,255,255,0.06)'">
-        <mat-icon style="font-size:18px;width:18px;height:18px;">chevron_left</mat-icon>
-      </button>
+      <!-- Month navigation -->
+      <div class="cal-nav">
+        <button type="button" class="btn-icon-ghost" (click)="prevMonth(); $event.stopPropagation()">
+          <mat-icon class="icon-md">chevron_left</mat-icon>
+        </button>
 
-      <span style="font-family:'Sora',sans-serif;font-size:0.875rem;font-weight:600;
-                     color:#fff;text-transform:capitalize;">
-        {{ viewTitle }}
-      </span>
+        <span class="cal-title">{{ viewTitle }}</span>
 
-      <button type="button" (click)="nextMonth(); $event.stopPropagation()" style="background:rgba(255,255,255,0.06);border:none;border-radius:8px;
-                       width:32px;height:32px;cursor:pointer;display:flex;align-items:center;
-                       justify-content:center;color:rgba(255,255,255,0.6);transition:background .2s;"
-        onmouseover="this.style.background='rgba(255,255,255,0.12)'"
-        onmouseout="this.style.background='rgba(255,255,255,0.06)'">
-        <mat-icon style="font-size:18px;width:18px;height:18px;">chevron_right</mat-icon>
-      </button>
-    </div>
+        <button type="button" class="btn-icon-ghost" (click)="nextMonth(); $event.stopPropagation()">
+          <mat-icon class="icon-md">chevron_right</mat-icon>
+        </button>
+      </div>
 
-    <!-- Weekday headers -->
-    <div style="display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:8px;">
-      @for (d of DAYS; track d) {
-      <div style="text-align:center;font-size:0.7rem;font-family:'DM Mono',monospace;
-                      color:rgba(255,255,255,0.3);padding:4px 0;">{{ d }}</div>
-      }
-    </div>
-
-    <!-- Day cells -->
-    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">
-      @for (day of calendarDays; track $index) {
-      <button type="button" [disabled]="!day" (click)="selectDay(day); $event.stopPropagation()" style="aspect-ratio:1;border:none;border-radius:8px;font-size:0.8rem;
-                         font-family:'Sora',sans-serif;cursor:pointer;transition:all .15s;
-                         display:flex;align-items:center;justify-content:center;position:relative;" [style.background]="isSelected(day) ? '#14b8a6'
-                                     : isToday(day)   ? 'rgba(20,184,166,0.15)'
-                                     : day             ? 'transparent'
-                                                       : 'transparent'" [style.color]="isSelected(day) ? '#000'
-                                : isToday(day)   ? '#14b8a6'
-                                : day            ? 'rgba(255,255,255,0.8)'
-                                                 : 'transparent'"
-        [style.font-weight]="(isSelected(day) || isToday(day)) ? '700' : '400'"
-        [style.cursor]="day ? 'pointer' : 'default'"
-        onmouseover="if(this.textContent.trim() && !this.disabled) this.style.background='rgba(255,255,255,0.08)'"
-        onmouseout="this.style.background=this.dataset['bg'] || 'transparent'">
-        {{ day || '' }}
-        <!-- Dot for today when not selected -->
-        @if (isToday(day) && !isSelected(day)) {
-        <span style="position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
-                           width:4px;height:4px;border-radius:50%;background:#14b8a6;"></span>
+      <!-- Weekday headers -->
+      <div class="cal-header-grid">
+        @for (d of DAYS; track d) {
+          <div class="cal-weekday">{{ d }}</div>
         }
-      </button>
-      }
-    </div>
+      </div>
 
-    <!-- Footer: Hoy -->
-    <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);
-                  display:flex;justify-content:center;">
-      <button type="button" (click)="selectToday(); $event.stopPropagation()" style="background:rgba(20,184,166,0.1);border:1px solid rgba(20,184,166,0.2);
-                       color:#14b8a6;border-radius:8px;padding:6px 16px;cursor:pointer;
-                       font-family:'Sora',sans-serif;font-size:0.8rem;font-weight:600;
-                       transition:all .2s;" onmouseover="this.style.background='rgba(20,184,166,0.2)'"
-        onmouseout="this.style.background='rgba(20,184,166,0.1)'">
-        Hoy
-      </button>
-    </div>
+      <!-- Day cells -->
+      <div class="cal-grid">
+        @for (day of calendarDays; track $index) {
+          <button type="button" [disabled]="!day" (click)="selectDay(day); $event.stopPropagation()"
+            style="aspect-ratio:1;border:none;border-radius:8px;font-size:0.8rem;
+                   font-family:'Sora',sans-serif;cursor:pointer;transition:all .15s;
+                   display:flex;align-items:center;justify-content:center;position:relative;"
+            [style.background]="isSelected(day) ? '#14b8a6'
+                              : isToday(day)   ? 'rgba(20,184,166,0.15)'
+                              : day             ? 'transparent'
+                                                : 'transparent'"
+            [style.color]="isSelected(day) ? '#000'
+                         : isToday(day)   ? '#14b8a6'
+                         : day            ? 'rgba(255,255,255,0.8)'
+                                          : 'transparent'"
+            [style.font-weight]="(isSelected(day) || isToday(day)) ? '700' : '400'"
+            [style.cursor]="day ? 'pointer' : 'default'">
+            {{ day || '' }}
+            @if (isToday(day) && !isSelected(day)) {
+              <span class="dot-today"></span>
+            }
+          </button>
+        }
+      </div>
 
-  </div>
+      <!-- Footer: Hoy -->
+      <div class="cal-footer">
+        <button type="button" class="btn-teal-sm" (click)="selectToday(); $event.stopPropagation()">
+          Hoy
+        </button>
+      </div>
+
+    </div>
   }
 </div>

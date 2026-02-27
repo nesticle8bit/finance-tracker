@@ -1,14 +1,10 @@
-<div class="card" style="padding:20px;display:flex;flex-direction:column;gap:12px;">
-  <div style="display:flex;align-items:center;justify-content:space-between;">
-    <span
-      style="color:rgba(255,255,255,0.4);font-size:0.7rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;">
-      {{ label }}
-    </span>
-    <div [style.background]="iconBg"
-      style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;">
-      <mat-icon [style.color]="iconColor" style="font-size:16px;width:16px;height:16px;">{{ icon }}</mat-icon>
+<div class="card card-p-sm card-flex">
+  <div class="flex items-center justify-between">
+    <span class="card-title" style="margin:0;">{{ label }}</span>
+    <div [style.background]="iconBg" class="icon-box-sm">
+      <mat-icon [style.color]="iconColor" class="icon-sm">{{ icon }}</mat-icon>
     </div>
   </div>
-  <p style="font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:700;color:#fff;margin:0;">{{ value }}</p>
-  <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin:0;">{{ sub }}</p>
+  <p class="value-lg">{{ value }}</p>
+  <p class="text-dim text-xs-0">{{ sub }}</p>
 </div>

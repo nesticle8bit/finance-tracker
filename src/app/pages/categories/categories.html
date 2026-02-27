@@ -1,61 +1,52 @@
 <div class="page-pad">
 
-  <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px;">
+  <div class="page-header">
     <div>
-      <h1 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#fff;margin:0;" class="sm:text-3xl">Categorías</h1>
-      <p style="color:rgba(255,255,255,0.4);font-size:0.875rem;margin-top:4px;font-family:'DM Mono',monospace;">Administra tus categorías</p>
+      <h1 class="page-title">Categorías</h1>
+      <p class="page-subtitle">Administra tus categorías</p>
     </div>
     <button class="btn-primary" (click)="openAdd()">
-      <mat-icon style="font-size:18px;width:18px;height:18px;">add</mat-icon> Nueva categoría
+      <mat-icon class="icon-md">add</mat-icon> Nueva categoría
     </button>
   </div>
 
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;">
+  <div class="cat-grid">
     @for (card of cards(); track card.cat.id) {
-      <div class="card" style="padding:20px;">
+      <div class="card card-p-sm">
 
         <!-- Top row: icon + name + actions -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-          <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"
-              [style.background]="card.cat.color + '22'">
+        <div class="flex items-center justify-between" style="margin-bottom:16px;">
+          <div class="flex items-center" style="gap:12px;">
+            <div class="icon-box-md" [style.background]="card.cat.color + '22'">
               <mat-icon [style.color]="card.cat.color">{{ card.cat.icon }}</mat-icon>
             </div>
             <div>
-              <p style="font-weight:600;color:#fff;font-size:0.875rem;margin:0;">{{ card.cat.name }}</p>
-              <p style="font-size:0.7rem;color:rgba(255,255,255,0.3);font-family:'DM Mono',monospace;margin:2px 0 0;">
+              <p class="preview-name">{{ card.cat.name }}</p>
+              <p class="mono text-dim" style="font-size:0.7rem;margin:2px 0 0;">
                 {{ card.cat.type === 'income' ? 'Ingreso' : card.cat.type === 'expense' ? 'Gasto' : 'Ambos' }}
               </p>
             </div>
           </div>
 
-          <div style="display:flex;align-items:center;gap:6px;">
-            <button (click)="openEdit(card.cat)" style="background:rgba(45,212,191,0.08);border:1px solid rgba(45,212,191,0.15);
-                color:#2dd4bf;border-radius:8px;width:30px;height:30px;cursor:pointer;
-                display:flex;align-items:center;justify-content:center;transition:all .2s;"
-              onmouseover="this.style.background='rgba(45,212,191,0.18)'"
-              onmouseout="this.style.background='rgba(45,212,191,0.08)'" title="Editar">
-              <mat-icon style="font-size:15px;width:15px;height:15px;">edit</mat-icon>
+          <div class="flex items-center" style="gap:6px;">
+            <button class="btn-icon-edit" (click)="openEdit(card.cat)" title="Editar">
+              <mat-icon class="icon-sm">edit</mat-icon>
             </button>
 
             @if (card.isDeletable) {
-              <button (click)="delete(card.cat.id)" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);
-                  color:#f87171;border-radius:8px;width:30px;height:30px;cursor:pointer;
-                  display:flex;align-items:center;justify-content:center;transition:all .2s;"
-                onmouseover="this.style.background='rgba(239,68,68,0.18)'"
-                onmouseout="this.style.background='rgba(239,68,68,0.08)'" title="Eliminar">
-                <mat-icon style="font-size:15px;width:15px;height:15px;">delete</mat-icon>
+              <button class="btn-icon-delete" (click)="delete(card.cat.id)" title="Eliminar">
+                <mat-icon class="icon-sm">delete</mat-icon>
               </button>
             }
           </div>
         </div>
 
         <!-- Bottom row: count + total -->
-        <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);">
-          <span style="color:rgba(255,255,255,0.4);font-size:0.8rem;">
+        <div class="flex justify-between items-center row-divider-top">
+          <span class="text-dim" style="font-size:0.8rem;">
             {{ card.count }} transacción{{ card.count !== 1 ? 'es' : '' }}
           </span>
-          <span style="font-family:'DM Mono',monospace;font-weight:600;font-size:0.875rem;"
+          <span class="mono text-sm-bold"
             [style.color]="card.total >= 0 ? '#f87171' : '#4ade80'">
             {{ formatCOP(card.total) }}
           </span>

@@ -14,18 +14,11 @@
 
       <!-- Mobile top bar -->
       <header class="mobile-topbar">
-        <button
-          (click)="layout.toggle()"
-          style="background:none;border:none;cursor:pointer;padding:8px;border-radius:8px;
-                 color:rgba(255,255,255,0.7);display:flex;align-items:center;transition:color .2s;"
-          onmouseover="this.style.color='#fff'"
-          onmouseout="this.style.color='rgba(255,255,255,0.7)'">
+        <button class="btn-menu" (click)="layout.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
 
-        <span style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:#fff;">
-          Finance Tracker
-        </span>
+        <span class="title-serif">Finance Tracker</span>
 
         <!-- Spacer to keep title centred -->
         <div style="width:40px;"></div>

@@ -1,54 +1,49 @@
 <div class="page-pad">
 
   <!-- Header -->
-  <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px;">
+  <div class="page-header">
     <div>
-      <h1 style="font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:700;color:#fff;margin:0;">Dashboard</h1>
-      <p style="color:rgba(255,255,255,0.4);font-size:0.875rem;margin-top:4px;font-family:'DM Mono',monospace;">{{ monthLabel() }}</p>
+      <h1 class="page-title page-title--lg">Dashboard</h1>
+      <p class="page-subtitle">{{ monthLabel() }}</p>
     </div>
     <button class="btn-primary" (click)="openAdd()">
-      <mat-icon style="font-size:18px;width:18px;height:18px;">add</mat-icon> Nuevo
+      <mat-icon class="icon-md">add</mat-icon> Nuevo
     </button>
   </div>
 
   <!-- KPI Cards: 2 cols on mobile, 4 on desktop -->
-  <div class="kpi-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px;">
+  <div class="kpi-grid">
     <app-kpi-card label="Presupuesto" [value]="budgetFmt()" sub="Presupuesto mensual" icon="account_balance_wallet" color="blue" />
     <app-kpi-card label="Ingresos"    [value]="incomeFmt()"  [sub]="incomeCount()"     icon="arrow_downward"        color="green" />
     <app-kpi-card label="Gastos"      [value]="expenseFmt()" [sub]="expenseCount()"    icon="arrow_upward"          color="red" />
 
     <!-- Balance card -->
-    <div class="card" style="padding:20px;display:flex;flex-direction:column;gap:12px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <span style="color:rgba(255,255,255,0.4);font-size:0.7rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;">Balance</span>
-        <div style="width:32px;height:32px;border-radius:8px;background:rgba(20,184,166,0.1);display:flex;align-items:center;justify-content:center;">
-          <mat-icon style="font-size:16px;width:16px;height:16px;color:#2dd4bf;">balance</mat-icon>
+    <div class="card card-p-sm card-flex">
+      <div class="flex items-center justify-between">
+        <span class="card-title" style="margin:0;">Balance</span>
+        <div class="icon-box-sm" style="background:rgba(20,184,166,0.1);">
+          <mat-icon class="icon-sm text-brand">balance</mat-icon>
         </div>
       </div>
-      <p style="font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:700;margin:0;"
-        [style.color]="balancePos() ? '#2dd4bf' : '#f87171'">{{ balanceFmt() }}</p>
-      <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin:0;">Ingresos − Gastos</p>
+      <p class="value-lg" [style.color]="balancePos() ? '#2dd4bf' : '#f87171'">{{ balanceFmt() }}</p>
+      <p class="text-dim text-xs-0">Ingresos − Gastos</p>
     </div>
   </div>
 
   <!-- Circular + Category bars -->
-  <div class="dash-grid-1-2" style="display:grid;gap:24px;margin-bottom:24px;">
+  <div class="dash-grid-1-2">
 
-    <div class="card" style="padding:24px;display:flex;flex-direction:column;align-items:center;">
-      <h3 style="font-size:0.75rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.05em;margin:0 0 24px;">
-        Uso del Presupuesto
-      </h3>
+    <div class="card card-p col-center">
+      <h3 class="card-title">Uso del Presupuesto</h3>
       <app-circular-progress [percentage]="pct()" [spent]="spentFmt()" [remaining]="remainFmt()" />
     </div>
 
-    <div class="card" style="padding:24px;">
-      <h3 style="font-size:0.75rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.05em;margin:0 0 24px;">
-        Gastos por Categoría
-      </h3>
+    <div class="card card-p">
+      <h3 class="card-title">Gastos por Categoría</h3>
       @if (categoryStats().length === 0) {
-        <p style="color:rgba(255,255,255,0.3);font-size:0.875rem;text-align:center;padding:32px 0;">Sin gastos este mes</p>
+        <p class="empty-chart">Sin gastos este mes</p>
       } @else {
-        <div style="display:flex;flex-direction:column;gap:20px;">
+        <div class="form-stack" style="gap:20px;">
           @for (s of categoryStats(); track s.cat.id) {
             <app-category-bar [name]="s.cat.name" [icon]="s.cat.icon" [color]="s.cat.color"
               [amount]="formatCOP(s.total)" [percentage]="s.percentage" [limitPct]="s.limitPct" [limit]="s.limitLabel" />
@@ -59,20 +54,18 @@
   </div>
 
   <!-- Daily Chart + Recent Transactions -->
-  <div class="dash-grid-1-1" style="display:grid;gap:24px;">
+  <div class="dash-grid-1-1">
 
-    <div class="card" style="padding:24px;">
-      <h3 style="font-size:0.75rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.05em;margin:0 0 24px;">
-        Gastos Diarios
-      </h3>
+    <div class="card card-p">
+      <h3 class="card-title">Gastos Diarios</h3>
       @if (!hasDailyData()) {
-        <p style="color:rgba(255,255,255,0.3);font-size:0.875rem;text-align:center;padding:32px 0;">Sin gastos registrados</p>
+        <p class="empty-chart">Sin gastos registrados</p>
       } @else {
-        <div style="display:flex;align-items:flex-end;gap:4px;height:160px;padding:0 8px;">
+        <div class="daily-chart">
           @for (bar of dailyBars(); track bar.day) {
-            <div style="display:flex;flex-direction:column;align-items:center;flex:1;gap:4px;cursor:pointer;" [title]="'Día ' + bar.day">
-              <div style="flex:1;width:100%;display:flex;align-items:flex-end;">
-                <div style="width:100%;border-radius:6px 6px 0 0;transition:height .6s cubic-bezier(0.4,0,0.2,1);min-height:4px;"
+            <div class="daily-bar-col" [title]="'Día ' + bar.day">
+              <div class="daily-bar-track">
+                <div class="daily-bar"
                   [style.height.%]="Math.max(bar.pct, 4)"
                   [style.background]="bar.isToday ? 'linear-gradient(to top,#0d9488,#5eead4)' : 'rgba(20,184,166,0.35)'"
                   [style.opacity]="bar.isToday ? 1 : 0.7">
@@ -81,45 +74,37 @@
             </div>
           }
         </div>
-        <div style="display:flex;gap:4px;padding:0 8px;margin-top:4px;">
+        <div class="daily-labels">
           @for (bar of dailyBars(); track bar.day) {
-            <div style="flex:1;text-align:center;color:rgba(255,255,255,0.25);font-family:'DM Mono',monospace;font-size:10px;">{{ bar.day }}</div>
+            <div class="daily-label">{{ bar.day }}</div>
           }
         </div>
       }
     </div>
 
-    <div class="card" style="padding:24px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
-        <h3 style="font-size:0.75rem;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.05em;margin:0;">
-          Recientes
-        </h3>
-        <button (click)="goToTransactions()" style="color:#2dd4bf;font-size:0.75rem;font-family:'DM Mono',monospace;background:none;border:none;cursor:pointer;">
-          Ver todo →
-        </button>
+    <div class="card card-p">
+      <div class="flex items-center justify-between" style="margin-bottom:24px;">
+        <h3 class="card-title" style="margin:0;">Recientes</h3>
+        <button (click)="goToTransactions()" class="btn-link-brand">Ver todo →</button>
       </div>
 
       @if (recentTransactions().length === 0) {
-        <p style="color:rgba(255,255,255,0.3);font-size:0.875rem;text-align:center;padding:32px 0;">Sin transacciones este mes</p>
+        <p class="empty-chart">Sin transacciones este mes</p>
       } @else {
-        <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="form-stack">
           @for (t of recentTransactions(); track t.id) {
             @let cat = getCategory(t.categoryId);
-            <div style="display:flex;align-items:center;gap:12px;">
-              <div style="width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;"
-                [style.background]="(cat?.color ?? '#6b7280') + '20'">
-                <mat-icon style="font-size:16px;width:16px;height:16px;" [style.color]="cat?.color ?? '#6b7280'">
+            <div class="txn-row">
+              <div class="icon-box" [style.background]="(cat?.color ?? '#6b7280') + '20'">
+                <mat-icon class="icon-sm" [style.color]="cat?.color ?? '#6b7280'">
                   {{ cat?.icon ?? 'more_horiz' }}
                 </mat-icon>
               </div>
-              <div style="flex:1;min-width:0;">
-                <p style="font-size:0.875rem;color:#fff;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ t.desc }}</p>
-                <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);font-family:'DM Mono',monospace;margin:0;">
-                  {{ formatDate(t.date) }} · {{ cat?.name }}
-                </p>
+              <div class="flex-min">
+                <p class="txn-desc">{{ t.desc }}</p>
+                <p class="txn-meta">{{ formatDate(t.date) }} · {{ cat?.name }}</p>
               </div>
-              <span style="font-family:'DM Mono',monospace;font-size:0.875rem;font-weight:600;flex-shrink:0;"
-                [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
+              <span class="txn-amount" [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
                 {{ t.type === 'income' ? '+' : '-' }}{{ formatCOP(t.amount) }}
               </span>
             </div>
