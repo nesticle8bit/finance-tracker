@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  financeTrackerAPI: '',
+  financeTrackerAPI: 'https://financeapi.juliopoveda.com',
 };
