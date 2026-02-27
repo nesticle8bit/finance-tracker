@@ -6,11 +6,12 @@ import { AuthService } from '../../services/auth.service';
 import { FinanceService } from '../../services/finance';
 import { ToastService } from '../../services/toast.service';
 import { IconComponent } from '../../components/shared/icon/icon.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, IconComponent],
+  imports: [CommonModule, FormsModule, MatIconModule, IconComponent, MatTooltipModule],
   templateUrl: './settings.html',
 })
 export class SettingsComponent implements OnInit {
