@@ -10,6 +10,7 @@ import { StorageService } from './storage';
 import { environment } from '../../environments/environment';
 
 const API = environment.financeTrackerAPI;
+const BUDGET_CACHE_KEY = 'finance_budget_cache';
 
 // IDs of the default categories seeded by the backend
 const DEFAULT_CATEGORY_IDS = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10'];
@@ -145,10 +146,20 @@ export class FinanceService {
   }
 
   async loadBudget(): Promise<void> {
+    // Restore from cache immediately so the UI never flashes 0 on refresh
+    const cached = localStorage.getItem(BUDGET_CACHE_KEY);
+    if (cached) {
+      this._budget.set(parseFloat(cached));
+    }
+
     const res = await firstValueFrom(
       this.http.get<ApiResponse<BudgetDto>>(`${API}/api/budget`),
     );
-    this._budget.set(res.data?.amount ?? 0);
+    const amount = res.data?.amount ?? 0;
+    this._budget.set(amount);
+    if (amount > 0) {
+      localStorage.setItem(BUDGET_CACHE_KEY, String(amount));
+    }
   }
 
   async loadLimits(): Promise<void> {
@@ -221,6 +232,7 @@ export class FinanceService {
       this.http.put<ApiResponse<null>>(`${API}/api/budget`, { amount }),
     );
     this._budget.set(amount);
+    localStorage.setItem(BUDGET_CACHE_KEY, String(amount));
   }
 
   async setCategoryLimit(catId: string, limit: number | null): Promise<void> {
@@ -306,5 +318,6 @@ export class FinanceService {
     this._categories.set([]);
     this._budget.set(0);
     this._categoryLimits.set({});
+    localStorage.removeItem(BUDGET_CACHE_KEY);
   }
 }

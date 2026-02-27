@@ -6,141 +6,131 @@
   </div>
 
   <div class="settings-stack">
-
-    <!-- ── Perfil ─────────────────────────────────────────────────────────── -->
     <div class="card card-p">
       <h3 class="card-title">Perfil</h3>
 
       @if (profileError()) {
-        <div class="alert-error">
-          <mat-icon class="icon-sm">error_outline</mat-icon>
-          {{ profileError() }}
-        </div>
+      <div class="alert-error">
+        <mat-icon class="icon-sm">error_outline</mat-icon>
+        {{ profileError() }}
+      </div>
       }
 
       <div class="form-stack-sm">
         <div>
           <label class="form-label">Nombre</label>
-          <input class="input-field" type="text" placeholder="Tu nombre"
-            [value]="profileName()" (input)="profileName.set($any($event.target).value)">
+          <input class="input-field" type="text" placeholder="Tu nombre" [value]="profileName()"
+            (input)="profileName.set($any($event.target).value)">
         </div>
 
         <div>
           <label class="form-label">Correo electrónico</label>
-          <input class="input-field" type="email" placeholder="tu@email.com"
-            [value]="profileEmail()" (input)="profileEmail.set($any($event.target).value)">
+          <input class="input-field" type="email" placeholder="tu@email.com" [value]="profileEmail()"
+            (input)="profileEmail.set($any($event.target).value)">
         </div>
 
-        <button class="btn-primary btn-end"
-          (click)="saveProfile()"
-          [disabled]="savingProfile() || !profileDirty()">
+        <button class="btn-primary btn-end" (click)="saveProfile()" [disabled]="savingProfile() || !profileDirty()">
           @if (savingProfile()) {
-            <mat-icon class="icon-sm spin">refresh</mat-icon>
-            Guardando…
+          <mat-icon class="icon-sm spin">refresh</mat-icon>
+          Guardando…
           } @else {
-            <mat-icon class="icon-sm">save</mat-icon>
-            Guardar cambios
+          <mat-icon class="icon-sm">save</mat-icon>
+          Guardar cambios
           }
         </button>
       </div>
     </div>
 
-    <!-- ── Contraseña ─────────────────────────────────────────────────────── -->
     <div class="card card-p">
       <h3 class="card-title">Cambiar contraseña</h3>
 
       @if (passwordError()) {
-        <div class="alert-error">
-          <mat-icon class="icon-sm">error_outline</mat-icon>
-          {{ passwordError() }}
-        </div>
+      <div class="alert-error">
+        <mat-icon class="icon-sm">error_outline</mat-icon>
+        {{ passwordError() }}
+      </div>
       }
 
       <div class="form-stack-sm">
         <div>
           <label class="form-label">Contraseña actual</label>
-          <input class="input-field" type="password" placeholder="••••••••"
-            [value]="currentPwd()" (input)="currentPwd.set($any($event.target).value)">
+          <input class="input-field" type="password" placeholder="••••••••" [value]="currentPwd()"
+            (input)="currentPwd.set($any($event.target).value)">
         </div>
 
         <div>
           <label class="form-label">Nueva contraseña</label>
-          <input class="input-field" type="password" placeholder="Mínimo 6 caracteres"
-            [value]="newPwd()" (input)="newPwd.set($any($event.target).value)">
+          <input class="input-field" type="password" placeholder="Mínimo 6 caracteres" [value]="newPwd()"
+            (input)="newPwd.set($any($event.target).value)">
         </div>
 
         <div>
           <label class="form-label">Confirmar contraseña</label>
-          <input class="input-field" type="password" placeholder="••••••••"
-            [value]="confirmPwd()" (input)="confirmPwd.set($any($event.target).value)"
+          <input class="input-field" type="password" placeholder="••••••••" [value]="confirmPwd()"
+            (input)="confirmPwd.set($any($event.target).value)"
             [style.borderColor]="confirmPwd() && newPwd() !== confirmPwd() ? '#f87171' : ''">
           @if (confirmPwd() && newPwd() !== confirmPwd()) {
-            <p class="mono text-expense text-xs-indent">
-              Las contraseñas no coinciden
-            </p>
+          <p class="mono text-expense text-xs-indent">
+            Las contraseñas no coinciden
+          </p>
           }
         </div>
 
-        <button class="btn-primary btn-end"
-          (click)="changePassword()"
-          [disabled]="savingPwd() || !passwordValid()">
+        <button class="btn-primary btn-end" (click)="changePassword()" [disabled]="savingPwd() || !passwordValid()">
           @if (savingPwd()) {
-            <mat-icon class="icon-sm spin">refresh</mat-icon>
-            Cambiando…
+          <mat-icon class="icon-sm spin">refresh</mat-icon>
+          Cambiando…
           } @else {
-            <mat-icon class="icon-sm">lock_reset</mat-icon>
-            Cambiar contraseña
+          <mat-icon class="icon-sm">lock_reset</mat-icon>
+          Cambiar contraseña
           }
         </button>
       </div>
     </div>
 
-    <!-- ── Datos ──────────────────────────────────────────────────────────── -->
     <div class="card card-p">
       <h3 class="card-title">Gestión de Datos</h3>
 
       <div class="form-stack-sm" style="gap:10px;">
         <!-- Export JSON -->
-        <button class="btn-primary btn-full"
-          (click)="exportJson()" [disabled]="exportingJson()">
+        <button class="btn-primary btn-full" (click)="exportJson()" [disabled]="exportingJson()">
           @if (exportingJson()) {
-            <mat-icon class="icon-md spin">refresh</mat-icon> Exportando…
+          <mat-icon class="icon-md spin">refresh</mat-icon> Exportando…
           } @else {
-            <mat-icon class="icon-md">download</mat-icon> Exportar datos JSON
+          <mat-icon class="icon-md">download</mat-icon> Exportar datos JSON
           }
         </button>
 
         <!-- Export CSV -->
         <button class="btn-teal-outline" (click)="exportCsv()" [disabled]="exportingCsv()">
           @if (exportingCsv()) {
-            <mat-icon class="icon-md spin">refresh</mat-icon> Exportando…
+          <mat-icon class="icon-md spin">refresh</mat-icon> Exportando…
           } @else {
-            <mat-icon class="icon-md">table_chart</mat-icon> Exportar datos CSV
+          <mat-icon class="icon-md">table_chart</mat-icon> Exportar datos CSV
           }
         </button>
 
         <!-- Import JSON -->
         <button class="btn-ghost-import" (click)="triggerImport()" [disabled]="importing()">
           @if (importing()) {
-            <mat-icon class="icon-md spin">refresh</mat-icon> Importando…
+          <mat-icon class="icon-md spin">refresh</mat-icon> Importando…
           } @else {
-            <mat-icon class="icon-md">upload</mat-icon> Importar datos JSON
+          <mat-icon class="icon-md">upload</mat-icon> Importar datos JSON
           }
         </button>
         <input type="file" id="import-input" accept=".json" style="display:none;" (change)="onImport($event)">
       </div>
     </div>
 
-    <!-- ── Acerca de ───────────────────────────────────────────────────────── -->
     <div class="card card-p">
       <h3 class="card-title">Acerca de</h3>
       <p class="text-muted text-sm-0">Finance Tracker v1.0</p>
       <p class="mono text-dim text-xs-indent">
-        Desarrollado con <app-icon class="text-red-500" [icon]="'heart'" [size]="12" /> por
+        Desarrollado con ❤️ por
         <a href="https://juliopoveda.com" target="_blank" class="link-brand"
-          title="Hi Everyone!, I'm Julio Poveda a Senior .NET Developer from Medellin, Colombia.">Julio Poveda</a>
+          [matTooltip]="'Hi Everyone!, I\'m Julio Poveda a Senior .NET Developer from Medellin, Colombia.'">Julio
+          Poveda</a>
       </p>
     </div>
-
   </div>
 </div>
