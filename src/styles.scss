@@ -522,9 +522,8 @@ app-kpi-card {
   gap: 16px;
   margin-bottom: 24px;
 
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  @media (max-width: 479px) { gap: 10px; margin-bottom: 16px; }
+  @media (min-width: 1024px) { grid-template-columns: repeat(4, 1fr); }
 }
 
 // Dashboard: 1-col on mobile → 1+2 cols on tablet+
@@ -534,9 +533,8 @@ app-kpi-card {
   margin-bottom: 24px;
   grid-template-columns: 1fr;
 
-  @media (min-width: 768px) {
-    grid-template-columns: 1fr 2fr;
-  }
+  @media (max-width: 639px) { gap: 14px; margin-bottom: 14px; }
+  @media (min-width: 768px) { grid-template-columns: 1fr 2fr; }
 }
 
 // Dashboard: 1-col on mobile → 2-col on tablet+
@@ -545,9 +543,8 @@ app-kpi-card {
   gap: 24px;
   grid-template-columns: 1fr;
 
-  @media (min-width: 768px) {
-    grid-template-columns: 1fr 1fr;
-  }
+  @media (max-width: 639px) { gap: 14px; }
+  @media (min-width: 768px) { grid-template-columns: 1fr 1fr; }
 }
 
 // Budget: 1-col on mobile → 2-col on tablet+
@@ -598,6 +595,11 @@ app-kpi-card {
   margin: 0;
 
   &--lg { font-size: 1.75rem; }
+
+  @media (max-width: 639px) {
+    font-size: 1.25rem;
+    &--lg { font-size: 1.375rem; }
+  }
 }
 
 .page-subtitle {
@@ -614,6 +616,8 @@ app-kpi-card {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin: 0 0 20px;
+
+  @media (max-width: 639px) { margin-bottom: 12px; }
 }
 
 .form-label {
@@ -641,8 +645,10 @@ app-kpi-card {
   font-weight: 700;
   color: #fff;
   margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 
-  @media (max-width: 639px) { font-size: 1.25rem; }
+  @media (max-width: 639px) { font-size: 1.15rem; }
+  @media (max-width: 479px) { font-size: 1rem; }
 }
 
 .value-xl {
@@ -651,6 +657,8 @@ app-kpi-card {
   font-weight: 700;
   color: #fff;
   margin: 0;
+
+  @media (max-width: 639px) { font-size: 1.5rem; }
 }
 
 // ── 15. Layout helpers ────────────────────────────────────────────────────────
@@ -662,6 +670,8 @@ app-kpi-card {
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 28px;
+
+  @media (max-width: 639px) { margin-bottom: 18px; }
 }
 
 .form-stack    { display: flex; flex-direction: column; gap: 16px; }
@@ -1292,3 +1302,16 @@ mat-icon.icon-lg { font-size: 20px !important; width: 20px !important; height: 2
   .card-p    { padding: 16px; }
   .card-p-sm { padding: 14px; }
 }
+
+// Circular progress — scale SVG down so it fits single-column card on mobile
+@media (max-width: 639px) {
+  .cp-wrap svg { width: 140px; height: 140px; }
+}
+
+// Dashboard "Recientes" section header
+.dash-recent-header { margin-bottom: 24px; }
+@media (max-width: 639px) { .dash-recent-header { margin-bottom: 14px; } }
+
+// Category bars stack in dashboard — tighter gap on mobile
+.dash-cat-stack { gap: 20px; }
+@media (max-width: 639px) { .dash-cat-stack { gap: 14px; } }

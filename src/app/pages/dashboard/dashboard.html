@@ -43,7 +43,7 @@
       @if (categoryStats().length === 0) {
         <p class="empty-chart">Sin gastos este mes</p>
       } @else {
-        <div class="form-stack" style="gap:20px;">
+        <div class="form-stack dash-cat-stack">
           @for (s of categoryStats(); track s.cat.id) {
             <app-category-bar [name]="s.cat.name" [icon]="s.cat.icon" [color]="s.cat.color"
               [amount]="formatCOP(s.total)" [percentage]="s.percentage" [limitPct]="s.limitPct" [limit]="s.limitLabel" />
@@ -83,7 +83,7 @@
     </div>
 
     <div class="card card-p">
-      <div class="flex items-center justify-between" style="margin-bottom:24px;">
+      <div class="flex items-center justify-between dash-recent-header">
         <h3 class="card-title" style="margin:0;">Recientes</h3>
         <button (click)="goToTransactions()" class="btn-link-brand">Ver todo →</button>
       </div>
