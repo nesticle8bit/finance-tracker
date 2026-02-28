@@ -518,12 +518,19 @@ app-kpi-card {
 // Dashboard: 1-col stack on mobile → 2-col on tablet → 4-col on desktop
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
 
-  @media (max-width: 479px) { gap: 10px; margin-bottom: 16px; }
-  @media (min-width: 1024px) { grid-template-columns: repeat(4, 1fr); }
+  @media (min-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+    margin-bottom: 24px;
+  }
 }
 
 // Dashboard: 1-col on mobile → 1+2 cols on tablet+
