@@ -140,6 +140,8 @@ a {
   flex-direction: column;
   flex: 1;
   min-height: 100vh;
+  min-width: 0;       // prevent flex item from expanding beyond viewport
+  overflow-x: hidden; // clip any stray child overflow (won't affect position:fixed)
 
   @media (min-width: 1024px) {
     margin-left: 260px;
@@ -946,13 +948,13 @@ mat-icon.icon-lg { font-size: 20px !important; width: 20px !important; height: 2
 .daily-labels { display: flex; gap: 4px; padding: 0 8px; margin-top: 4px; }
 
 .daily-label {
-  flex: 1; text-align: center;
+  flex: 1; min-width: 0; overflow: hidden; text-align: center;
   color: rgba(255, 255, 255, 0.25);
   font-family: 'DM Mono', monospace; font-size: 10px;
 }
 
 .daily-bar-col {
-  display: flex; flex-direction: column; align-items: center; flex: 1; gap: 4px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; gap: 4px; cursor: pointer;
 }
 
 .daily-bar-track { flex: 1; width: 100%; display: flex; align-items: flex-end; }
@@ -1040,6 +1042,15 @@ mat-icon.icon-lg { font-size: 20px !important; width: 20px !important; height: 2
 
 .filter-search {
   flex: 2 1 200px;
+}
+
+@media (max-width: 639px) {
+  .filter-bar { flex-direction: column; gap: 10px; }
+  .filter-select,
+  .filter-select-wide,
+  .filter-search {
+    width: 100%; min-width: 0; flex: none;
+  }
 }
 
 .empty-state {
