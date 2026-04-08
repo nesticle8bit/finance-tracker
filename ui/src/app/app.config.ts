@@ -19,19 +19,19 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideIcons([
-      // ── Navigation ─────────────────────────────────────────────────────────
+      // ── Navigation ──────────────
       'layout-dashboard',
       'receipt',
       'category',
       'pig-money',
       'adjustments-horizontal',
-      // ── Auth ───────────────────────────────────────────────────────────────
+      // ── Auth ────────────────────
       'trending-up',
       'login',
       'logout',
       'user',
       'refresh',
-      // ── Actions ────────────────────────────────────────────────────────────
+      // ── Actions ─────────────────
       'plus',
       'pencil',
       'trash',
@@ -40,21 +40,21 @@ export const appConfig: ApplicationConfig = {
       'download',
       'upload',
       'search',
-      // ── Alerts & feedback ──────────────────────────────────────────────────
+      // ── Alerts & feedback ───────
       'alert-circle',
       'circle-check',
       'info-circle',
-      // ── Date picker ────────────────────────────────────────────────────────
+      // ── Date picker ─────────────
       'chevron-left',
       'chevron-right',
       'chevron-down',
       'calendar',
-      // ── Finance ────────────────────────────────────────────────────────────
+      // ── Finance ─────────────────
       'trending-down',
       'scale',
       'arrow-up',
       'arrow-down',
-      // ── Default categories ─────────────────────────────────────────────────
+      // ── Default categories ──────
       'tools',
       'home',
       'car',

@@ -116,7 +116,8 @@ export class DashboardComponent implements OnInit {
   openAdd(): void {
     this.dialog.open(TransactionModalComponent, {
       panelClass: 'transparent-dialog',
-      maxWidth: '140vw',
+      width: '640px',
+      maxWidth: '100vw',
     });
   }
 

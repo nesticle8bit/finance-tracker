@@ -69,7 +69,8 @@ export class TransactionsComponent {
     this.dialog.open(TransactionModalComponent, {
       data: {},
       panelClass: 'transparent-dialog',
-      maxWidth: '140vw',
+      width: '640px',
+      maxWidth: '100vw',
     });
   }
 
@@ -77,7 +78,8 @@ export class TransactionsComponent {
     this.dialog.open(TransactionModalComponent, {
       data: { transaction: t },
       panelClass: 'transparent-dialog',
-      maxWidth: '140vw',
+      width: '640px',
+      maxWidth: '100vw',
     });
   }
 
