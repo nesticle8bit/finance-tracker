@@ -11,56 +11,42 @@ namespace Finance.Tracker.API.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Ensure schemas exist
             migrationBuilder.Sql("CREATE SCHEMA IF NOT EXISTS authentications;");
             migrationBuilder.Sql("CREATE SCHEMA IF NOT EXISTS settings;");
 
-            // Add Role column to users
-            migrationBuilder.AddColumn<string>(
-                name: "Role",
-                schema: "authentications",
-                table: "users",
-                type: "text",
-                nullable: false,
-                defaultValue: "user");
+            migrationBuilder.Sql(@"
+                ALTER TABLE authentications.users
+                    ADD COLUMN IF NOT EXISTS ""Role"" text NOT NULL DEFAULT 'user';
+            ");
 
-            // Add LastSeenAt column to users
-            migrationBuilder.AddColumn<DateTime>(
-                name: "LastSeenAt",
-                schema: "authentications",
-                table: "users",
-                type: "timestamp with time zone",
-                nullable: true);
+            migrationBuilder.Sql(@"
+                ALTER TABLE authentications.users
+                    ADD COLUMN IF NOT EXISTS ""LastSeenAt"" timestamp with time zone;
+            ");
 
-            // Create siteSettings table
-            migrationBuilder.CreateTable(
-                name: "siteSettings",
-                schema: "settings",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    SiteName = table.Column<string>(type: "text", nullable: false),
-                    Slogan = table.Column<string>(type: "text", nullable: false),
-                    LoginSubtitle = table.Column<string>(type: "text", nullable: false),
-                    Feature1Title = table.Column<string>(type: "text", nullable: false),
-                    Feature1Desc = table.Column<string>(type: "text", nullable: false),
-                    Feature2Title = table.Column<string>(type: "text", nullable: false),
-                    Feature2Desc = table.Column<string>(type: "text", nullable: false),
-                    Feature3Title = table.Column<string>(type: "text", nullable: false),
-                    Feature3Desc = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_siteSettings", x => x.Id);
-                });
+            migrationBuilder.Sql(@"
+                CREATE TABLE IF NOT EXISTS settings.""siteSettings"" (
+                    ""Id""            uuid NOT NULL,
+                    ""SiteName""      text NOT NULL DEFAULT 'Finance Tracker',
+                    ""Slogan""        text NOT NULL DEFAULT 'Controla tus finanzas, transforma tu futuro.',
+                    ""LoginSubtitle"" text NOT NULL DEFAULT 'Registra ingresos, gastos y presupuestos en un solo lugar.',
+                    ""Feature1Title"" text NOT NULL DEFAULT 'Análisis visual',
+                    ""Feature1Desc""  text NOT NULL DEFAULT 'Gráficas claras de tus movimientos diarios',
+                    ""Feature2Title"" text NOT NULL DEFAULT 'Presupuesto inteligente',
+                    ""Feature2Desc""  text NOT NULL DEFAULT 'Define límites por categoría y evita sobregastos',
+                    ""Feature3Title"" text NOT NULL DEFAULT 'Datos seguros',
+                    ""Feature3Desc""  text NOT NULL DEFAULT 'Autenticación JWT, tus datos solo son tuyos',
+                    CONSTRAINT ""PK_siteSettings"" PRIMARY KEY (""Id"")
+                );
+            ");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(name: "siteSettings", schema: "settings");
-            migrationBuilder.DropColumn(name: "Role", schema: "authentications", table: "users");
-            migrationBuilder.DropColumn(name: "LastSeenAt", schema: "authentications", table: "users");
+            migrationBuilder.Sql(@"DROP TABLE IF EXISTS settings.""siteSettings"";");
+            migrationBuilder.Sql(@"ALTER TABLE authentications.users DROP COLUMN IF EXISTS ""Role"";");
+            migrationBuilder.Sql(@"ALTER TABLE authentications.users DROP COLUMN IF EXISTS ""LastSeenAt"";");
         }
     }
 }
