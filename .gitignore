@@ -55,3 +55,4 @@ desktop.ini
 *.swp
 *.swo
 api/.env
+api/node_modules/*
