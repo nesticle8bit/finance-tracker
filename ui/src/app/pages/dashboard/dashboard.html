@@ -63,20 +63,21 @@
       } @else {
         <div class="daily-chart">
           @for (bar of dailyBars(); track bar.day) {
-            <div class="daily-bar-col" [title]="'Día ' + bar.day">
-              <div class="daily-bar-track">
-                <div class="daily-bar"
-                  [style.height.%]="Math.max(bar.pct, 4)"
-                  [style.background]="bar.isToday ? 'linear-gradient(to top,#0d9488,#5eead4)' : 'rgba(20,184,166,0.35)'"
-                  [style.opacity]="bar.isToday ? 1 : 0.7">
-                </div>
+            <div class="daily-bar-col"
+              [title]="'Día ' + bar.day + (bar.amount ? ': ' + formatCOP(bar.amount) : '')">
+              <div class="daily-bar"
+                [style.height.px]="bar.heightPx"
+                [style.background]="bar.isToday
+                  ? 'linear-gradient(to top,#0d9488,#5eead4)'
+                  : bar.amount > 0 ? 'rgba(20,184,166,0.45)' : 'rgba(255,255,255,0.06)'">
               </div>
             </div>
           }
         </div>
         <div class="daily-labels">
           @for (bar of dailyBars(); track bar.day) {
-            <div class="daily-label">{{ bar.day }}</div>
+            <div class="daily-label"
+              [style.color]="bar.isToday ? '#14b8a6' : ''">{{ bar.day }}</div>
           }
         </div>
       }

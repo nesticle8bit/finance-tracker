@@ -90,16 +90,23 @@ export class DashboardComponent implements OnInit {
       .sort((a, b) => b.total - a.total);
   });
 
-  // Daily bar chart
+  // Daily bar chart — pixel heights avoid the % height bug in nested flex containers
+  private readonly CHART_H = 148;
   dailyBars = computed(() => {
     const now = new Date();
     const daily = this.finance.dailyExpenses();
     const today = now.getDate();
     const start = Math.max(1, today - 13);
-    const days: { day: number; pct: number; isToday: boolean }[] = [];
     const maxVal = Math.max(...Object.values(daily), 1);
+    const days: { day: number; heightPx: number; isToday: boolean; amount: number }[] = [];
     for (let d = start; d <= today; d++) {
-      days.push({ day: d, pct: ((daily[d] || 0) / maxVal) * 100, isToday: d === today });
+      const amount = daily[d] || 0;
+      days.push({
+        day: d,
+        heightPx: amount > 0 ? Math.max(Math.round((amount / maxVal) * this.CHART_H), 6) : 3,
+        isToday: d === today,
+        amount,
+      });
     }
     return days;
   });
@@ -133,6 +140,6 @@ export class DashboardComponent implements OnInit {
   }
 
   formatDate(dateStr: string): string {
-    return new Date(dateStr + 'T00:00:00').toLocaleDateString('es-CO');
+    return new Date(dateStr).toLocaleDateString('es-CO', { day: '2-digit', month: 'short' });
   }
 }

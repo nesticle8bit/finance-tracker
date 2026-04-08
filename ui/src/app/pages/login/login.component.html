@@ -1,66 +1,99 @@
 <div class="login-page">
-  <div class="login-glow"></div>
 
-  <div class="card login-card">
-    <!-- Logo -->
-    <div class="login-logo">
-      <div class="login-logo-icon">
-        <mat-icon>trending_up</mat-icon>
+  <!-- Left panel — branding / features -->
+  <div class="login-left">
+    <div class="login-left__glow1"></div>
+    <div class="login-left__glow2"></div>
+
+    <div class="login-left__content">
+      <!-- Brand -->
+      <div class="login-brand">
+        <div class="login-brand__icon">
+          <mat-icon>trending_up</mat-icon>
+        </div>
+        <span class="login-brand__name">Finance Tracker</span>
       </div>
-      <span class="login-logo-text">Finance Tracker</span>
+
+      <h2 class="login-left__title">Controla tus finanzas,<br>transforma tu futuro.</h2>
+      <p class="login-left__sub">Registra ingresos, gastos y presupuestos en un solo lugar, con claridad total.</p>
+
+      <div class="login-features">
+        <div class="login-feature">
+          <div class="login-feature__icon"><mat-icon>pie_chart</mat-icon></div>
+          <div>
+            <p class="login-feature__label">Análisis visual</p>
+            <p class="login-feature__desc">Gráficas claras de tus movimientos diarios</p>
+          </div>
+        </div>
+        <div class="login-feature">
+          <div class="login-feature__icon"><mat-icon>account_balance_wallet</mat-icon></div>
+          <div>
+            <p class="login-feature__label">Presupuesto inteligente</p>
+            <p class="login-feature__desc">Define límites por categoría y evita sobregastos</p>
+          </div>
+        </div>
+        <div class="login-feature">
+          <div class="login-feature__icon"><mat-icon>lock</mat-icon></div>
+          <div>
+            <p class="login-feature__label">Datos seguros</p>
+            <p class="login-feature__desc">Autenticación JWT, tus datos solo son tuyos</p>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <h1 class="login-title">Iniciar sesión</h1>
-    <p class="login-subtitle">Accede a tu cuenta para continuar</p>
-
-    <!-- Error banner -->
-    @if (error()) {
-      <div class="login-error">
-        <mat-icon>error_outline</mat-icon>
-        {{ error() }}
-      </div>
-    }
-
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-      <!-- Email -->
-      <div class="form-group">
-        <label class="form-label">Correo electrónico</label>
-        <input
-          class="input-field"
-          type="email"
-          formControlName="email"
-          placeholder="tu@correo.com"
-          autocomplete="email"
-        />
-        @if (form.get('email')?.invalid && form.get('email')?.touched) {
-          <p class="form-error">Ingresa un correo válido</p>
-        }
-      </div>
-
-      <!-- Password -->
-      <div class="form-group">
-        <label class="form-label">Contraseña</label>
-        <input
-          class="input-field"
-          type="password"
-          formControlName="password"
-          placeholder="••••••••"
-          autocomplete="current-password"
-        />
-        @if (form.get('password')?.invalid && form.get('password')?.touched) {
-          <p class="form-error">Mínimo 6 caracteres</p>
-        }
-      </div>
-
-      <button type="submit" class="btn-primary login-submit" [disabled]="loading()">
-        @if (loading()) {
-          <mat-icon class="spin">sync</mat-icon>
-          Verificando...
-        } @else {
-          <mat-icon>login</mat-icon>
-          Entrar
-        }
-      </button>
-    </form>
   </div>
+
+  <!-- Right panel — form -->
+  <div class="login-right">
+    <div class="login-form-wrap">
+
+      <!-- Logo visible solo en mobile -->
+      <div class="login-mobile-brand">
+        <div class="login-brand__icon">
+          <mat-icon>trending_up</mat-icon>
+        </div>
+        <span class="login-brand__name">Finance Tracker</span>
+      </div>
+
+      <h1 class="login-title">Iniciar sesión</h1>
+      <p class="login-subtitle">Accede a tu cuenta para continuar</p>
+
+      @if (error()) {
+        <div class="login-error">
+          <mat-icon>error_outline</mat-icon>
+          {{ error() }}
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="form-group">
+          <label class="form-label">Correo electrónico</label>
+          <input class="input-field" type="email" formControlName="email"
+            placeholder="tu@correo.com" autocomplete="email" />
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <p class="form-error">Ingresa un correo válido</p>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Contraseña</label>
+          <input class="input-field" type="password" formControlName="password"
+            placeholder="••••••••" autocomplete="current-password" />
+          @if (form.get('password')?.invalid && form.get('password')?.touched) {
+            <p class="form-error">Mínimo 6 caracteres</p>
+          }
+        </div>
+
+        <button type="submit" class="btn-primary login-submit" [disabled]="loading()">
+          @if (loading()) {
+            <mat-icon class="spin">sync</mat-icon> Verificando...
+          } @else {
+            <mat-icon>login</mat-icon> Entrar
+          }
+        </button>
+      </form>
+
+    </div>
+  </div>
+
 </div>
