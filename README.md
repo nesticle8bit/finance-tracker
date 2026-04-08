@@ -2,7 +2,7 @@
 
 > Aplicación web de control financiero personal — construida con **Angular 20**, **Tailwind CSS** y un backend **ASP.NET Core**.
 
-<img width="1916" height="1071" alt="image" src="https://github.com/user-attachments/assets/5333ee8b-88f6-45f7-82ad-729d6bae0611" />
+<img width="1916" height="1123" alt="image" src="https://github.com/user-attachments/assets/9f6d05c1-1fd3-4f15-83ab-1b27323f1245" />
 
 ---
 
