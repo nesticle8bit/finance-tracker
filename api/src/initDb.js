@@ -67,6 +67,14 @@ async function initDb() {
         "Feature3Desc"   TEXT NOT NULL DEFAULT 'Autenticación JWT, tus datos solo son tuyos'
       );
     `);
+
+    // Migrations: add columns to existing tables if they don't exist yet
+    await client.query(`
+      ALTER TABLE authentications.users
+        ADD COLUMN IF NOT EXISTS "Role"       TEXT NOT NULL DEFAULT 'user',
+        ADD COLUMN IF NOT EXISTS "LastSeenAt" TIMESTAMPTZ;
+    `);
+
     console.log('DB schema ready');
   } finally {
     client.release();
