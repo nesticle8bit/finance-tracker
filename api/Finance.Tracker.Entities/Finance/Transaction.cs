@@ -13,7 +13,7 @@ namespace Finance.Tracker.Entities.Finance
         public string Desc { get; set; } = string.Empty;
         public decimal Amount { get; set; }
         public string Type { get; set; } = "expense";
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public User User { get; set; } = null!;

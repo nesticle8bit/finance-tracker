@@ -17,7 +17,7 @@ namespace Finance.Tracker.Service.Services
         {
             var query = _repository.TransactionRepository.FindByUser(UserId, false);
 
-            if (!string.IsNullOrEmpty(month) && DateOnly.TryParseExact(month + "-01", "yyyy-MM-dd", out var parsed))
+            if (!string.IsNullOrEmpty(month) && DateTime.TryParseExact(month + "-01", "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out var parsed))
                 query = query.Where(t => t.Date.Year == parsed.Year && t.Date.Month == parsed.Month);
 
             var transactions = query.ToList();

@@ -26,9 +26,15 @@
 
   <!-- Form -->
   <div class="form-stack">
-    <div>
-      <label class="form-label">Fecha</label>
-      <app-date-picker [(value)]="form.date" />
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div>
+        <label class="form-label">Fecha</label>
+        <app-date-picker [(value)]="form.date" />
+      </div>
+      <div>
+        <label class="form-label">Hora</label>
+        <input class="input-field" type="time" [(ngModel)]="form.time">
+      </div>
     </div>
 
     <div>

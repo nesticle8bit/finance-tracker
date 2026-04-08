@@ -37,6 +37,7 @@ export class TransactionModalComponent implements OnInit {
     amount: null as number | null,
     categoryId: '',
     date: new Date().toISOString().slice(0, 10),
+    time: new Date().toTimeString().slice(0, 5),
   };
 
   get filteredCategories(): Category[] {
@@ -62,7 +63,8 @@ export class TransactionModalComponent implements OnInit {
       this.form.desc = t.desc;
       this.form.amount = t.amount;
       this.form.categoryId = t.categoryId;
-      this.form.date = t.date;
+      this.form.date = t.date.slice(0, 10);
+      this.form.time = t.date.includes('T') ? t.date.slice(11, 16) : '00:00';
     } else {
       this.preselectCategory();
     }
@@ -110,7 +112,7 @@ export class TransactionModalComponent implements OnInit {
           desc: this.form.desc.trim(),
           amount: this.form.amount,
           categoryId: this.form.categoryId,
-          date: this.form.date,
+          date: `${this.form.date}T${this.form.time}:00Z`,
         });
         this.toast.success('Transacción actualizada ✓');
       } else {
@@ -119,7 +121,7 @@ export class TransactionModalComponent implements OnInit {
           amount: this.form.amount,
           type: this.activeTab,
           categoryId: this.form.categoryId,
-          date: this.form.date,
+          date: `${this.form.date}T${this.form.time}:00Z`,
         });
         this.toast.success('Transacción registrada ✓');
       }

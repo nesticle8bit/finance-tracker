@@ -10,7 +10,7 @@ namespace Finance.Tracker.Shared.DataTransferObjects.Finance
         public string Desc { get; set; } = string.Empty;
         public decimal Amount { get; set; }
         public string Type { get; set; } = string.Empty;
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

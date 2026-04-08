@@ -4,5 +4,5 @@ export interface Transaction {
   amount: number;
   type: 'income' | 'expense';
   categoryId: string;
-  date: string; // YYYY-MM-DD
+  date: string; // ISO datetime e.g. 2026-04-07T14:30:00Z
 }
