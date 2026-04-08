@@ -12,6 +12,7 @@ const origins = (process.env.ALLOWED_ORIGINS || '')
 	.filter(Boolean);
 app.use(cors({ origin: origins.length ? origins : '*', credentials: true }));
 app.use(express.json({ limit: '10mb' }));
+app.use(require('./src/middleware/camelCase'));
 
 app.use('/api/auth', require('./src/routes/auth'));
 app.use('/api/transactions', require('./src/routes/transactions'));
