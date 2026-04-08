@@ -1,4 +1,7 @@
-const { Pool } = require('pg');
+const { Pool, types } = require('pg');
+
+// Parse NUMERIC as float instead of string
+types.setTypeParser(1700, (val) => parseFloat(val));
 
 // Parse .NET-style connection string: Host=...;Port=...;Database=...;Username=...;Password=...
 function parseConnString(str) {
