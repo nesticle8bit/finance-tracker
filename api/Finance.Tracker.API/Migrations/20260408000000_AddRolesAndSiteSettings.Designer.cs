@@ -36,7 +36,7 @@ namespace Finance.Tracker.API.Migrations
                     b.Property<string>("Role").IsRequired().HasColumnType("text");
                     b.HasKey("Id");
                     b.HasIndex("Email").IsUnique();
-                    b.ToTable("Users");
+                    b.ToTable("users", "authentications");
                 });
 
             modelBuilder.Entity("Finance.Tracker.Entities.Finance.BudgetConfig", b =>
@@ -46,7 +46,7 @@ namespace Finance.Tracker.API.Migrations
                     b.Property<Guid>("UserId").HasColumnType("uuid");
                     b.HasKey("Id");
                     b.HasIndex("UserId").IsUnique();
-                    b.ToTable("BudgetConfigs");
+                    b.ToTable("budgetConfig", "finance");
                 });
 
             modelBuilder.Entity("Finance.Tracker.Entities.Finance.CategoryLimit", b =>
@@ -58,7 +58,7 @@ namespace Finance.Tracker.API.Migrations
                     b.HasKey("Id");
                     b.HasIndex("CategoryId");
                     b.HasIndex("UserId", "CategoryId").IsUnique();
-                    b.ToTable("CategoryLimits");
+                    b.ToTable("categoryLimit", "finance");
                 });
 
             modelBuilder.Entity("Finance.Tracker.Entities.Finance.Transaction", b =>
@@ -74,7 +74,7 @@ namespace Finance.Tracker.API.Migrations
                     b.HasKey("Id");
                     b.HasIndex("CategoryId");
                     b.HasIndex("UserId");
-                    b.ToTable("Transactions");
+                    b.ToTable("transactions", "finance");
                 });
 
             modelBuilder.Entity("Finance.Tracker.Entities.Parameters.Category", b =>
@@ -88,7 +88,7 @@ namespace Finance.Tracker.API.Migrations
                     b.Property<Guid>("UserId").HasColumnType("uuid");
                     b.HasKey("Id");
                     b.HasIndex("UserId");
-                    b.ToTable("Categories");
+                    b.ToTable("categories", "parameters");
                 });
 
             modelBuilder.Entity("Finance.Tracker.Entities.Settings.SiteSettings", b =>
@@ -104,7 +104,7 @@ namespace Finance.Tracker.API.Migrations
                     b.Property<string>("SiteName").IsRequired().HasColumnType("text");
                     b.Property<string>("Slogan").IsRequired().HasColumnType("text");
                     b.HasKey("Id");
-                    b.ToTable("SiteSettings");
+                    b.ToTable("siteSettings", "settings");
                 });
 
             modelBuilder.Entity("Finance.Tracker.Entities.Finance.BudgetConfig", b =>

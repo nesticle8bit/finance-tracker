@@ -11,24 +11,31 @@ namespace Finance.Tracker.API.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Add Role column to Users
+            // Ensure schemas exist
+            migrationBuilder.Sql("CREATE SCHEMA IF NOT EXISTS authentications;");
+            migrationBuilder.Sql("CREATE SCHEMA IF NOT EXISTS settings;");
+
+            // Add Role column to users
             migrationBuilder.AddColumn<string>(
                 name: "Role",
-                table: "Users",
+                schema: "authentications",
+                table: "users",
                 type: "text",
                 nullable: false,
                 defaultValue: "user");
 
-            // Add LastSeenAt column to Users
+            // Add LastSeenAt column to users
             migrationBuilder.AddColumn<DateTime>(
                 name: "LastSeenAt",
-                table: "Users",
+                schema: "authentications",
+                table: "users",
                 type: "timestamp with time zone",
                 nullable: true);
 
-            // Create SiteSettings table
+            // Create siteSettings table
             migrationBuilder.CreateTable(
-                name: "SiteSettings",
+                name: "siteSettings",
+                schema: "settings",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -44,16 +51,16 @@ namespace Finance.Tracker.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SiteSettings", x => x.Id);
+                    table.PrimaryKey("PK_siteSettings", x => x.Id);
                 });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(name: "SiteSettings");
-            migrationBuilder.DropColumn(name: "Role", table: "Users");
-            migrationBuilder.DropColumn(name: "LastSeenAt", table: "Users");
+            migrationBuilder.DropTable(name: "siteSettings", schema: "settings");
+            migrationBuilder.DropColumn(name: "Role", schema: "authentications", table: "users");
+            migrationBuilder.DropColumn(name: "LastSeenAt", schema: "authentications", table: "users");
         }
     }
 }

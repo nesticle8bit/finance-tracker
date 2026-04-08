@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Finance.Tracker.Entities.Settings
 {
+    [Table("siteSettings", Schema = "settings")]
     public class SiteSettings
     {
         public Guid Id { get; set; } = Guid.NewGuid();
