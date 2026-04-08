@@ -22,7 +22,7 @@ module.exports = {
       fontFamily: {
         sans: ['Sora', 'sans-serif'],
         mono: ['DM Mono', 'monospace'],
-        display: ['Playfair Display', 'serif'],
+        display: ['Miranda Sans', 'serif'],
       },
       colors: {
         brand: {

@@ -643,7 +643,7 @@ app-kpi-card {
 // ── 14. Typography ─────────────────
 
 .page-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Miranda Sans', serif;
   font-size: 1.5rem;
   font-weight: 700;
   color: #fff;
@@ -1150,7 +1150,7 @@ mat-icon.icon-lg {
 
 .logo-text {
   cursor: pointer;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Miranda Sans', serif;
   font-size: 1.125rem;
   font-weight: 700;
   color: #fff;
@@ -1747,7 +1747,7 @@ mat-icon.icon-lg {
 
 // Serif title (mobile topbar brand name)
 .title-serif {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Miranda Sans', serif;
   font-size: 1rem;
   font-weight: 700;
   color: #fff;
@@ -2144,4 +2144,10 @@ mat-icon.icon-lg {
 .txn-modal__actions {
   display: flex;
   gap: 12px;
+}
+
+// Category dropdown opens upward inside the transaction modal
+.txn-modal .cat-dropdown-panel {
+  top: auto;
+  bottom: calc(100% + 6px);
 }
