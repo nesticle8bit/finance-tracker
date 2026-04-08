@@ -8,6 +8,7 @@ namespace Finance.Tracker.Contracts.Manager
         ITransactionRepository TransactionRepository { get; }
         ICategoryRepository CategoryRepository { get; }
         IBudgetRepository BudgetRepository { get; }
+        ISiteSettingsRepository SiteSettingsRepository { get; }
 
         void Save();
     }

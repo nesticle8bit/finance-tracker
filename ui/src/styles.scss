@@ -1,6 +1,6 @@
 @use '@angular/material' as mat;
 
-// ── 2. Angular Material dark theme
+//  2. Angular Material dark theme
 $ft-theme: mat.define-theme((color: (theme-type: dark,
         primary: mat.$cyan-palette,
       ),
@@ -10,16 +10,16 @@ $ft-theme: mat.define-theme((color: (theme-type: dark,
   @include mat.all-component-themes($ft-theme);
 }
 
-// ── 3. Tailwind
+//  3. Tailwind
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-// ── 4. Fonts
+//  4. Fonts
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Sora:wght@100..800&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
-// ── 5. Base
+//  5. Base
 *,
 *::before,
 *::after {
@@ -41,7 +41,7 @@ a {
   text-decoration: none;
 }
 
-// ── 6. Design tokens (extracted from the original HTML) ───────────────────────
+//  6. Design tokens (extracted from the original HTML) 
 :root {
   --brand-300: #5eead4;
   --brand-400: #2dd4bf;
@@ -50,7 +50,7 @@ a {
   --brand-700: #0f766e;
 }
 
-// ── 7. Core UI classes (from the original <style> block) ──────────────────────
+//  7. Core UI classes (from the original <style> block) 
 
 // Sidebar
 .sidebar {
@@ -392,7 +392,7 @@ a {
   padding: 16px;
 }
 
-// ── 8. Angular Material overrides ─
+//  8. Angular Material overrides 
 
 .mat-mdc-form-field {
   --mdc-outlined-text-field-outline-color: rgba(255, 255, 255, 0.12);
@@ -459,7 +459,7 @@ a {
   letter-spacing: 0 !important;
 }
 
-// ── 9. Scrollbar ───────────────────
+//  9. Scrollbar 
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -474,7 +474,7 @@ a {
   border-radius: 4px;
 }
 
-// ── 10. Keyframes ──────────────────
+//  10. Keyframes 
 @keyframes slideUp {
   from {
     opacity: 0;
@@ -499,19 +499,19 @@ a {
   }
 }
 
-// ── 11. Icon fixes ─────────────────
+//  11. Icon fixes 
 .mat-icon {
   overflow: visible !important;
   user-select: none;
 }
 
-// ── 12. Table ──────────────────────
+//  12. Table 
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
-// ── 13. Responsive layout helpers ──
+//  13. Responsive layout helpers 
 
 // KPI card host: ensure it fills its grid cell
 app-kpi-card {
@@ -640,7 +640,7 @@ app-kpi-card {
   gap: 12px;
 }
 
-// ── 14. Typography ─────────────────
+//  14. Typography 
 
 .page-title {
   font-family: 'Miranda Sans', serif;
@@ -755,7 +755,7 @@ app-kpi-card {
   }
 }
 
-// ── 15. Layout helpers ─────────────
+//  15. Layout helpers 
 
 .page-header {
   display: flex;
@@ -789,7 +789,7 @@ app-kpi-card {
   gap: 16px;
 }
 
-// ── 16. Icon sizes ─────────────────
+//  16. Icon sizes 
 
 mat-icon.icon-xs {
   font-size: 14px !important;
@@ -855,7 +855,7 @@ mat-icon.icon-lg {
   flex-shrink: 0;
 }
 
-// ── 17. Buttons ────────────────────
+//  17. Buttons 
 
 .btn-edit {
   background: rgba(45, 212, 191, 0.1);
@@ -1040,7 +1040,7 @@ mat-icon.icon-lg {
   }
 }
 
-// ── 18. Modal header ──────────────
+//  18. Modal header 
 
 .modal-header {
   display: flex;
@@ -1056,7 +1056,7 @@ mat-icon.icon-lg {
   margin: 0;
 }
 
-// ── 19. Toast ──────────────────────
+//  19. Toast 
 
 .toast-container {
   position: fixed;
@@ -1090,7 +1090,7 @@ mat-icon.icon-lg {
   display: flex;
 }
 
-// ── 20. Alert ──────────────────────
+//  20. Alert 
 
 .alert-error {
   display: flex;
@@ -1105,7 +1105,7 @@ mat-icon.icon-lg {
   margin-bottom: 16px;
 }
 
-// ── 21. Sidebar extras ─────────────
+//  21. Sidebar extras 
 
 .sidebar-logo {
   padding: 0 24px;
@@ -1178,7 +1178,7 @@ mat-icon.icon-lg {
   margin-left: .4rem;
 }
 
-// ── 22. Date picker ────────────────
+//  22. Date picker 
 
 .cal-dropdown {
   position: absolute;
@@ -1228,7 +1228,7 @@ mat-icon.icon-lg {
   justify-content: center;
 }
 
-// ── 23. Dashboard charts ───────────
+//  23. Dashboard charts 
 
 .daily-chart {
   display: flex;
@@ -1263,7 +1263,10 @@ mat-icon.icon-lg {
   cursor: pointer;
   border-radius: 4px;
   transition: opacity .15s;
-  &:hover { opacity: 0.8; }
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .daily-bar-track {
@@ -1280,7 +1283,7 @@ mat-icon.icon-lg {
   min-height: 4px;
 }
 
-// ── 24. Transaction row ────────────
+//  24. Transaction row 
 
 .txn-row {
   display: flex;
@@ -1311,7 +1314,7 @@ mat-icon.icon-lg {
   flex-shrink: 0;
 }
 
-// ── 25. Spin animation ─────────────
+//  25. Spin animation 
 
 @keyframes spin {
   from {
@@ -1327,7 +1330,7 @@ mat-icon.icon-lg {
   animation: spin 1s linear infinite;
 }
 
-// ── 26. Table styles ───────────────
+//  26. Table styles 
 
 .th-cell {
   text-align: left;
@@ -1355,7 +1358,7 @@ mat-icon.icon-lg {
   }
 }
 
-// ── 27. Misc ───────────────────────
+//  27. Misc 
 
 .dot-today {
   position: absolute;
@@ -1497,7 +1500,7 @@ mat-icon.icon-lg {
   margin-top: 4px;
 }
 
-// ── 28. Circular progress ──────────
+//  28. Circular progress 
 
 .cp-outer {
   display: flex;
@@ -1531,7 +1534,7 @@ mat-icon.icon-lg {
   font-size: 0.875rem;
 }
 
-// ── 29. Picker / custom select ─────
+//  29. Picker / custom select 
 
 // Shared trigger button for date-picker and category select
 .picker-btn {
@@ -1605,7 +1608,7 @@ mat-icon.icon-lg {
   cursor: pointer;
 }
 
-// ── 30. Final utilities ────────────
+//  30. Final utilities 
 
 // Full-width centered button (form submit, modal save)
 .btn-full {
@@ -1715,7 +1718,7 @@ mat-icon.icon-lg {
   color: rgba(255, 255, 255, 0.4);
 }
 
-// ── 31. Text utility helpers ───────
+//  31. Text utility helpers 
 
 // Soft body text (0.875rem, 70% white)
 .text-sm-faint {
@@ -1818,7 +1821,7 @@ mat-icon.icon-lg {
   padding: 4px 12px;
 }
 
-// ── 32. Mobile bottom navigation ──
+//  32. Mobile bottom navigation 
 
 .mobile-bottom-nav {
   position: fixed;
@@ -1871,7 +1874,7 @@ mat-icon.icon-lg {
   }
 }
 
-// ── 33. Global mobile responsive fixes ───────────────────────────────────────
+//  33. Global mobile responsive fixes 
 
 // Date picker — prevent horizontal overflow on small screens
 @media (max-width: 639px) {
@@ -1942,7 +1945,7 @@ mat-icon.icon-lg {
   }
 }
 
-// ── 34. Transaction modal redesign ─
+//  34. Transaction modal redesign 
 
 .txn-modal {
   background: #141416;
@@ -2151,4 +2154,174 @@ mat-icon.icon-lg {
 .txn-modal .cat-dropdown-panel {
   top: auto;
   bottom: calc(100% + 6px);
+}
+
+//  Admin pages 
+.admin-page {
+  padding: 32px 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  gap: 16px;
+}
+
+.admin-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.admin-subtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 4px 0 0;
+}
+
+.admin-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  padding: 32px 0;
+}
+
+.admin-card {
+  background: #1e293b;
+  border: 1px solid #1e3a4a;
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #64748b;
+    padding: 0 12px 12px;
+    border-bottom: 1px solid #1e3a4a;
+  }
+
+  td {
+    padding: 14px 12px;
+    font-size: 0.875rem;
+    color: #cbd5e1;
+    border-bottom: 1px solid #0f2233;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+}
+
+.user-name-cell {
+  font-weight: 600;
+  color: #f1f5f9 !important;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.online-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #334155;
+  border: 2px solid #475569;
+
+  &--on {
+    background: #22c55e;
+    border-color: #16a34a;
+    box-shadow: 0 0 6px #22c55e88;
+  }
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #1e3a4a;
+  color: #94a3b8;
+
+  &--admin {
+    background: rgba(13, 148, 136, 0.2);
+    color: #2dd4bf;
+    border: 1px solid rgba(45, 212, 191, 0.3);
+  }
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background: #1e3a4a;
+    color: #94a3b8;
+  }
+
+  &--danger:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+
+.settings-section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #0d9488;
+  margin: 0 0 16px;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 }

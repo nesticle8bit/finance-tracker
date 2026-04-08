@@ -1,0 +1,90 @@
+<div class="admin-page">
+
+  <!-- Header -->
+  <div class="admin-header">
+    <div>
+      <h1 class="admin-title">Configuración del sitio</h1>
+      <p class="admin-subtitle">Personaliza el nombre, slogan y contenido del login</p>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="admin-loading">
+      <mat-icon class="spin">sync</mat-icon>
+      Cargando...
+    </div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="admin-card" style="display:flex;flex-direction:column;gap:24px;">
+
+        <!-- General -->
+        <div>
+          <p class="settings-section-label">General</p>
+          <div class="settings-grid">
+            <div class="form-group">
+              <label class="form-label">Nombre del sitio</label>
+              <input class="input-field" type="text" formControlName="siteName" placeholder="Finance Tracker" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Slogan</label>
+              <textarea class="input-field" formControlName="slogan" rows="2"
+                placeholder="Controla tus finanzas..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Login left panel -->
+        <div>
+          <p class="settings-section-label">Panel izquierdo del login</p>
+          <div class="form-group" style="margin-bottom:16px;">
+            <label class="form-label">Subtítulo</label>
+            <textarea class="input-field" formControlName="loginSubtitle" rows="2"
+              placeholder="Descripción breve debajo del slogan"></textarea>
+          </div>
+
+          <div class="settings-grid">
+            <div class="form-group">
+              <label class="form-label">Característica 1 — Título</label>
+              <input class="input-field" type="text" formControlName="feature1Title" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Característica 1 — Descripción</label>
+              <input class="input-field" type="text" formControlName="feature1Desc" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Característica 2 — Título</label>
+              <input class="input-field" type="text" formControlName="feature2Title" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Característica 2 — Descripción</label>
+              <input class="input-field" type="text" formControlName="feature2Desc" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Característica 3 — Título</label>
+              <input class="input-field" type="text" formControlName="feature3Title" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Característica 3 — Descripción</label>
+              <input class="input-field" type="text" formControlName="feature3Desc" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Save -->
+        <div style="display:flex;justify-content:flex-end;">
+          <button type="submit" class="btn-primary" [disabled]="saving()">
+            @if (saving()) {
+              <mat-icon class="spin">sync</mat-icon> Guardando...
+            } @else {
+              <mat-icon>save</mat-icon> Guardar cambios
+            }
+          </button>
+        </div>
+
+      </div>
+    </form>
+  }
+
+</div>

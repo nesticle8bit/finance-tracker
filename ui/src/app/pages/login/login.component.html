@@ -11,32 +11,32 @@
         <div class="login-brand__icon">
           <mat-icon>trending_up</mat-icon>
         </div>
-        <span class="login-brand__name">Finance Tracker</span>
+        <span class="login-brand__name">{{ settings().siteName }}</span>
       </div>
 
-      <h2 class="login-left__title">Controla tus finanzas,<br>transforma tu futuro.</h2>
-      <p class="login-left__sub">Registra ingresos, gastos y presupuestos en un solo lugar, con claridad total.</p>
+      <h2 class="login-left__title" style="white-space:pre-line;">{{ settings().slogan }}</h2>
+      <p class="login-left__sub">{{ settings().loginSubtitle }}</p>
 
       <div class="login-features">
         <div class="login-feature">
           <div class="login-feature__icon"><mat-icon>pie_chart</mat-icon></div>
           <div>
-            <p class="login-feature__label">Análisis visual</p>
-            <p class="login-feature__desc">Gráficas claras de tus movimientos diarios</p>
+            <p class="login-feature__label">{{ settings().feature1Title }}</p>
+            <p class="login-feature__desc">{{ settings().feature1Desc }}</p>
           </div>
         </div>
         <div class="login-feature">
           <div class="login-feature__icon"><mat-icon>account_balance_wallet</mat-icon></div>
           <div>
-            <p class="login-feature__label">Presupuesto inteligente</p>
-            <p class="login-feature__desc">Define límites por categoría y evita sobregastos</p>
+            <p class="login-feature__label">{{ settings().feature2Title }}</p>
+            <p class="login-feature__desc">{{ settings().feature2Desc }}</p>
           </div>
         </div>
         <div class="login-feature">
           <div class="login-feature__icon"><mat-icon>lock</mat-icon></div>
           <div>
-            <p class="login-feature__label">Datos seguros</p>
-            <p class="login-feature__desc">Autenticación JWT, tus datos solo son tuyos</p>
+            <p class="login-feature__label">{{ settings().feature3Title }}</p>
+            <p class="login-feature__desc">{{ settings().feature3Desc }}</p>
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@
         <div class="login-brand__icon">
           <mat-icon>trending_up</mat-icon>
         </div>
-        <span class="login-brand__name">Finance Tracker</span>
+        <span class="login-brand__name">{{ settings().siteName }}</span>
       </div>
 
       <h1 class="login-title">Iniciar sesión</h1>

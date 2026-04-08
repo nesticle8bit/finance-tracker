@@ -2,6 +2,7 @@
 using Finance.Tracker.Contracts.Manager;
 using Finance.Tracker.Repository.Repositories;
 using Finance.Tracker.Repository.Seed;
+using Finance.Tracker.Entities.Settings;
 
 namespace Finance.Tracker.Repository.RepositoryManager
 {
@@ -21,10 +22,14 @@ namespace Finance.Tracker.Repository.RepositoryManager
         private readonly Lazy<IBudgetRepository> _budgetRepository = new(() =>
             new BudgetRepository(repositoryContext));
 
+        private readonly Lazy<ISiteSettingsRepository> _siteSettingsRepository = new(() =>
+            new SiteSettingsRepository(repositoryContext));
+
         public IUserRepository UserRepository => _userRepository.Value;
         public ITransactionRepository TransactionRepository => _transactionRepository.Value;
         public ICategoryRepository CategoryRepository => _categoryRepository.Value;
         public IBudgetRepository BudgetRepository => _budgetRepository.Value;
+        public ISiteSettingsRepository SiteSettingsRepository => _siteSettingsRepository.Value;
 
         public void Save() => _repositoryContext.SaveChanges();
     }

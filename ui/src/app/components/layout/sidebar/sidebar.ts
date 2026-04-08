@@ -37,6 +37,7 @@ export class SidebarComponent {
   balance = computed(() => this.finance.formatCOP(this.finance.balance()));
   pct = computed(() => this.finance.budgetUsedPct());
   userName = computed(() => this.auth.currentUser()?.name ?? '');
+  isAdmin = computed(() => this.auth.currentUser()?.role === 'admin');
 
   get pctLabel(): string {
     return `${Math.round(this.pct())}% del presupuesto usado`;

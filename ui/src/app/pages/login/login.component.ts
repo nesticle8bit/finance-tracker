@@ -1,8 +1,22 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
+import { SiteSettingsService } from '../../services/site-settings.service';
+import { SiteSettings } from '../../models/site-settings.model';
+
+const DEFAULT_SETTINGS: SiteSettings = {
+  siteName: 'Finance Tracker',
+  slogan: 'Controla tus finanzas,\ntransforma tu futuro.',
+  loginSubtitle: 'Registra ingresos, gastos y presupuestos en un solo lugar, con claridad total.',
+  feature1Title: 'Análisis visual',
+  feature1Desc: 'Gráficas claras de tus movimientos diarios',
+  feature2Title: 'Presupuesto inteligente',
+  feature2Desc: 'Define límites por categoría y evita sobregastos',
+  feature3Title: 'Datos seguros',
+  feature3Desc: 'Autenticación JWT, tus datos solo son tuyos',
+};
 
 @Component({
   selector: 'app-login',
@@ -11,13 +25,24 @@ import { ToastService } from '../../services/toast.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private auth = inject(AuthService);
   private toast = inject(ToastService);
   private fb = inject(FormBuilder);
+  private siteSettingsService = inject(SiteSettingsService);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+  readonly settings = signal<SiteSettings>(DEFAULT_SETTINGS);
+
+  async ngOnInit(): Promise<void> {
+    try {
+      const s = await this.siteSettingsService.getSettings();
+      this.settings.set(s);
+    } catch {
+      // use defaults silently
+    }
+  }
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],

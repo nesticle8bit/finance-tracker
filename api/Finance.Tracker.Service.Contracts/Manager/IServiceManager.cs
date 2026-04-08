@@ -10,5 +10,7 @@ namespace Finance.Tracker.Service.Contracts.Manager
         IBudgetService BudgetService { get; }
         IExportService ExportService { get; }
         IImportService ImportService { get; }
+        IAdminService AdminService { get; }
+        ISiteSettingsService SiteSettingsService { get; }
     }
 }

@@ -36,10 +36,11 @@ namespace Finance.Tracker.Service.Services
 
             var token = JwtHelper.Generate(new UserUpdateDto
             {
-                Email = user.Email,
+                Email = newUser.Email,
                 Id = newUser.Id.ToString(),
-                Name = user.Name,
-                Password = newUser.PasswordHash
+                Name = newUser.Name,
+                Password = newUser.PasswordHash,
+                Role = newUser.Role
             });
 
             return token;
@@ -56,12 +57,17 @@ namespace Finance.Tracker.Service.Services
             if (!BCryptHelper.Verify(login.Password, userEntity.PasswordHash))
                 throw new Exception("La contraseña ingresada es incorrecta.");
 
+            userEntity.LastSeenAt = DateTime.UtcNow;
+            await _repository.UserRepository.UpdateUser(userEntity);
+            _repository.Save();
+
             var token = JwtHelper.Generate(new UserUpdateDto
             {
                 Id = userEntity.Id.ToString(),
                 Email = userEntity.Email,
                 Name = userEntity.Name,
-                Password = userEntity.PasswordHash
+                Password = userEntity.PasswordHash,
+                Role = userEntity.Role
             });
 
             return token;
@@ -77,7 +83,9 @@ namespace Finance.Tracker.Service.Services
                 Id = user.Id.ToString(),
                 Email = user.Email,
                 Name = user.Name,
-                CreatedAt = user.CreatedAt
+                CreatedAt = user.CreatedAt,
+                Role = user.Role,
+                LastSeenAt = user.LastSeenAt
             };
         }
 
@@ -117,7 +125,9 @@ namespace Finance.Tracker.Service.Services
                 Id = user.Id.ToString(),
                 Email = user.Email,
                 Name = user.Name,
-                CreatedAt = user.CreatedAt
+                CreatedAt = user.CreatedAt,
+                Role = user.Role,
+                LastSeenAt = user.LastSeenAt
             };
         }
     }

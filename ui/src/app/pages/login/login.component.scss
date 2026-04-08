@@ -1,4 +1,4 @@
-// ── Layout ────────────────────────────────────────────────────────────────────
+// Layout 
 
 .login-page {
   min-height: 100vh;
@@ -11,7 +11,7 @@
   }
 }
 
-// ── Left panel ────────────────────────────────────────────────────────────────
+//  Left panel 
 
 .login-left {
   position: relative;
@@ -72,7 +72,7 @@
   line-height: 1.65;
 }
 
-// ── Brand ─────────────────────────────────────────────────────────────────────
+//  Brand ─
 
 .login-brand {
   display: flex;
@@ -106,7 +106,7 @@
   color: #fff;
 }
 
-// ── Features ──────────────────────────────────────────────────────────────────
+//  Features 
 
 .login-features {
   display: flex;
@@ -155,7 +155,7 @@
   line-height: 1.5;
 }
 
-// ── Right panel ───────────────────────────────────────────────────────────────
+//  Right panel ─
 
 .login-right {
   display: flex;
@@ -185,7 +185,7 @@
   }
 }
 
-// ── Form ─────────────────────────────────────────────────────────────────────
+//  Form ─
 
 .login-title {
   font-family: 'Playfair Display', serif;
@@ -250,13 +250,18 @@
   }
 }
 
-// ── Animations ────────────────────────────────────────────────────────────────
+//  Animations 
 
 .spin {
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }

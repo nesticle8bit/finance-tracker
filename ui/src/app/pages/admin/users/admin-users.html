@@ -1,0 +1,134 @@
+<div class="admin-page">
+
+  <!-- Header -->
+  <div class="admin-header">
+    <div>
+      <h1 class="admin-title">Usuarios</h1>
+      <p class="admin-subtitle">Gestiona los usuarios del sistema</p>
+    </div>
+    <button class="btn-primary" (click)="openCreate()">
+      <mat-icon>person_add</mat-icon>
+      Nuevo usuario
+    </button>
+  </div>
+
+  <!-- Table -->
+  @if (loading()) {
+    <div class="admin-loading">
+      <mat-icon class="spin">sync</mat-icon>
+      Cargando...
+    </div>
+  } @else {
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Estado</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Últ. conexión</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users(); track user.id) {
+            <tr>
+              <td>
+                <span class="online-dot" [class.online-dot--on]="isOnline(user)"
+                  [title]="isOnline(user) ? 'En línea' : 'Desconectado'">
+                </span>
+              </td>
+              <td class="user-name-cell">{{ user.name }}</td>
+              <td class="text-dim">{{ user.email }}</td>
+              <td>
+                <span class="role-badge" [class.role-badge--admin]="user.role === 'admin'">
+                  {{ user.role === 'admin' ? 'Admin' : 'Usuario' }}
+                </span>
+              </td>
+              <td class="text-dim mono" style="font-size:0.78rem;">
+                {{ user.lastSeenAt ? (user.lastSeenAt | date:'dd/MM/yy HH:mm') : '—' }}
+              </td>
+              <td class="actions-cell">
+                <button class="icon-btn" (click)="openEdit(user)" title="Editar">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button class="icon-btn icon-btn--danger" (click)="deleteUser(user)"
+                  [disabled]="deleting() === user.id" title="Eliminar">
+                  @if (deleting() === user.id) {
+                    <mat-icon class="spin">sync</mat-icon>
+                  } @else {
+                    <mat-icon>delete</mat-icon>
+                  }
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+</div>
+
+<!-- Dialog -->
+@if (showDialog()) {
+  <div class="modal-backdrop" (click)="closeDialog()"></div>
+  <div class="modal-box" style="max-width:480px;">
+    <div class="modal-header">
+      <h2 class="modal-title">{{ isEditing ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
+      <button class="modal-close" (click)="closeDialog()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="modal-body" style="display:flex;flex-direction:column;gap:16px;">
+
+      <div class="form-group">
+        <label class="form-label">Nombre</label>
+        <input class="input-field" type="text" formControlName="name" placeholder="Nombre completo" />
+        @if (form.get('name')?.invalid && form.get('name')?.touched) {
+          <p class="form-error">El nombre es requerido</p>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Correo electrónico</label>
+        <input class="input-field" type="email" formControlName="email" placeholder="correo@ejemplo.com" />
+        @if (form.get('email')?.invalid && form.get('email')?.touched) {
+          <p class="form-error">Ingresa un correo válido</p>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Rol</label>
+        <select class="input-field" formControlName="role">
+          <option value="user">Usuario</option>
+          <option value="admin">Administrador</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">{{ isEditing ? 'Nueva contraseña (opcional)' : 'Contraseña' }}</label>
+        <input class="input-field" type="password" formControlName="password"
+          [placeholder]="isEditing ? 'Dejar en blanco para no cambiar' : 'Mínimo 6 caracteres'" />
+        @if (form.get('password')?.invalid && form.get('password')?.touched) {
+          <p class="form-error">Mínimo 6 caracteres</p>
+        }
+      </div>
+
+      <div class="modal-footer" style="margin-top:8px;">
+        <button type="button" class="btn-secondary" (click)="closeDialog()">Cancelar</button>
+        <button type="submit" class="btn-primary" [disabled]="saving()">
+          @if (saving()) {
+            <mat-icon class="spin">sync</mat-icon> Guardando...
+          } @else {
+            <mat-icon>{{ isEditing ? 'save' : 'person_add' }}</mat-icon>
+            {{ isEditing ? 'Guardar' : 'Crear' }}
+          }
+        </button>
+      </div>
+
+    </form>
+  </div>
+}

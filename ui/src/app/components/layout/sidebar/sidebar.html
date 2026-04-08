@@ -38,6 +38,19 @@
       <mat-icon>{{ navItems[4].icon }}</mat-icon>
       {{ navItems[4].label }}
     </a>
+
+    @if (isAdmin()) {
+      <p class="nav-section-label" style="margin-top:24px;">Administración</p>
+
+      <a routerLink="/admin/users" routerLinkActive="active-nav" class="nav-item">
+        <mat-icon>manage_accounts</mat-icon>
+        Usuarios
+      </a>
+      <a routerLink="/admin/site" routerLinkActive="active-nav" class="nav-item">
+        <mat-icon>web</mat-icon>
+        Sitio
+      </a>
+    }
   </nav>
 
   <!-- Balance Card -->

@@ -3,6 +3,7 @@ using Finance.Tracker.Entities.Authentication;
 using Finance.Tracker.Repository.RepositoryBase;
 using Finance.Tracker.Repository.Seed;
 using Finance.Tracker.Shared.DataTransferObjects.Authentication;
+using Microsoft.EntityFrameworkCore;
 
 namespace Finance.Tracker.Repository.Repositories
 {
@@ -27,19 +28,19 @@ namespace Finance.Tracker.Repository.Repositories
             return users;
         }
 
-        public async Task AssignDefaultCategories(Guid userId)
-        {
+        public async Task<IEnumerable<User>> FindAllUsers(bool trackChanges) =>
+            await FindAll(trackChanges).OrderBy(u => u.Name).ToListAsync();
+
+        public async Task<User?> FindUserById(Guid id, bool trackChanges) =>
+            await FindByCondition(u => u.Id == id, trackChanges).FirstOrDefaultAsync();
+
+        public async Task AssignDefaultCategories(Guid userId) =>
             await seed.SeedUserCategories(userId);
-        }
 
-        public async Task CreateUser(User user)
-        {
-            Create(user);
-        }
+        public async Task CreateUser(User user) => Create(user);
 
-        public async Task UpdateUser(User user)
-        {
-            Update(user);
-        }
+        public async Task UpdateUser(User user) => Update(user);
+
+        public void DeleteUser(User user) => Delete(user);
     }
 }

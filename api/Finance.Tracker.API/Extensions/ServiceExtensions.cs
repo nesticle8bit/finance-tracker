@@ -53,6 +53,10 @@ namespace Finance.Tracker.API.Extensions
             });
         }
 
+        public static void ConfigureAuthorization(this IServiceCollection services) =>
+            services.AddAuthorization(options =>
+                options.AddPolicy("AdminOnly", policy => policy.RequireClaim("role", "admin")));
+
         public static void ConfigureJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

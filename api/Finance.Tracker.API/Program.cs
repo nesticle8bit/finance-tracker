@@ -22,6 +22,7 @@ ConfigurationManager configuration = builder.Configuration;
 
 builder.Services.ConfigureCors(configuration);
 builder.Services.ConfigureJwtAuthentication(configuration);
+builder.Services.ConfigureAuthorization();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigurePostgresContext(configuration);
@@ -29,6 +30,13 @@ builder.Services.ConfigureTransversalValue();
 builder.Services.ConfigureDbSeed();
 
 var app = builder.Build();
+
+// Seed app defaults (admin user role + site settings)
+using (var scope = app.Services.CreateScope())
+{
+    var seed = scope.ServiceProvider.GetRequiredService<Finance.Tracker.Repository.Seed.SeedService>();
+    await seed.SeedAppDefaults();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

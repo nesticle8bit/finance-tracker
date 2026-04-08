@@ -1,6 +1,7 @@
 ﻿using Finance.Tracker.Entities.Authentication;
 using Finance.Tracker.Entities.Finance;
 using Finance.Tracker.Entities.Parameters;
+using Finance.Tracker.Entities.Settings;
 using Microsoft.EntityFrameworkCore;
 
 namespace Finance.Tracker.Repository
@@ -12,6 +13,7 @@ namespace Finance.Tracker.Repository
         public DbSet<Transaction> Transactions => Set<Transaction>();
         public DbSet<BudgetConfig> BudgetConfigs => Set<BudgetConfig>();
         public DbSet<CategoryLimit> CategoryLimits => Set<CategoryLimit>();
+        public DbSet<SiteSettings> SiteSettings => Set<SiteSettings>();
 
         protected override void OnModelCreating(ModelBuilder mb)
         {
