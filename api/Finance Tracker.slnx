@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/Core/">
+    <Project Path="Finance.Tracker.Contracts/Finance.Tracker.Contracts.csproj" />
+    <Project Path="Finance.Tracker.Service.Contracts/Finance.Tracker.Service.Contracts.csproj" />
+    <Project Path="Finance.Tracker.Service/Finance.Tracker.Service.csproj" />
+  </Folder>
+  <Folder Name="/Domain/">
+    <Project Path="Finance.Tracker.Entities/Finance.Tracker.Entities.csproj" />
+    <Project Path="Finance.Tracker.Repository/Finance.Tracker.Repository.csproj" />
+    <Project Path="Finance.Tracker.Shared/Finance.Tracker.Shared.csproj" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="Finance.Tracker.Presentation/Finance.Tracker.Presentation.csproj" />
+  </Folder>
+  <Project Path="Finance.Tracker.API/Finance.Tracker.API.csproj" />
+</Solution>

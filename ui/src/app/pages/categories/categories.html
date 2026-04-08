@@ -1,0 +1,59 @@
+<div class="page-pad">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Categorías</h1>
+      <p class="page-subtitle">Administra tus categorías</p>
+    </div>
+    <button class="btn-primary" (click)="openAdd()">
+      <mat-icon class="icon-md">add</mat-icon> Nueva categoría
+    </button>
+  </div>
+
+  <div class="cat-grid">
+    @for (card of cards(); track card.cat.id) {
+      <div class="card card-p-sm">
+
+        <!-- Top row: icon + name + actions -->
+        <div class="flex items-center justify-between" style="margin-bottom:16px;">
+          <div class="flex items-center" style="gap:12px;">
+            <div class="icon-box-md" [style.background]="card.cat.color + '22'">
+              <mat-icon [style.color]="card.cat.color">{{ card.cat.icon }}</mat-icon>
+            </div>
+            <div>
+              <p class="preview-name">{{ card.cat.name }}</p>
+              <p class="mono text-dim" style="font-size:0.7rem;margin:2px 0 0;">
+                {{ card.cat.type === 'income' ? 'Ingreso' : card.cat.type === 'expense' ? 'Gasto' : 'Ambos' }}
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center" style="gap:6px;">
+            <button class="btn-icon-edit" (click)="openEdit(card.cat)" title="Editar">
+              <mat-icon class="icon-sm">edit</mat-icon>
+            </button>
+
+            @if (card.isDeletable) {
+              <button class="btn-icon-delete" (click)="delete(card.cat.id)" title="Eliminar">
+                <mat-icon class="icon-sm">delete</mat-icon>
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Bottom row: count + total -->
+        <div class="flex justify-between items-center row-divider-top">
+          <span class="text-dim" style="font-size:0.8rem;">
+            {{ card.count }} transacción{{ card.count !== 1 ? 'es' : '' }}
+          </span>
+          <span class="mono text-sm-bold"
+            [style.color]="card.total >= 0 ? '#f87171' : '#4ade80'">
+            {{ formatCOP(card.total) }}
+          </span>
+        </div>
+
+      </div>
+    }
+  </div>
+
+</div>

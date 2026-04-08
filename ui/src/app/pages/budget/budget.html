@@ -1,0 +1,104 @@
+<div class="page-pad">
+
+  <div style="margin-bottom:28px;">
+    <h1 class="page-title">Presupuesto</h1>
+    <p class="page-subtitle">{{ monthLabel() }}</p>
+  </div>
+
+  <!-- Set Budget + Summary: stacked on mobile, side by side on desktop -->
+  <div class="budget-grid">
+    <div class="card card-p">
+      <h3 class="card-title">
+        Presupuesto Global
+      </h3>
+
+      <label class="form-label form-label-plain">
+        Presupuesto Mensual (COP)
+      </label>
+
+      <div class="flex flex-wrap" style="gap:12px;">
+        <input class="input-field input-flex" type="number" placeholder="Ej: 3000000" min="0"
+          [value]="budgetInput() ?? ''" (input)="budgetInput.set(+$any($event.target).value)">
+        <button class="btn-primary" (click)="saveBudget()" style="white-space:nowrap;">Guardar</button>
+      </div>
+
+      <p class="zmono text-dim text-xs-indent">
+        Presupuesto actual:
+        <span class="text-brand">
+          {{budgetFmt()}}
+        </span>
+      </p>
+
+      <div style="margin-top:24px;">
+        <div class="flex justify-between" style="font-size:0.875rem;margin-bottom:8px;">
+          <span class="text-muted">Utilizado</span>
+          <span class="mono" style="color:#fff;">{{ pct() | number:'1.0-1' }}%</span>
+        </div>
+        <div class="progress-track" style="height:12px;">
+          <div class="progress-fill" [style.width.%]="pct()"
+            [style.background]="pct() > 90 ? '#ef4444' : pct() > 70 ? '#f59e0b' : 'linear-gradient(to right,#0d9488,#5eead4)'">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="card card-p">
+      <h3 class="card-title">Resumen del Mes</h3>
+      <div class="form-stack">
+        <div class="budget-row">
+          <span class="text-muted">Ingresos del mes</span>
+          <span class="mono text-income">{{ totalIncome() }}</span>
+        </div>
+        <div class="budget-row">
+          <span class="text-muted">Gastos del mes</span>
+          <span class="mono text-expense">{{ totalExpense() }}</span>
+        </div>
+        <div class="budget-row budget-row-border">
+          <span class="text-muted">Balance</span>
+          <span class="mono" style="font-weight:600;" [style.color]="isPositive() ? '#2dd4bf' : '#f87171'">{{ balance()
+            }}</span>
+        </div>
+        <div class="budget-row">
+          <span class="text-muted">Disponible del presupuesto</span>
+          <span class="mono" style="color:#fff;">{{ remaining() }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Limits -->
+  <div class="card card-p">
+    <h3 class="card-title">Límites por Categoría (opcional)</h3>
+    <div class="form-stack" style="gap:24px;">
+      @for (cat of expenseCategories(); track cat.id) {
+      @let spent = getCatSpent(cat.id);
+      @let limit = getCatLimit(cat.id);
+      @let pct = getCatLimitPct(cat.id);
+      <div>
+        <!-- Category row -->
+        <div class="flex flex-wrap items-center justify-between gap-3" style="margin-bottom:8px;">
+          <div class="flex items-center" style="gap:8px;">
+            <mat-icon class="icon-sm" [style.color]="cat.color">{{ cat.icon }}</mat-icon>
+            <span class="text-sm-faint">{{ cat.name }}</span>
+          </div>
+          <div class="flex items-center" style="gap:12px;">
+            <span class="mono text-dim" style="font-size:0.75rem;">{{ formatCOP(spent) }}</span>
+            <input class="input-field cat-limit-input" type="number" [value]="limit ?? ''"
+              (change)="setCatLimit(cat.id, $event)" placeholder="Límite COP" min="0">
+          </div>
+        </div>
+        @if (limit) {
+        <div class="progress-track">
+          <div class="progress-fill" [style.width.%]="pct"
+            [style.background]="pct > 90 ? '#ef4444' : pct > 70 ? '#f59e0b' : 'linear-gradient(to right,' + cat.color + 'aa,' + cat.color + ')'">
+          </div>
+        </div>
+        <p class="cat-limit-pct">{{ pct | number:'1.0-0' }}% del límite</p>
+        }
+      </div>
+      }
+    </div>
+  </div>
+
+</div>

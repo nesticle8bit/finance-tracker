@@ -1,0 +1,13 @@
+<div class="toast-container">
+  @for (msg of toast.messages(); track msg.id) {
+    <div class="toast-item"
+      [style.border-left-color]="msg.type === 'success' ? '#14b8a6' : msg.type === 'error' ? '#ef4444' : 'rgba(255,255,255,0.2)'"
+      [style.color]="msg.type === 'success' ? '#2dd4bf' : msg.type === 'error' ? '#f87171' : 'rgba(255,255,255,0.8)'">
+      <mat-icon class="icon-md">{{ iconMap[msg.type] }}</mat-icon>
+      <span class="text-white-90">{{ msg.message }}</span>
+      <button class="toast-close" (click)="toast.remove(msg.id)">
+        <mat-icon class="icon-sm">close</mat-icon>
+      </button>
+    </div>
+  }
+</div>

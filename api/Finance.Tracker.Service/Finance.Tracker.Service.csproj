@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Finance.Tracker.Contracts\Finance.Tracker.Contracts.csproj" />
+    <ProjectReference Include="..\Finance.Tracker.Service.Contracts\Finance.Tracker.Service.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

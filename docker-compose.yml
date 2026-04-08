@@ -1,0 +1,23 @@
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Finance.Tracker.API/Dockerfile
+    environment:
+      - ConnectionStrings__Default=${DB_CONNECTION_STRING}
+      - Jwt__Secret=${JWT_SECRET}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+      - AllowedOrigins=${ALLOWED_ORIGINS}
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+    restart: unless-stopped
+
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    ports:
+      - "${UI_PORT}:80"
+    depends_on:
+      - api
+    restart: unless-stopped

@@ -1,0 +1,19 @@
+<div>
+  <div class="flex items-center justify-between" style="margin-bottom:6px;">
+    <div class="flex items-center" style="gap:8px;">
+      <mat-icon class="icon-sm" [style.color]="color">{{ icon }}</mat-icon>
+      <span class="text-sm-faint">{{ name }}</span>
+      @if (limit) {
+        <span class="mono text-dim" style="font-size:0.75rem;">/ {{ limit }}</span>
+      }
+    </div>
+    <div class="flex items-center" style="gap:12px;">
+      <span class="mono text-dim" style="font-size:0.75rem;">{{ percentage | number:'1.0-0' }}%</span>
+      <span class="mono text-sm-bold" style="color:#fff;">{{ amount }}</span>
+    </div>
+  </div>
+
+  <div class="progress-track">
+    <div class="progress-fill" [style.width.%]="fillPct" [style.background]="barColor"></div>
+  </div>
+</div>

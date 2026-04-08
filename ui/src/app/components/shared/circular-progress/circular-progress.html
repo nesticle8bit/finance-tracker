@@ -1,0 +1,45 @@
+<div class="cp-outer">
+  <!-- SVG Circle -->
+  <div class="cp-wrap">
+    <svg width="160" height="160" viewBox="0 0 160 160" style="transform:rotate(-90deg)">
+      <defs>
+        <linearGradient id="grad-ok" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#0d9488" />
+          <stop offset="100%" stop-color="#5eead4" />
+        </linearGradient>
+        <linearGradient id="grad-warn" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#d97706" />
+          <stop offset="100%" stop-color="#fbbf24" />
+        </linearGradient>
+        <linearGradient id="grad-danger" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#dc2626" />
+          <stop offset="100%" stop-color="#f87171" />
+        </linearGradient>
+      </defs>
+      <!-- Track -->
+      <circle cx="80" cy="80" [attr.r]="radius" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12" />
+      <!-- Fill -->
+      <circle cx="80" cy="80" [attr.r]="radius" fill="none" [attr.stroke]="strokeColor" stroke-width="12"
+        stroke-linecap="round" [attr.stroke-dasharray]="circumference" [attr.stroke-dashoffset]="offset"
+        style="transition:stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)" />
+    </svg>
+
+    <!-- Center label -->
+    <div class="cp-center">
+      <p class="value-xl">{{ percentage | number:'1.0-0' }}%</p>
+      <p class="text-dim text-xs-indent">utilizado</p>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="cp-stats">
+    <div class="cp-row">
+      <span class="text-muted">Gastado</span>
+      <span class="mono text-expense">{{ spent }}</span>
+    </div>
+    <div class="cp-row">
+      <span class="text-muted">Disponible</span>
+      <span class="mono text-brand">{{ remaining }}</span>
+    </div>
+  </div>
+</div>

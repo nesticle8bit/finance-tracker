@@ -1,0 +1,40 @@
+@if (auth.isAuthenticated()) {
+  <div class="flex min-h-screen bg-zinc-950">
+
+    <!-- Mobile overlay (shown when sidebar is open on small screens) -->
+    @if (layout.navOpen()) {
+      <div class="sidebar-overlay" (click)="layout.close()"></div>
+    }
+
+    <!-- Sidebar (fixed drawer on mobile, always visible on desktop) -->
+    <app-sidebar />
+
+    <!-- Page content -->
+    <div class="content-wrapper">
+
+      <!-- Mobile top bar -->
+      <header class="mobile-topbar">
+        <button class="btn-menu" (click)="layout.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <span class="title-serif">Finance Tracker</span>
+
+        <!-- Spacer to keep title centred -->
+        <div style="width:40px;"></div>
+      </header>
+
+      <main class="main-content">
+        <router-outlet />
+      </main>
+    </div>
+
+    <!-- Mobile bottom navigation (hidden on desktop via CSS) -->
+    <app-bottom-nav />
+
+  </div>
+} @else {
+  <router-outlet />
+}
+
+<app-toast />

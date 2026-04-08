@@ -1,0 +1,94 @@
+<div class="modal-box">
+  <div class="modal-header">
+    <h2 class="modal-title">{{ title }}</h2>
+    <button class="btn-ghost-close" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Type Tabs -->
+  @if (!isEdit) {
+    <div class="tab-container">
+      <button class="tab-btn" [class.active]="activeTab === 'expense'" (click)="setTab('expense')">
+        <mat-icon class="icon-sm">arrow_upward</mat-icon> Gasto
+      </button>
+      <button class="tab-btn" [class.active]="activeTab === 'income'" (click)="setTab('income')">
+        <mat-icon class="icon-sm">arrow_downward</mat-icon> Ingreso
+      </button>
+    </div>
+  } @else {
+    <div style="margin-bottom:20px;">
+      <span class="badge badge-sm" [class.badge-income]="activeTab === 'income'" [class.badge-expense]="activeTab === 'expense'">
+        {{ activeTab === 'income' ? '↓ Ingreso' : '↑ Gasto' }}
+      </span>
+    </div>
+  }
+
+  <!-- Form -->
+  <div class="form-stack">
+    <div>
+      <label class="form-label">Fecha</label>
+      <app-date-picker [(value)]="form.date" />
+    </div>
+
+    <div>
+      <label class="form-label">Descripción</label>
+      <input class="input-field" type="text" [(ngModel)]="form.desc" placeholder="Ej: Almuerzo, Salario...">
+    </div>
+
+    <div>
+      <label class="form-label">Monto (COP)</label>
+      <input class="input-field" type="number" [(ngModel)]="form.amount" placeholder="0" min="0">
+    </div>
+
+    <div style="position:relative;">
+      <label class="form-label">Categoría</label>
+
+      <button type="button" class="picker-btn" (click)="catOpen = !catOpen"
+        [style.border-color]="catOpen ? '#14b8a6' : 'rgba(255,255,255,0.12)'">
+        @if (selectedCat) {
+          <div class="icon-box-xxs" [style.background]="selectedCat.color + '25'">
+            <mat-icon class="icon-xs" [style.color]="selectedCat.color">{{ selectedCat.icon }}</mat-icon>
+          </div>
+          <span [style.color]="selectedCat.color" class="picker-selected-text">
+            {{ selectedCat.name }}
+          </span>
+        } @else {
+          <span class="text-dim picker-placeholder">Seleccionar categoría...</span>
+        }
+        <mat-icon class="icon-md text-dim" style="transition:transform .2s;"
+          [style.transform]="catOpen ? 'rotate(180deg)' : 'rotate(0)'">expand_more</mat-icon>
+      </button>
+
+      @if (catOpen) {
+        <div class="cat-dropdown-panel">
+          @for (cat of filteredCategories; track cat.id) {
+            <button type="button" class="dropdown-item" (click)="selectCat(cat)"
+              [style.background]="form.categoryId === cat.id ? 'rgba(20,184,166,0.12)' : 'transparent'">
+              <div class="icon-box-xs" [style.background]="cat.color + '25'">
+                <mat-icon class="icon-sm" [style.color]="cat.color">{{ cat.icon }}</mat-icon>
+              </div>
+              <span class="dropdown-item-text"
+                [style.color]="form.categoryId === cat.id ? cat.color : 'rgba(255,255,255,0.8)'">
+                {{ cat.name }}
+              </span>
+              @if (form.categoryId === cat.id) {
+                <mat-icon class="icon-sm text-teal" style="margin-left:auto;">check</mat-icon>
+              }
+            </button>
+          }
+        </div>
+        <div class="overlay-close" style="z-index:199;" (click)="catOpen = false"></div>
+      }
+    </div>
+  </div>
+
+  <!-- Botones -->
+  <div class="modal-actions">
+    <button class="btn-cancel" (click)="close()">Cancelar</button>
+    <button class="btn-primary btn-save" (click)="save()">
+      <mat-icon class="icon-md">{{ isEdit ? 'save' : 'check' }}</mat-icon>
+      {{saveLabel}}
+    </button>
+  </div>
+</div>

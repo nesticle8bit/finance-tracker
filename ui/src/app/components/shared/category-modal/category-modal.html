@@ -1,0 +1,69 @@
+<div class="modal-box">
+  <!-- Header -->
+  <div class="modal-header">
+    <h2 class="modal-title">Nueva Categoría</h2>
+    <button class="btn-ghost-close" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="form-stack">
+
+    <div>
+      <label class="form-label">Nombre</label>
+      <input class="input-field" type="text" [(ngModel)]="form.name" placeholder="Ej: Restaurante, Salud...">
+    </div>
+
+    <div>
+      <label class="form-label">
+        Ícono Material <br>
+        <span class="text-hint">
+          Busca el nombre del ícono en
+          <a href="https://fonts.google.com/icons" target="_blank" class="link-brand">Google Fonts</a>
+        </span>
+      </label>
+      <input class="input-field" type="text" [(ngModel)]="form.icon" placeholder="Ej: restaurant, local_hospital">
+    </div>
+
+    <!-- Color Picker -->
+    <div>
+      <label class="form-label">Color</label>
+      <div class="flex flex-wrap" style="gap:8px;">
+        @for (c of palette; track c) {
+          <button class="color-swatch" (click)="selectColor(c)" [style.background]="c"
+            [style.border]="form.color === c ? '3px solid #fff' : '3px solid transparent'"
+            [style.transform]="form.color === c ? 'scale(1.15)' : 'scale(1)'">
+          </button>
+        }
+      </div>
+    </div>
+
+    <div>
+      <label class="form-label">Tipo</label>
+      <select class="input-field" [(ngModel)]="form.type">
+        <option value="expense">Gasto</option>
+        <option value="income">Ingreso</option>
+        <option value="both">Ambos</option>
+      </select>
+    </div>
+
+    <!-- Preview -->
+    <div class="cat-preview">
+      <div class="icon-box-md" [style.background]="form.color + '22'">
+        <mat-icon [style.color]="form.color">{{ form.icon || 'more_horiz' }}</mat-icon>
+      </div>
+      <div>
+        <p class="preview-name">{{ form.name || 'Vista previa' }}</p>
+        <p class="text-dim text-xs-0">
+          {{ form.type === 'income' ? 'Ingreso' : form.type === 'expense' ? 'Gasto' : 'Ambos' }}
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="btn-primary btn-full" style="margin-top:24px;" (click)="save()">
+    <mat-icon class="icon-md">check</mat-icon>
+    Crear categoría
+  </button>
+</div>

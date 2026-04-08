@@ -1,0 +1,73 @@
+<aside class="sidebar flex flex-col py-6" [class.sidebar--open]="layout.navOpen()">
+
+  <!-- Logo row (+ mobile close button) -->
+  <div class="sidebar-logo">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="logo-icon">
+          <mat-icon class="icon-md">trending_up</mat-icon>
+        </div>
+        <span [routerLink]="['/']" class="logo-text">Finance Tracker</span>
+      </div>
+
+      <!-- Close button — only visible on mobile -->
+      <button class="sidebar-close-btn" (click)="layout.close()">
+        <mat-icon class="icon-lg">close</mat-icon>
+      </button>
+    </div>
+
+    <p class="mono text-dim" style="font-size:0.75rem;margin-top:4px;margin-left:44px;">
+      {{ monthLabel() }}
+    </p>
+  </div>
+
+  <!-- Nav -->
+  <nav class="flex-1" style="padding:0 8px;">
+    <p class="nav-section-label">Principal</p>
+
+    @for (item of navItems.slice(0, 4); track item.route) {
+      <a [routerLink]="item.route" routerLinkActive="active-nav" class="nav-item">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        {{ item.label }}
+      </a>
+    }
+
+    <p class="nav-section-label" style="margin-top:24px;">Configuración</p>
+
+    <a [routerLink]="navItems[4].route" routerLinkActive="active-nav" class="nav-item">
+      <mat-icon>{{ navItems[4].icon }}</mat-icon>
+      {{ navItems[4].label }}
+    </a>
+  </nav>
+
+  <!-- Balance Card -->
+  <div class="sidebar-balance">
+    <div class="balance-card">
+      <p class="balance-card-label">Saldo disponible</p>
+      <p class="value-lg" [style.color]="isPositive ? '#2dd4bf' : '#f87171'">{{ balance() }}</p>
+
+      <div class="progress-track" style="margin-top:12px;">
+        <div class="progress-fill" [style.width.%]="pct()"
+          [style.background]="pct() > 90 ? '#ef4444' : pct() > 70 ? '#f59e0b' : 'linear-gradient(to right,#0d9488,#5eead4)'">
+        </div>
+      </div>
+      <p class="balance-card-pct">{{ pctLabel }}</p>
+    </div>
+  </div>
+
+  <!-- User + Logout -->
+  <div class="sidebar-user">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2" style="overflow:hidden;">
+        <div class="user-avatar">
+          <mat-icon class="icon-xs text-teal">person</mat-icon>
+        </div>
+        <span class="user-name">{{ userName() }}</span>
+      </div>
+      <button class="btn-logout" (click)="logout()" [matTooltip]="'Cerrar sesión'">
+        <mat-icon class="icon-md">logout</mat-icon>
+      </button>
+    </div>
+  </div>
+
+</aside>
