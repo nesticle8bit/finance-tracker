@@ -6,6 +6,9 @@ import { AuthService } from '../../services/auth.service';
 import { FinanceService } from '../../services/finance';
 import { ToastService } from '../../services/toast.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { environment } from '../../../environments/environment';
+
+const API = environment.financeTrackerAPI;
 
 @Component({
   selector: 'app-settings',
@@ -17,6 +20,18 @@ export class SettingsComponent implements OnInit {
   private auth = inject(AuthService);
   private finance = inject(FinanceService);
   private toast = inject(ToastService);
+
+  readonly currentUser = this.auth.currentUser;
+  readonly avatarSrc = computed(() => {
+    const url = this.auth.currentUser()?.avatarUrl;
+    return url ? `${API}${url.split('?')[0]}?t=${Date.now()}` : null;
+  });
+  readonly userInitials = computed(() => {
+    const name = this.auth.currentUser()?.name ?? '?';
+    return name.split(' ').slice(0, 2).map((w: string) => w[0]).join('').toUpperCase();
+  });
+
+  uploadingAvatar = signal(false);
 
   profileName = signal('');
   profileEmail = signal('');
@@ -109,6 +124,21 @@ export class SettingsComponent implements OnInit {
       this.toast.error('Error al exportar CSV');
     } finally {
       this.exportingCsv.set(false);
+    }
+  }
+
+  async pickAvatar(event: Event): Promise<void> {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    this.uploadingAvatar.set(true);
+    try {
+      await this.auth.uploadAvatar(file);
+      this.toast.success('Foto de perfil actualizada ✓');
+    } catch {
+      this.toast.error('Error al subir la imagen');
+    } finally {
+      this.uploadingAvatar.set(false);
+      (event.target as HTMLInputElement).value = '';
     }
   }
 

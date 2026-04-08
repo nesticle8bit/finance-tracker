@@ -23,8 +23,7 @@
       <table class="admin-table">
         <thead>
           <tr>
-            <th>Estado</th>
-            <th>Nombre</th>
+            <th>Usuario</th>
             <th>Correo</th>
             <th>Rol</th>
             <th>Últ. conexión</th>
@@ -35,11 +34,17 @@
           @for (user of users(); track user.id) {
             <tr>
               <td>
-                <span class="online-dot" [class.online-dot--on]="isOnline(user)"
-                  [title]="isOnline(user) ? 'En línea' : 'Desconectado'">
-                </span>
+                <div class="user-cell">
+                  <div class="user-avatar-sm" [class.user-avatar-sm--online]="isOnline(user)">
+                    @if (avatarSrc(user)) {
+                      <img [src]="avatarSrc(user)!" [alt]="user.name" class="avatar-img-sm" />
+                    } @else {
+                      <span class="avatar-initials-sm">{{ initials(user.name) }}</span>
+                    }
+                  </div>
+                  <span class="user-name-cell">{{ user.name }}</span>
+                </div>
               </td>
-              <td class="user-name-cell">{{ user.name }}</td>
               <td class="text-dim">{{ user.email }}</td>
               <td>
                 <span class="role-badge" [class.role-badge--admin]="user.role === 'admin'">
@@ -68,63 +73,115 @@
       </table>
     </div>
   }
-
 </div>
 
-<!-- Dialog -->
+<!-- Backdrop -->
 @if (showDialog()) {
   <div class="modal-backdrop" (click)="closeDialog()"></div>
-  <div class="modal-box" style="max-width:480px;">
-    <div class="modal-header">
-      <h2 class="modal-title">{{ isEditing ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
+
+  <!-- Dialog -->
+  <div class="modal-box user-dialog">
+
+    <!-- Dialog header -->
+    <div class="user-dialog__header">
       <button class="modal-close" (click)="closeDialog()">
         <mat-icon>close</mat-icon>
       </button>
+
+      <!-- Avatar upload zone -->
+      <div class="avatar-upload-zone">
+        <label class="avatar-upload-circle" for="avatar-input" title="Cambiar foto">
+          @if (avatarPreview()) {
+            <img [src]="avatarPreview()!" alt="Avatar" class="avatar-upload-img" />
+          } @else {
+            <span class="avatar-upload-initials">{{ dialogInitials() }}</span>
+          }
+          <div class="avatar-upload-overlay">
+            <mat-icon>photo_camera</mat-icon>
+            <span>Cambiar</span>
+          </div>
+        </label>
+        <input id="avatar-input" type="file" accept="image/*" style="display:none"
+          (change)="pickAvatar($event)" />
+        <p class="avatar-upload-hint">
+          {{ isEditing ? 'Foto de perfil' : 'Foto (opcional)' }}
+        </p>
+      </div>
+
+      <h2 class="user-dialog__title">
+        {{ isEditing ? 'Editar usuario' : 'Nuevo usuario' }}
+      </h2>
     </div>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="modal-body" style="display:flex;flex-direction:column;gap:16px;">
+    <!-- Form -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="user-dialog__body">
 
-      <div class="form-group">
-        <label class="form-label">Nombre</label>
-        <input class="input-field" type="text" formControlName="name" placeholder="Nombre completo" />
-        @if (form.get('name')?.invalid && form.get('name')?.touched) {
-          <p class="form-error">El nombre es requerido</p>
-        }
+      <div class="dialog-row">
+        <div class="form-group">
+          <label class="form-label">
+            <mat-icon class="label-icon">person</mat-icon>
+            Nombre
+          </label>
+          <input class="input-field" type="text" formControlName="name" placeholder="Nombre completo" />
+          @if (form.get('name')?.invalid && form.get('name')?.touched) {
+            <p class="form-error">El nombre es requerido</p>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <mat-icon class="label-icon">mail</mat-icon>
+            Correo electrónico
+          </label>
+          <input class="input-field" type="email" formControlName="email" placeholder="correo@ejemplo.com" />
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <p class="form-error">Ingresa un correo válido</p>
+          }
+        </div>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Correo electrónico</label>
-        <input class="input-field" type="email" formControlName="email" placeholder="correo@ejemplo.com" />
-        @if (form.get('email')?.invalid && form.get('email')?.touched) {
-          <p class="form-error">Ingresa un correo válido</p>
-        }
+      <div class="dialog-row">
+        <div class="form-group">
+          <label class="form-label">
+            <mat-icon class="label-icon">shield</mat-icon>
+            Rol
+          </label>
+          <div class="role-selector">
+            <label class="role-option" [class.role-option--active]="form.get('role')?.value === 'user'">
+              <input type="radio" formControlName="role" value="user" />
+              <mat-icon>person</mat-icon>
+              <span>Usuario</span>
+            </label>
+            <label class="role-option role-option--admin" [class.role-option--active]="form.get('role')?.value === 'admin'">
+              <input type="radio" formControlName="role" value="admin" />
+              <mat-icon>admin_panel_settings</mat-icon>
+              <span>Admin</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <mat-icon class="label-icon">lock</mat-icon>
+            {{ isEditing ? 'Nueva contraseña (opcional)' : 'Contraseña' }}
+          </label>
+          <input class="input-field" type="password" formControlName="password"
+            [placeholder]="isEditing ? 'Dejar en blanco para no cambiar' : 'Mínimo 6 caracteres'" />
+          @if (form.get('password')?.invalid && form.get('password')?.touched) {
+            <p class="form-error">Mínimo 6 caracteres</p>
+          }
+        </div>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Rol</label>
-        <select class="input-field" formControlName="role">
-          <option value="user">Usuario</option>
-          <option value="admin">Administrador</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">{{ isEditing ? 'Nueva contraseña (opcional)' : 'Contraseña' }}</label>
-        <input class="input-field" type="password" formControlName="password"
-          [placeholder]="isEditing ? 'Dejar en blanco para no cambiar' : 'Mínimo 6 caracteres'" />
-        @if (form.get('password')?.invalid && form.get('password')?.touched) {
-          <p class="form-error">Mínimo 6 caracteres</p>
-        }
-      </div>
-
-      <div class="modal-footer" style="margin-top:8px;">
+      <div class="user-dialog__footer">
         <button type="button" class="btn-secondary" (click)="closeDialog()">Cancelar</button>
-        <button type="submit" class="btn-primary" [disabled]="saving()">
-          @if (saving()) {
-            <mat-icon class="spin">sync</mat-icon> Guardando...
+        <button type="submit" class="btn-primary" [disabled]="saving() || uploadingAvatar()">
+          @if (saving() || uploadingAvatar()) {
+            <mat-icon class="spin">sync</mat-icon>
+            {{ uploadingAvatar() ? 'Subiendo imagen…' : 'Guardando…' }}
           } @else {
             <mat-icon>{{ isEditing ? 'save' : 'person_add' }}</mat-icon>
-            {{ isEditing ? 'Guardar' : 'Crear' }}
+            {{ isEditing ? 'Guardar cambios' : 'Crear usuario' }}
           }
         </button>
       </div>

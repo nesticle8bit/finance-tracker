@@ -49,6 +49,14 @@ export class AdminService {
     ).then(r => r.data!);
   }
 
+  uploadAvatar(userId: string, file: File): Promise<AuthUser> {
+    const form = new FormData();
+    form.append('avatar', file);
+    return firstValueFrom(
+      this.http.post<ApiResponse<AuthUser>>(`${API}/api/admin/users/${userId}/avatar`, form)
+    ).then(r => r.data!);
+  }
+
   deleteUser(id: string): Promise<void> {
     return firstValueFrom(
       this.http.delete<ApiResponse<object>>(`${API}/api/admin/users/${id}`)

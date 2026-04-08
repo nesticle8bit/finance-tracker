@@ -15,6 +15,7 @@ export interface AuthUser {
   name: string;
   role: 'user' | 'admin';
   lastSeenAt?: string;
+  avatarUrl?: string;
 }
 
 export interface UpdateProfileRequest {

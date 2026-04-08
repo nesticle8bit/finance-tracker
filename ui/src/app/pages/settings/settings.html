@@ -9,6 +9,29 @@
     <div class="card card-p">
       <h3 class="card-title">Perfil</h3>
 
+      <!-- Avatar -->
+      <div class="profile-avatar-zone">
+        <label class="avatar-upload-circle avatar-upload-circle--lg" for="profile-avatar-input"
+          [class.avatar-upload-circle--loading]="uploadingAvatar()" title="Cambiar foto de perfil">
+          @if (avatarSrc()) {
+            <img [src]="avatarSrc()!" alt="avatar" class="avatar-upload-img" />
+          } @else {
+            <span class="avatar-upload-initials">{{ userInitials() }}</span>
+          }
+          <div class="avatar-upload-overlay">
+            @if (uploadingAvatar()) {
+              <mat-icon class="spin">sync</mat-icon>
+            } @else {
+              <mat-icon>photo_camera</mat-icon>
+              <span>Cambiar</span>
+            }
+          </div>
+        </label>
+        <input id="profile-avatar-input" type="file" accept="image/*" style="display:none"
+          (change)="pickAvatar($event)" [disabled]="uploadingAvatar()" />
+        <p class="avatar-upload-hint">Clic para cambiar foto · Comprimida automáticamente</p>
+      </div>
+
       @if (profileError()) {
       <div class="alert-error">
         <mat-icon class="icon-sm">error_outline</mat-icon>

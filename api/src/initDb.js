@@ -72,7 +72,8 @@ async function initDb() {
     await client.query(`
       ALTER TABLE authentications.users
         ADD COLUMN IF NOT EXISTS "Role"       TEXT NOT NULL DEFAULT 'user',
-        ADD COLUMN IF NOT EXISTS "LastSeenAt" TIMESTAMPTZ;
+        ADD COLUMN IF NOT EXISTS "LastSeenAt" TIMESTAMPTZ,
+        ADD COLUMN IF NOT EXISTS "AvatarUrl"  TEXT;
     `);
 
     console.log('DB schema ready');

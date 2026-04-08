@@ -61,6 +61,15 @@ export class AuthService {
     }
   }
 
+  async uploadAvatar(file: File): Promise<void> {
+    const form = new FormData();
+    form.append('avatar', file);
+    const res = await firstValueFrom(
+      this.http.post<ApiResponse<AuthUser>>(`${API}/api/auth/avatar`, form)
+    );
+    if (res.data) this._setSession(this.token()!, res.data);
+  }
+
   async changePassword(req: ChangePasswordRequest): Promise<void> {
     await firstValueFrom(
       this.http.post<ApiResponse<null>>(`${API}/api/auth/change-password`, req),

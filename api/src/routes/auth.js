@@ -1,10 +1,23 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
+const multer = require('multer');
+const sharp = require('sharp');
+const path = require('path');
+const fs = require('fs');
 const pool = require('../db');
 const { ok, fail } = require('../response');
 const { signToken } = require('../utils/jwt');
 const { auth } = require('../middleware/auth');
 const { seedUserCategories } = require('../seed');
+
+const UPLOADS_DIR = process.env.UPLOADS_PATH || '/app/uploads';
+const AVATARS_DIR = path.join(UPLOADS_DIR, 'avatars');
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (_, file, cb) =>
+    file.mimetype.startsWith('image/') ? cb(null, true) : cb(new Error('Solo se permiten imágenes')),
+});
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
@@ -111,6 +124,31 @@ router.post('/change-password', auth, async (req, res) => {
       `UPDATE authentications.users SET "PasswordHash"=$1 WHERE "Id"=$2`, [hash, req.user.id]
     );
     return ok(res, null);
+  } catch (e) {
+    return fail(res, e.message, 500);
+  }
+});
+
+// POST /api/auth/avatar
+router.post('/avatar', auth, upload.single('avatar'), async (req, res) => {
+  if (!req.file) return fail(res, 'No image provided');
+  try {
+    fs.mkdirSync(AVATARS_DIR, { recursive: true });
+    const filename = `${req.user.id}.webp`;
+    const filepath = path.join(AVATARS_DIR, filename);
+
+    await sharp(req.file.buffer)
+      .resize(200, 200, { fit: 'cover', position: 'center' })
+      .webp({ quality: 82 })
+      .toFile(filepath);
+
+    const avatarUrl = `/uploads/avatars/${filename}?t=${Date.now()}`;
+    const { rows } = await pool.query(
+      `UPDATE authentications.users SET "AvatarUrl"=$1 WHERE "Id"=$2
+       RETURNING "Id","Email","Name","Role","CreatedAt","LastSeenAt","AvatarUrl"`,
+      [avatarUrl, req.user.id]
+    );
+    return ok(res, rows[0]);
   } catch (e) {
     return fail(res, e.message, 500);
   }

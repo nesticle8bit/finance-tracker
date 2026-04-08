@@ -13,6 +13,9 @@ services:
       - JWT_AUDIENCE=${JWT_AUDIENCE}
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
       - PORT=5197
+      - UPLOADS_PATH=/app/uploads
+    volumes:
+      - uploads:/app/uploads
 
   ui:
     build:
@@ -25,6 +28,9 @@ services:
       - "${UI_PORT:-5011}:80"
     depends_on:
       - api
+
+volumes:
+  uploads:
 
 networks:
   finance_net:

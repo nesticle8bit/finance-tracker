@@ -1,8 +1,13 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 const initDb = require('./src/initDb');
 const { seedAppDefaults } = require('./src/seed');
+
+const UPLOADS_PATH = process.env.UPLOADS_PATH || '/app/uploads';
+fs.mkdirSync(path.join(UPLOADS_PATH, 'avatars'), { recursive: true });
 
 const app = express();
 
@@ -12,6 +17,7 @@ const origins = (process.env.ALLOWED_ORIGINS || '')
 	.filter(Boolean);
 app.use(cors({ origin: origins.length ? origins : '*', credentials: true }));
 app.use(express.json({ limit: '10mb' }));
+app.use('/uploads', express.static(UPLOADS_PATH));
 app.use(require('./src/middleware/camelCase'));
 
 app.use('/api/auth', require('./src/routes/auth'));
