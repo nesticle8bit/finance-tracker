@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
       `SELECT "Budget" FROM finance."budgetConfig" WHERE "UserId"=$1`,
       [req.user.id]
     );
-    return ok(res, rows[0] ? { budget: rows[0].Budget } : { budget: 0 });
+    return ok(res, { amount: rows[0]?.Budget ?? 0 });
   } catch (e) {
     return fail(res, e.message, 500);
   }
@@ -20,16 +20,16 @@ router.get('/', async (req, res) => {
 
 // PUT /api/budget
 router.put('/', async (req, res) => {
-  const { budget } = req.body;
-  if (budget == null) return fail(res, 'budget is required');
+  const { amount } = req.body;
+  if (amount == null) return fail(res, 'amount is required');
 
   try {
     await pool.query(
       `INSERT INTO finance."budgetConfig" ("UserId","Budget") VALUES ($1,$2)
        ON CONFLICT ("UserId") DO UPDATE SET "Budget"=$2`,
-      [req.user.id, budget]
+      [req.user.id, amount]
     );
-    return ok(res, { budget });
+    return ok(res, { amount });
   } catch (e) {
     return fail(res, e.message, 500);
   }
