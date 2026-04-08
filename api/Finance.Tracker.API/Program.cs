@@ -1,5 +1,7 @@
 using Finance.Tracker.API.Extensions;
+using Finance.Tracker.Repository;
 using Finance.Tracker.Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 DotNetEnv.Env.Load();
 
@@ -31,9 +33,12 @@ builder.Services.ConfigureDbSeed();
 
 var app = builder.Build();
 
-// Seed app defaults (admin user role + site settings)
+// Apply pending migrations and seed defaults
 using (var scope = app.Services.CreateScope())
 {
+    var db = scope.ServiceProvider.GetRequiredService<RepositoryContext>();
+    await db.Database.MigrateAsync();
+
     var seed = scope.ServiceProvider.GetRequiredService<Finance.Tracker.Repository.Seed.SeedService>();
     await seed.SeedAppDefaults();
 }
