@@ -73,13 +73,23 @@
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2" style="overflow:hidden;">
         <div class="user-avatar">
-          <mat-icon class="icon-xs text-teal">person</mat-icon>
+          @if (avatarUrl()) {
+            <img [src]="avatarUrl()!" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+          } @else {
+            <mat-icon class="icon-xs text-teal">person</mat-icon>
+          }
         </div>
         <span class="user-name">{{ userName() }}</span>
       </div>
-      <button class="btn-logout" (click)="logout()" [matTooltip]="'Cerrar sesión'">
-        <mat-icon class="icon-md">logout</mat-icon>
-      </button>
+      <div class="flex items-center gap-1">
+        <button class="btn-logout" (click)="theme.toggle()"
+          [matTooltip]="theme.isDark() ? 'Modo claro' : 'Modo oscuro'">
+          <mat-icon class="icon-md">{{ theme.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
+        <button class="btn-logout" (click)="logout()" [matTooltip]="'Cerrar sesión'">
+          <mat-icon class="icon-md">logout</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
 

@@ -6,6 +6,7 @@ import { filter } from 'rxjs/operators';
 import { FinanceService } from '../../../services/finance';
 import { AuthService } from '../../../services/auth.service';
 import { LayoutService } from '../../../core/services/layout.service';
+import { ThemeService } from '../../../../core/services/theme.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 interface NavItem {
@@ -24,6 +25,7 @@ export class SidebarComponent {
   finance = inject(FinanceService);
   auth = inject(AuthService);
   layout = inject(LayoutService);
+  theme = inject(ThemeService);
 
   navItems: NavItem[] = [
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
@@ -38,6 +40,11 @@ export class SidebarComponent {
   pct = computed(() => this.finance.budgetUsedPct());
   userName = computed(() => this.auth.currentUser()?.name ?? '');
   isAdmin = computed(() => this.auth.currentUser()?.role === 'admin');
+  avatarUrl = computed(() => this.auth.currentUser()?.avatarUrl ?? null);
+  userInitials = computed(() => {
+    const name = this.auth.currentUser()?.name ?? '';
+    return name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  });
 
   get pctLabel(): string {
     return `${Math.round(this.pct())}% del presupuesto usado`;

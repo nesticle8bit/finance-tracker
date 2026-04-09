@@ -1,64 +1,98 @@
 @use '@angular/material' as mat;
 
-//  2. Angular Material dark theme
-$ft-theme: mat.define-theme((color: (theme-type: dark,
-        primary: mat.$cyan-palette,
-      ),
-    ));
+// ── Angular Material themes (dark + light) ───────────────
+$ft-dark:  mat.define-theme((color: (theme-type: dark,  primary: mat.$cyan-palette)));
+$ft-light: mat.define-theme((color: (theme-type: light, primary: mat.$cyan-palette)));
 
-:root {
-  @include mat.all-component-themes($ft-theme);
-}
+html.dark  { @include mat.all-component-themes($ft-dark);  }
+html.light { @include mat.all-component-themes($ft-light); }
 
-//  3. Tailwind
+// ── Tailwind ─────────────────────────────────────────────
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-//  4. Fonts
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Sora:wght@100..800&display=swap');
+// ── Fonts ────────────────────────────────────────────────
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@100..800&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
-//  5. Base
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  height: 100%;
-  margin: 0;
-  font-family: 'Sora', sans-serif;
-  background: #09090b;
-  color: #fafafa;
-  -webkit-font-smoothing: antialiased;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-//  6. Design tokens (extracted from the original HTML) 
+// ── CSS Design Tokens ────────────────────────────────────
 :root {
+  // Brand
   --brand-300: #5eead4;
   --brand-400: #2dd4bf;
   --brand-500: #14b8a6;
   --brand-600: #0d9488;
   --brand-700: #0f766e;
+
+  // Dark theme (default)
+  --bg:              #09090b;
+  --surface:         #111113;
+  --surface-2:       #18181b;
+  --surface-3:       #1e1e22;
+  --surface-hover:   rgba(255,255,255,0.04);
+  --border:          rgba(255,255,255,0.07);
+  --border-strong:   rgba(255,255,255,0.12);
+  --text:            #f4f4f5;
+  --text-muted:      rgba(255,255,255,0.52);
+  --text-dim:        rgba(255,255,255,0.28);
+  --input-bg:        rgba(255,255,255,0.05);
+  --input-border:    rgba(255,255,255,0.1);
+  --input-focus:     #14b8a6;
+  --nav-hover:       rgba(255,255,255,0.05);
+  --nav-active-bg:   rgba(20,184,166,0.12);
+  --nav-active-text: #14b8a6;
+  --card-bg:         #18181b;
+  --shadow:          0 4px 24px rgba(0,0,0,0.4);
+  --shadow-sm:       0 1px 6px  rgba(0,0,0,0.3);
 }
+
+html.light {
+  --bg:              #f1f5f9;
+  --surface:         #ffffff;
+  --surface-2:       #f8fafc;
+  --surface-3:       #f1f5f9;
+  --surface-hover:   rgba(0,0,0,0.04);
+  --border:          rgba(0,0,0,0.07);
+  --border-strong:   rgba(0,0,0,0.13);
+  --text:            #0f172a;
+  --text-muted:      #64748b;
+  --text-dim:        #94a3b8;
+  --input-bg:        rgba(0,0,0,0.04);
+  --input-border:    rgba(0,0,0,0.14);
+  --input-focus:     #0d9488;
+  --nav-hover:       rgba(0,0,0,0.05);
+  --nav-active-bg:   rgba(13,148,136,0.1);
+  --nav-active-text: #0d9488;
+  --card-bg:         #ffffff;
+  --shadow:          0 4px 24px rgba(0,0,0,0.08);
+  --shadow-sm:       0 1px 6px  rgba(0,0,0,0.06);
+}
+
+// ── Base reset ───────────────────────────────────────────
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.25s ease, color 0.2s ease;
+}
+
+a { color: inherit; text-decoration: none; }
 
 //  7. Core UI classes (from the original <style> block) 
 
-// Sidebar
+// ── Sidebar ───────────────────────────────────────────────
 .sidebar {
   width: 260px;
   height: 100%;
   min-height: 100vh;
-  background: #0f0f10;
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
   position: fixed;
   top: 0;
   left: 0;
@@ -86,7 +120,7 @@ a {
   cursor: pointer;
   padding: 4px;
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
   align-items: center;
   transition: color .2s;
 
@@ -95,7 +129,7 @@ a {
   }
 
   &:hover {
-    color: #fff;
+    color: var(--text);
   }
 }
 
@@ -121,8 +155,8 @@ a {
   left: 0;
   right: 0;
   height: 56px;
-  background: #0f0f10;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
@@ -160,9 +194,11 @@ a {
 
 // Cards
 .card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
   border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.25s ease, border-color 0.25s ease;
 }
 
 .card-glass {
@@ -174,7 +210,7 @@ a {
 
 // Progress bar
 .progress-track {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--border-strong);
   border-radius: 999px;
   overflow: hidden;
   height: 8px;
@@ -206,8 +242,8 @@ a {
   padding: 10px 16px;
   border-radius: 10px;
   cursor: pointer;
-  transition: all .2s;
-  color: rgba(255, 255, 255, 0.55);
+  transition: background .15s, color .15s;
+  color: var(--text-muted);
   font-size: 0.9rem;
   font-weight: 500;
   margin: 2px 8px;
@@ -220,17 +256,17 @@ a {
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff;
+    background: var(--nav-hover);
+    color: var(--text);
   }
 }
 
 .active-nav {
-  background: rgba(20, 184, 166, 0.12) !important;
-  color: #14b8a6 !important;
+  background: var(--nav-active-bg) !important;
+  color: var(--nav-active-text) !important;
 
   .mat-icon {
-    color: #14b8a6 !important;
+    color: var(--nav-active-text) !important;
   }
 }
 
@@ -293,19 +329,19 @@ a {
 
 // Input fields
 .input-field {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
   border-radius: 10px;
   padding: 10px 14px;
-  color: #fff;
+  color: var(--text);
   font-family: 'Sora', sans-serif;
   font-size: 0.9rem;
   width: 100%;
   outline: none;
-  transition: border .2s;
+  transition: border .2s, background .25s;
 
   &:focus {
-    border-color: #14b8a6;
+    border-color: var(--input-focus);
   }
 
   option {
@@ -331,8 +367,8 @@ a {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1001;
-  background: #18181b;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
   border-radius: 20px;
   padding: 28px;
   width: calc(100% - 32px);
@@ -384,12 +420,12 @@ a {
 
   &:not(.active) {
     background: transparent;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-muted);
   }
 
   &:not(.active):hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff;
+    background: var(--nav-hover);
+    color: var(--text);
   }
 }
 
@@ -417,24 +453,24 @@ a {
 }
 
 .mat-mdc-input-element {
-  color: #fff !important;
-  caret-color: #14b8a6 !important;
+  color: var(--text) !important;
+  caret-color: var(--input-focus) !important;
   font-family: 'Sora', sans-serif !important;
 }
 
 .mat-mdc-select-value,
 .mat-mdc-select-arrow {
-  color: #fff !important;
+  color: var(--text) !important;
 }
 
 .mat-mdc-select-panel {
-  background: #1c1c1e !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: var(--surface-2) !important;
+  border: 1px solid var(--border-strong) !important;
   border-radius: 12px !important;
 }
 
 .mat-mdc-option {
-  color: rgba(255, 255, 255, 0.85) !important;
+  color: var(--text-muted) !important;
   font-family: 'Sora', sans-serif !important;
 
   &:hover:not(.mdc-list-item--disabled) {
@@ -480,7 +516,7 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--border-strong);
   border-radius: 4px;
 }
 
@@ -656,7 +692,7 @@ app-kpi-card {
   font-family: 'Miranda Sans', serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
   margin: 0;
 
   &--lg {
@@ -673,7 +709,7 @@ app-kpi-card {
 }
 
 .page-subtitle {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-dim);
   font-size: 0.875rem;
   margin-top: 4px;
   font-family: 'DM Mono', monospace;
@@ -682,7 +718,7 @@ app-kpi-card {
 .card-title {
   font-size: 0.75rem;
   font-family: 'DM Mono', monospace;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin: 0 0 20px;
@@ -695,24 +731,16 @@ app-kpi-card {
 .form-label {
   display: block;
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   margin-bottom: 6px;
   font-family: 'DM Mono', monospace;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.text-muted {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.text-dim {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.text-faint {
-  color: rgba(255, 255, 255, 0.25);
-}
+.text-muted { color: var(--text-muted); }
+.text-dim   { color: var(--text-dim); }
+.text-faint { color: var(--text-dim); }
 
 .text-brand {
   color: #2dd4bf;
@@ -738,7 +766,7 @@ app-kpi-card {
   font-family: 'DM Mono', monospace;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -757,7 +785,7 @@ app-kpi-card {
   font-family: 'DM Mono', monospace;
   font-size: 1.875rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
   margin: 0;
 
   @media (max-width: 639px) {
@@ -926,32 +954,30 @@ mat-icon.icon-lg {
   background: none;
   border: none;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   padding: 0;
   transition: color .2s;
 
-  &:hover {
-    color: #fff;
-  }
+  &:hover { color: var(--text); }
 }
 
 .btn-cancel {
   flex: 1;
   padding: 10px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border-strong);
   background: transparent;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   cursor: pointer;
   font-family: 'Sora', sans-serif;
   font-size: 0.9rem;
   transition: all .2s;
 
   &:hover {
-    border-color: rgba(255, 255, 255, 0.25);
-    color: #fff;
+    border-color: var(--text-dim);
+    color: var(--text);
   }
 }
 
@@ -984,10 +1010,10 @@ mat-icon.icon-lg {
   gap: 8px;
   width: 100%;
   padding: 10px 24px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--input-bg);
+  border: 1px solid var(--border-strong);
   border-radius: 10px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   cursor: pointer;
   font-family: 'Sora', sans-serif;
   font-size: 0.9rem;
@@ -995,7 +1021,7 @@ mat-icon.icon-lg {
 
   &:hover {
     border-color: #14b8a6;
-    color: #fff;
+    color: var(--text);
   }
 }
 
@@ -1040,14 +1066,12 @@ mat-icon.icon-lg {
   cursor: pointer;
   padding: 4px;
   border-radius: 6px;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-dim);
   display: flex;
   align-items: center;
   transition: color .2s;
 
-  &:hover {
-    color: #f87171;
-  }
+  &:hover { color: #f87171; }
 }
 
 //  18. Modal header 
@@ -1062,7 +1086,7 @@ mat-icon.icon-lg {
 .modal-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text);
   margin: 0;
 }
 
@@ -1084,18 +1108,20 @@ mat-icon.icon-lg {
   gap: 8px;
   padding: 12px 20px;
   border-radius: 12px;
-  background: #27272a;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
   font-size: 0.875rem;
   animation: slideLeft .3s ease;
   border-left-width: 2px;
+  box-shadow: var(--shadow);
 }
 
 .toast-close {
   background: none;
   border: none;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-dim);
   margin-left: 8px;
   display: flex;
 }
@@ -1130,13 +1156,13 @@ mat-icon.icon-lg {
 .sidebar-user {
   padding: 12px 16px 0;
   margin-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--border);
 }
 
 .nav-section-label {
   font-size: 0.7rem;
   font-family: 'DM Mono', monospace;
-  color: rgba(255, 255, 255, 0.25);
+  color: var(--text-dim);
   padding: 0 16px;
   margin-bottom: 8px;
   text-transform: uppercase;
@@ -1163,7 +1189,7 @@ mat-icon.icon-lg {
   font-family: 'Miranda Sans', serif;
   font-size: 1.125rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
   margin-left: 0.5rem;
 }
 
@@ -1180,7 +1206,7 @@ mat-icon.icon-lg {
 
 .user-name {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1195,12 +1221,12 @@ mat-icon.icon-lg {
   top: calc(100% + 8px);
   left: 0;
   z-index: 300;
-  background: #1c1c1e;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
   border-radius: 16px;
   padding: 16px;
   width: 300px;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow);
 }
 
 .cal-nav {
@@ -1226,14 +1252,14 @@ mat-icon.icon-lg {
   text-align: center;
   font-size: 0.7rem;
   font-family: 'DM Mono', monospace;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-dim);
   padding: 4px 0;
 }
 
 .cal-footer {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--border);
   display: flex;
   justify-content: center;
 }
@@ -1260,7 +1286,7 @@ mat-icon.icon-lg {
   min-width: 0;
   overflow: hidden;
   text-align: center;
-  color: rgba(255, 255, 255, 0.25);
+  color: var(--text-dim);
   font-family: 'DM Mono', monospace;
   font-size: 10px;
 }
@@ -1303,7 +1329,7 @@ mat-icon.icon-lg {
 
 .txn-desc {
   font-size: 0.875rem;
-  color: #fff;
+  color: var(--text);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -1312,7 +1338,7 @@ mat-icon.icon-lg {
 
 .txn-meta {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-dim);
   font-family: 'DM Mono', monospace;
   margin: 0;
 }
@@ -1346,7 +1372,7 @@ mat-icon.icon-lg {
   text-align: left;
   font-size: 0.7rem;
   font-family: 'DM Mono', monospace;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 16px 24px;
@@ -1360,11 +1386,11 @@ mat-icon.icon-lg {
 }
 
 .tr-hover {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--border);
   transition: background .15s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--nav-hover);
   }
 }
 
@@ -1383,13 +1409,13 @@ mat-icon.icon-lg {
 
 .balance-card-label {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   margin-bottom: 4px;
 }
 
 .balance-card-pct {
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-dim);
   margin-top: 4px;
   font-family: 'DM Mono', monospace;
 }
@@ -1440,12 +1466,12 @@ mat-icon.icon-lg {
 .empty-state {
   padding: 64px 24px;
   text-align: center;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-dim);
   font-size: 0.875rem;
 }
 
 .empty-chart {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-dim);
   font-size: 0.875rem;
   text-align: center;
   padding: 32px 0;
@@ -1465,14 +1491,14 @@ mat-icon.icon-lg {
   gap: 8px;
   margin-bottom: 20px;
   padding: 4px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-2);
   border-radius: 12px;
 }
 
 .cat-preview {
   padding: 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1491,7 +1517,7 @@ mat-icon.icon-lg {
 }
 
 .budget-row-border {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border);
   padding-top: 16px;
 }
 
@@ -1505,7 +1531,7 @@ mat-icon.icon-lg {
 
 .cat-limit-pct {
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-dim);
   font-family: 'DM Mono', monospace;
   margin-top: 4px;
 }
@@ -1553,7 +1579,7 @@ mat-icon.icon-lg {
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--input-bg);
   border: 1px solid;
   border-radius: 10px;
   cursor: pointer;
@@ -1568,8 +1594,8 @@ mat-icon.icon-lg {
   left: 0;
   right: 0;
   z-index: 200;
-  background: #1c1c1e;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
   border-radius: 12px;
   overflow-y: auto;
   max-height: 240px;
@@ -1592,7 +1618,7 @@ mat-icon.icon-lg {
   font-family: 'Sora', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text);
   text-transform: capitalize;
 }
 
@@ -1604,7 +1630,7 @@ mat-icon.icon-lg {
 
 // Row top divider
 .row-divider-top {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--border);
   padding-top: 12px;
 }
 
@@ -1664,7 +1690,7 @@ mat-icon.icon-lg {
   flex: 1;
   font-family: 'Sora', sans-serif;
   font-size: 0.9rem;
-  color: #fff;
+  color: var(--text);
   text-transform: capitalize;
 }
 
@@ -1685,7 +1711,7 @@ mat-icon.icon-lg {
 
 // Table: description cell overrides
 .td-desc {
-  color: #fff;
+  color: var(--text);
   font-weight: 500;
   font-family: 'Sora', sans-serif;
 }
@@ -1699,7 +1725,7 @@ mat-icon.icon-lg {
 // Mobile transaction card — description line
 .txn-mobile-desc {
   font-size: 0.9rem;
-  color: #fff;
+  color: var(--text);
   margin: 0;
   font-weight: 600;
   white-space: nowrap;
@@ -1718,14 +1744,14 @@ mat-icon.icon-lg {
 .preview-name {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text);
   margin: 0;
 }
 
 // Tiny hint text (below labels)
 .text-hint {
   font-size: 0.5rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-dim);
 }
 
 //  31. Text utility helpers 
@@ -1733,7 +1759,7 @@ mat-icon.icon-lg {
 // Soft body text (0.875rem, 70% white)
 .text-sm-faint {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-muted);
 }
 
 // Bold emphasized text at 0.875rem
@@ -1756,7 +1782,7 @@ mat-icon.icon-lg {
 
 // White text at 90% opacity (toast message body)
 .text-white-90 {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text);
 }
 
 // Serif title (mobile topbar brand name)
@@ -1764,7 +1790,7 @@ mat-icon.icon-lg {
   font-family: 'Miranda Sans', serif;
   font-size: 1rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
 }
 
 // Picker / select placeholder (flex text)
@@ -1775,7 +1801,7 @@ mat-icon.icon-lg {
 
 // Table thead row bottom divider
 .tr-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--border);
 }
 
 // Modal primary-action button (wider flex weight)
@@ -1804,13 +1830,13 @@ mat-icon.icon-lg {
   cursor: pointer;
   padding: 8px;
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   transition: color .2s;
 
   &:hover {
-    color: #fff;
+    color: var(--text);
   }
 }
 
@@ -1839,8 +1865,8 @@ mat-icon.icon-lg {
   left: 0;
   right: 0;
   height: 64px;
-  background: #111113;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
   display: flex;
   align-items: stretch;
   z-index: 150;
@@ -1858,7 +1884,7 @@ mat-icon.icon-lg {
   align-items: center;
   justify-content: center;
   gap: 3px;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-dim);
   text-decoration: none;
   font-size: 0.55rem;
   font-family: 'DM Mono', monospace;
@@ -1880,7 +1906,7 @@ mat-icon.icon-lg {
   }
 
   &:active {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--nav-hover);
   }
 }
 
@@ -1958,8 +1984,8 @@ mat-icon.icon-lg {
 //  34. Transaction modal redesign 
 
 .txn-modal {
-  background: #141416;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 24px;
   padding: 32px;
   width: 640px;
@@ -1999,14 +2025,14 @@ mat-icon.icon-lg {
 .txn-modal__title {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
   margin: 0;
   font-family: 'Sora', sans-serif;
 }
 
 .txn-modal__subtitle {
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-dim);
   font-family: 'DM Mono', monospace;
   margin: 4px 0 0;
 }
@@ -2017,8 +2043,8 @@ mat-icon.icon-lg {
   gap: 8px;
   margin-bottom: 24px;
   padding: 5px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
   border-radius: 16px;
 }
 
@@ -2036,11 +2062,11 @@ mat-icon.icon-lg {
   font-weight: 600;
   transition: all .2s;
   background: transparent;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-dim);
 
   &:hover:not([class*='active']) {
-    background: rgba(255, 255, 255, 0.04);
-    color: rgba(255, 255, 255, 0.6);
+    background: var(--nav-hover);
+    color: var(--text-muted);
   }
 
   &--active-expense {
@@ -2087,8 +2113,8 @@ mat-icon.icon-lg {
   padding: 24px;
   margin-bottom: 24px;
   text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
   transition: border-color .3s, background .3s;
 
   &.txn-modal__amount--expense {
@@ -2106,7 +2132,7 @@ mat-icon.icon-lg {
   display: block;
   font-size: 0.65rem;
   font-family: 'DM Mono', monospace;
-  color: rgba(255, 255, 255, 0.25);
+  color: var(--text-dim);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 6px;
@@ -2119,12 +2145,12 @@ mat-icon.icon-lg {
   font-family: 'DM Mono', monospace;
   font-size: 2.75rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
   text-align: center;
   width: 100%;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.1);
+    color: var(--text-dim);
   }
 
   &::-webkit-inner-spin-button,
@@ -2184,13 +2210,13 @@ mat-icon.icon-lg {
 .admin-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: var(--text);
   margin: 0;
 }
 
 .admin-subtitle {
   font-size: 0.85rem;
-  color: #64748b;
+  color: var(--text-muted);
   margin: 4px 0 0;
 }
 
@@ -2198,13 +2224,13 @@ mat-icon.icon-lg {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #64748b;
+  color: var(--text-muted);
   padding: 32px 0;
 }
 
 .admin-card {
-  background: #1e293b;
-  border: 1px solid #1e3a4a;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 24px;
 }
@@ -2219,16 +2245,16 @@ mat-icon.icon-lg {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: #64748b;
+    color: var(--text-dim);
     padding: 0 12px 12px;
-    border-bottom: 1px solid #1e3a4a;
+    border-bottom: 1px solid var(--border);
   }
 
   td {
     padding: 14px 12px;
     font-size: 0.875rem;
-    color: #cbd5e1;
-    border-bottom: 1px solid #0f2233;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
   }
 
   tr:last-child td {
@@ -2236,13 +2262,13 @@ mat-icon.icon-lg {
   }
 
   tr:hover td {
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--nav-hover);
   }
 }
 
 .user-name-cell {
   font-weight: 600;
-  color: #f1f5f9 !important;
+  color: var(--text) !important;
 }
 
 .actions-cell {
@@ -2272,8 +2298,8 @@ mat-icon.icon-lg {
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 600;
-  background: #1e3a4a;
-  color: #94a3b8;
+  background: var(--surface-2);
+  color: var(--text-muted);
 
   &--admin {
     background: rgba(13, 148, 136, 0.2);
@@ -2291,7 +2317,7 @@ mat-icon.icon-lg {
   border-radius: 8px;
   border: none;
   background: transparent;
-  color: #64748b;
+  color: var(--text-dim);
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 
@@ -2302,8 +2328,8 @@ mat-icon.icon-lg {
   }
 
   &:hover {
-    background: #1e3a4a;
-    color: #94a3b8;
+    background: var(--nav-hover);
+    color: var(--text-muted);
   }
 
   &--danger:hover {
@@ -2390,13 +2416,13 @@ mat-icon.icon-lg {
 
 .user-dialog__header {
   position: relative;
-  background: linear-gradient(160deg, #0f2027, #1a3a4a);
+  background: var(--surface-3);
   padding: 32px 24px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid var(--border);
 
   .modal-close {
     position: absolute;
@@ -2408,7 +2434,7 @@ mat-icon.icon-lg {
 .user-dialog__title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: var(--text);
   margin: 0;
 }
 
