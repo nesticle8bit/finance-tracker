@@ -10,6 +10,7 @@ import { CircularProgressComponent } from '../../components/shared/circular-prog
 import { KpiCardComponent } from '../../components/shared/kpi-card/kpi-card';
 import { TransactionModalComponent } from '../../components/shared/transaction-modal/transaction-modal';
 import { FinanceService } from '../../services/finance';
+import { AuthService } from '../../services/auth.service';
 
 interface CategoryStat {
   cat: Category;
@@ -34,6 +35,7 @@ interface CategoryStat {
 })
 export class DashboardComponent implements OnInit {
   finance = inject(FinanceService);
+  private auth = inject(AuthService);
   private dialog = inject(MatDialog);
   private router = inject(Router);
 
@@ -46,6 +48,13 @@ export class DashboardComponent implements OnInit {
   protected readonly Math = Math;
 
   monthLabel = computed(() => this.finance.getMonthLabel());
+
+  greeting = computed(() => {
+    const name = this.auth.currentUser()?.name?.split(' ')[0] ?? '';
+    const h = new Date().getHours();
+    const greet = h < 12 ? 'Buenos días' : h < 18 ? 'Buenas tardes' : 'Buenas noches';
+    return name ? `${greet}, ${name}` : greet;
+  });
 
   // KPIs
   budgetFmt = computed(() => this.finance.formatCOP(this.finance.budget()));
@@ -112,6 +121,16 @@ export class DashboardComponent implements OnInit {
   });
 
   hasDailyData = computed(() => Object.values(this.finance.dailyExpenses()).some((v) => v > 0));
+
+  incomeRatioPct = computed(() => {
+    const total = this.finance.totalIncome() + this.finance.totalExpense();
+    return total > 0 ? (this.finance.totalIncome() / total) * 100 : 50;
+  });
+
+  expenseRatioPct = computed(() => {
+    const total = this.finance.totalIncome() + this.finance.totalExpense();
+    return total > 0 ? (this.finance.totalExpense() / total) * 100 : 50;
+  });
 
   // Recent transactions
   recentTransactions = computed(() =>

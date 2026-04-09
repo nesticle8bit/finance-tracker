@@ -1,36 +1,56 @@
 <div class="page-pad">
 
-  <!-- Header -->
-  <div class="page-header">
+  <!-- Hero header -->
+  <div class="dash-hero">
     <div>
-      <h1 class="page-title page-title--lg">Dashboard</h1>
-      <p class="page-subtitle">{{ monthLabel() }}</p>
+      <h1 class="dash-greeting">{{ greeting() }}</h1>
+      <p class="page-subtitle">{{ monthLabel() }} · Resumen financiero</p>
     </div>
     <button class="btn-primary" (click)="openAdd()">
-      <mat-icon class="icon-md">add</mat-icon> Nuevo
+      <mat-icon class="icon-md">add</mat-icon>
+      Nueva transacción
     </button>
   </div>
 
-  <!-- KPI Cards: 2 cols on mobile, 4 on desktop -->
+  <!-- KPI Cards -->
   <div class="kpi-grid">
-    <app-kpi-card label="Presupuesto" [value]="budgetFmt()" sub="Presupuesto mensual" icon="account_balance_wallet" color="blue" />
-    <app-kpi-card label="Ingresos"    [value]="incomeFmt()"  [sub]="incomeCount()"     icon="arrow_downward"        color="green" />
-    <app-kpi-card label="Gastos"      [value]="expenseFmt()" [sub]="expenseCount()"    icon="arrow_upward"          color="red" />
-
-    <!-- Balance card -->
-    <div class="card card-p-sm card-flex">
-      <div class="flex items-center justify-between">
-        <span class="card-title" style="margin:0;">Balance</span>
-        <div class="icon-box-sm" style="background:rgba(20,184,166,0.1);">
-          <mat-icon class="icon-sm text-brand">balance</mat-icon>
-        </div>
-      </div>
-      <p class="value-lg" [style.color]="balancePos() ? '#2dd4bf' : '#f87171'">{{ balanceFmt() }}</p>
-      <p class="text-dim text-xs-0">Ingresos − Gastos</p>
-    </div>
+    <app-kpi-card label="Presupuesto" [value]="budgetFmt()" sub="Presupuesto mensual"  icon="account_balance_wallet" color="blue" />
+    <app-kpi-card label="Ingresos"    [value]="incomeFmt()"  [sub]="incomeCount()"      icon="south"                  color="green" />
+    <app-kpi-card label="Gastos"      [value]="expenseFmt()" [sub]="expenseCount()"     icon="north"                  color="red" />
+    <app-kpi-card label="Balance"     [value]="balanceFmt()" sub="Ingresos − Gastos"    icon="balance"                [color]="balancePos() ? 'teal' : 'red'" />
   </div>
 
-  <!-- Circular + Category bars -->
+  <!-- Income vs Expense ratio bar -->
+  @if (finance.totalIncome() > 0 || finance.totalExpense() > 0) {
+    <div class="card dash-ratio-card">
+      <div class="dash-ratio-header">
+        <div class="dash-ratio-item">
+          <span class="dash-ratio-dot dash-ratio-dot--income"></span>
+          <div>
+            <p class="dash-ratio-label">Ingresos</p>
+            <p class="dash-ratio-val dash-ratio-val--income">{{ incomeFmt() }}</p>
+          </div>
+        </div>
+        <div class="dash-ratio-center">
+          <p class="dash-ratio-label">Ahorro del mes</p>
+          <p class="dash-ratio-val" [style.color]="balancePos() ? '#4ade80' : '#f87171'">{{ balanceFmt() }}</p>
+        </div>
+        <div class="dash-ratio-item dash-ratio-item--right">
+          <div>
+            <p class="dash-ratio-label">Gastos</p>
+            <p class="dash-ratio-val dash-ratio-val--expense">{{ expenseFmt() }}</p>
+          </div>
+          <span class="dash-ratio-dot dash-ratio-dot--expense"></span>
+        </div>
+      </div>
+      <div class="dash-ratio-track">
+        <div class="dash-ratio-fill--income" [style.width.%]="incomeRatioPct()"></div>
+        <div class="dash-ratio-fill--expense" [style.width.%]="expenseRatioPct()"></div>
+      </div>
+    </div>
+  }
+
+  <!-- Budget circle + Categories -->
   <div class="dash-grid-1-2">
 
     <div class="card card-p col-center">
@@ -45,19 +65,27 @@
       } @else {
         <div class="form-stack dash-cat-stack">
           @for (s of categoryStats(); track s.cat.id) {
-            <app-category-bar [name]="s.cat.name" [icon]="s.cat.icon" [color]="s.cat.color"
-              [amount]="formatCOP(s.total)" [percentage]="s.percentage" [limitPct]="s.limitPct" [limit]="s.limitLabel" />
+            <app-category-bar
+              [name]="s.cat.name" [icon]="s.cat.icon" [color]="s.cat.color"
+              [amount]="formatCOP(s.total)" [percentage]="s.percentage"
+              [limitPct]="s.limitPct" [limit]="s.limitLabel" />
           }
         </div>
       }
     </div>
+
   </div>
 
-  <!-- Daily Chart + Recent Transactions -->
+  <!-- Daily chart + Recent transactions -->
   <div class="dash-grid-1-1">
 
     <div class="card card-p">
-      <h3 class="card-title">Gastos Diarios</h3>
+      <div class="dash-chart-header">
+        <h3 class="card-title" style="margin:0;">Gastos Diarios</h3>
+        @if (hasDailyData()) {
+          <span class="dash-chart-total">{{ expenseFmt() }}</span>
+        }
+      </div>
       @if (!hasDailyData()) {
         <p class="empty-chart">Sin gastos registrados</p>
       } @else {
@@ -65,26 +93,30 @@
           @for (bar of dailyBars(); track bar.day) {
             <div class="daily-bar-col"
               [title]="'Día ' + bar.day + (bar.amount ? ': ' + formatCOP(bar.amount) : '')">
-              <div class="daily-bar"
-                [style.height.px]="bar.heightPx"
-                [style.background]="bar.isToday
-                  ? 'linear-gradient(to top,#0d9488,#5eead4)'
-                  : bar.amount > 0 ? 'rgba(20,184,166,0.45)' : 'rgba(255,255,255,0.06)'">
+              <div class="daily-bar-track">
+                <div class="daily-bar"
+                  [class.daily-bar--today]="bar.isToday"
+                  [style.height.px]="bar.heightPx"
+                  [style.background]="bar.isToday
+                    ? 'linear-gradient(to top, #0d9488, #5eead4)'
+                    : bar.amount > 0 ? 'rgba(20,184,166,0.3)' : 'rgba(255,255,255,0.05)'">
+                </div>
               </div>
             </div>
           }
         </div>
         <div class="daily-labels">
           @for (bar of dailyBars(); track bar.day) {
-            <div class="daily-label"
-              [style.color]="bar.isToday ? '#14b8a6' : ''">{{ bar.day }}</div>
+            <div class="daily-label" [style.color]="bar.isToday ? '#14b8a6' : ''">
+              {{ bar.day }}
+            </div>
           }
         </div>
       }
     </div>
 
     <div class="card card-p">
-      <div class="flex items-center justify-between dash-recent-header">
+      <div class="dash-recent-header flex items-center justify-between">
         <h3 class="card-title" style="margin:0;">Recientes</h3>
         <button (click)="goToTransactions()" class="btn-link-brand">Ver todo →</button>
       </div>
@@ -96,7 +128,7 @@
           @for (t of recentTransactions(); track t.id) {
             @let cat = getCategory(t.categoryId);
             <div class="txn-row">
-              <div class="icon-box" [style.background]="(cat?.color ?? '#6b7280') + '20'">
+              <div class="icon-box" [style.background]="(cat?.color ?? '#6b7280') + '22'">
                 <mat-icon class="icon-sm" [style.color]="cat?.color ?? '#6b7280'">
                   {{ cat?.icon ?? 'more_horiz' }}
                 </mat-icon>
@@ -106,7 +138,7 @@
                 <p class="txn-meta">{{ formatDate(t.date) }} · {{ cat?.name }}</p>
               </div>
               <span class="txn-amount" [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
-                {{ t.type === 'income' ? '+' : '-' }}{{ formatCOP(t.amount) }}
+                {{ t.type === 'income' ? '+' : '−' }}{{ formatCOP(t.amount) }}
               </span>
             </div>
           }
