@@ -37,8 +37,8 @@ router.post('/', async (req, res) => {
 
   try {
     const { rows } = await pool.query(
-      `INSERT INTO finance.transactions ("Id","UserId","CategoryId","Desc","Amount","Type","Date")
-       VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
+      `INSERT INTO finance.transactions ("Id","UserId","CategoryId","Desc","Amount","Type","Date","CreatedAt")
+       VALUES ($1,$2,$3,$4,$5,$6,$7,NOW()) RETURNING *`,
       [randomUUID(), req.user.id, categoryId, desc || '', amount, type, date]
     );
     return ok(res, rows[0], 201);
