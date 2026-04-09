@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { randomUUID } = require('crypto');
 const pool = require('../db');
 const { ok, fail } = require('../response');
 const { auth } = require('../middleware/auth');
@@ -36,9 +37,9 @@ router.post('/', async (req, res) => {
 
   try {
     const { rows } = await pool.query(
-      `INSERT INTO finance.transactions ("UserId","CategoryId","Desc","Amount","Type","Date")
-       VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`,
-      [req.user.id, categoryId, desc || '', amount, type, date]
+      `INSERT INTO finance.transactions ("Id","UserId","CategoryId","Desc","Amount","Type","Date")
+       VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
+      [randomUUID(), req.user.id, categoryId, desc || '', amount, type, date]
     );
     return ok(res, rows[0], 201);
   } catch (e) {
