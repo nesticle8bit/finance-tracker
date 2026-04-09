@@ -8,6 +8,7 @@ import { AuthService } from '../../../services/auth.service';
 import { LayoutService } from '../../../core/services/layout.service';
 import { ThemeService } from '../../../../core/services/theme.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { environment } from '../../../../environments/environment';
 
 interface NavItem {
   label: string;
@@ -40,7 +41,10 @@ export class SidebarComponent {
   pct = computed(() => this.finance.budgetUsedPct());
   userName = computed(() => this.auth.currentUser()?.name ?? '');
   isAdmin = computed(() => this.auth.currentUser()?.role === 'admin');
-  avatarUrl = computed(() => this.auth.currentUser()?.avatarUrl ?? null);
+  avatarUrl = computed(() => {
+    const url = this.auth.currentUser()?.avatarUrl;
+    return url ? `${environment.financeTrackerAPI}${url}` : null;
+  });
   userInitials = computed(() => {
     const name = this.auth.currentUser()?.name ?? '';
     return name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();

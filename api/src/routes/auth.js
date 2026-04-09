@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
 router.get('/me', auth, async (req, res) => {
   try {
     const { rows } = await pool.query(
-      `SELECT "Id","Email","Name","Role","CreatedAt","LastSeenAt" FROM authentications.users WHERE "Id" = $1`,
+      `SELECT "Id","Email","Name","Role","CreatedAt","LastSeenAt","AvatarUrl" FROM authentications.users WHERE "Id" = $1`,
       [req.user.id]
     );
     if (!rows[0]) return fail(res, 'User not found', 404);
@@ -97,7 +97,7 @@ router.put('/profile', auth, async (req, res) => {
 
     const { rows } = await pool.query(
       `UPDATE authentications.users SET "Name"=$1,"Email"=$2 WHERE "Id"=$3
-       RETURNING "Id","Email","Name","Role","CreatedAt","LastSeenAt"`,
+       RETURNING "Id","Email","Name","Role","CreatedAt","LastSeenAt","AvatarUrl"`,
       [name.trim(), normalEmail, req.user.id]
     );
     return ok(res, rows[0]);

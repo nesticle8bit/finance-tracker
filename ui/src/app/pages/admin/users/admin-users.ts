@@ -157,7 +157,7 @@ export class AdminUsersComponent implements OnInit {
   }
 
   avatarSrc(user: AuthUser): string | null {
-    return user.avatarUrl ? `${API}${user.avatarUrl.split('?')[0]}?t=${Date.now()}` : null;
+    return user.avatarUrl ? `${API}${user.avatarUrl}` : null;
   }
 
   initials(name: string): string {
