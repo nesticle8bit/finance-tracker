@@ -174,13 +174,16 @@
       </div>
 
       <div class="user-dialog__footer">
-        <button type="button" class="btn-secondary" (click)="closeDialog()">Cancelar</button>
+        <button type="button" class="btn-secondary" (click)="closeDialog()" [disabled]="saving() || uploadingAvatar()">
+          <mat-icon class="icon-sm">close</mat-icon>
+          Cancelar
+        </button>
         <button type="submit" class="btn-primary" [disabled]="saving() || uploadingAvatar()">
           @if (saving() || uploadingAvatar()) {
-            <mat-icon class="spin">sync</mat-icon>
+            <mat-icon class="icon-sm spin">sync</mat-icon>
             {{ uploadingAvatar() ? 'Subiendo imagen…' : 'Guardando…' }}
           } @else {
-            <mat-icon>{{ isEditing ? 'save' : 'person_add' }}</mat-icon>
+            <mat-icon class="icon-sm">{{ isEditing ? 'save' : 'person_add' }}</mat-icon>
             {{ isEditing ? 'Guardar cambios' : 'Crear usuario' }}
           }
         </button>

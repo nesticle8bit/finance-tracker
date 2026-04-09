@@ -2410,8 +2410,11 @@ mat-icon.icon-lg {
 // ── User dialog ──────────────────────────────────────────
 .user-dialog {
   max-width: 560px;
+  width: calc(100vw - 32px);
   padding: 0;
   overflow: hidden;
+  max-height: 90dvh;
+  overflow-y: auto;
 }
 
 .user-dialog__header {
@@ -2441,7 +2444,7 @@ mat-icon.icon-lg {
 .user-dialog__body {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   padding: 24px;
 }
 
@@ -2449,7 +2452,15 @@ mat-icon.icon-lg {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 4px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+
+  @media (max-width: 480px) {
+    flex-direction: column-reverse;
+
+    button { width: 100%; justify-content: center; }
+  }
 }
 
 // ── Profile avatar zone (settings page) ─────────────────
@@ -2528,7 +2539,7 @@ mat-icon.icon-lg {
 
 .avatar-upload-hint {
   font-size: 0.72rem;
-  color: #64748b;
+  color: var(--text-dim);
   margin: 0;
 }
 
@@ -2566,9 +2577,9 @@ mat-icon.icon-lg {
   gap: 6px;
   padding: 10px 8px;
   border-radius: 10px;
-  border: 1.5px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.03);
-  color: #64748b;
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-dim);
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 500;
@@ -2577,7 +2588,7 @@ mat-icon.icon-lg {
   input[type="radio"] { display: none; }
   mat-icon { font-size: 1rem; width: 1rem; height: 1rem; }
 
-  &:hover { border-color: rgba(255,255,255,0.18); color: #cbd5e1; }
+  &:hover { border-color: var(--border-strong); color: var(--text-muted); }
 
   &--active {
     border-color: #0d9488;
@@ -2590,4 +2601,46 @@ mat-icon.icon-lg {
     background: rgba(245,158,11,0.1);
     color: #fbbf24;
   }
+}
+
+// ── Missing dialog utilities ──────────────────────────────
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface-2);
+  color: var(--text-muted);
+
+  &:hover {
+    background: var(--nav-hover);
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-error {
+  font-size: 0.75rem;
+  color: #f87171;
+  margin: 2px 0 0;
+  font-family: 'DM Mono', monospace;
 }
