@@ -19,10 +19,10 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class BottomNavComponent {
   navItems = [
-    { route: '/dashboard',    icon: 'dashboard',       label: 'Panel' },
-    { route: '/transactions', icon: 'swap_vert',        label: 'Movimientos' },
-    { route: '/budget',       icon: 'account_balance', label: 'Presupuesto' },
-    { route: '/categories',   icon: 'category',        label: 'Categorías' },
-    { route: '/settings',     icon: 'settings',        label: 'Ajustes' },
+    { route: '/dashboard',           icon: 'dashboard',       label: 'Panel' },
+    { route: '/transactions',        icon: 'swap_vert',        label: 'Movimientos' },
+    { route: '/budget',              icon: 'account_balance',  label: 'Presupuesto' },
+    { route: '/recurring-payments',  icon: 'event_repeat',     label: 'Pagos' },
+    { route: '/settings',            icon: 'settings',         label: 'Ajustes' },
   ];
 }

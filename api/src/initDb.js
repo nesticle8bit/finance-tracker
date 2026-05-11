@@ -54,6 +54,27 @@ async function initDb() {
         UNIQUE ("UserId", "CategoryId")
       );
 
+      CREATE TABLE IF NOT EXISTS finance."recurringPayments" (
+        "Id"            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        "UserId"        UUID NOT NULL REFERENCES authentications.users("Id") ON DELETE CASCADE,
+        "Name"          TEXT NOT NULL,
+        "Icon"          TEXT NOT NULL DEFAULT 'payment',
+        "DefaultAmount" NUMERIC(18,2) NOT NULL DEFAULT 0,
+        "SortOrder"     INTEGER NOT NULL DEFAULT 0,
+        "CreatedAt"     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+
+      CREATE TABLE IF NOT EXISTS finance."recurringPaymentRecords" (
+        "Id"        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        "UserId"    UUID NOT NULL REFERENCES authentications.users("Id") ON DELETE CASCADE,
+        "PaymentId" UUID NOT NULL REFERENCES finance."recurringPayments"("Id") ON DELETE CASCADE,
+        "Month"     TEXT NOT NULL,
+        "Amount"    NUMERIC(18,2) NOT NULL DEFAULT 0,
+        "PaidAt"    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        UNIQUE ("UserId", "PaymentId", "Month")
+      );
+
       CREATE TABLE IF NOT EXISTS settings."siteSettings" (
         "Id"             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         "SiteName"       TEXT NOT NULL DEFAULT 'Finance Tracker',

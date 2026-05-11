@@ -33,6 +33,7 @@ export class SidebarComponent {
     { label: 'Transacciones', icon: 'receipt_long', route: '/transactions' },
     { label: 'Categorías', icon: 'category', route: '/categories' },
     { label: 'Presupuesto', icon: 'savings', route: '/budget' },
+    { label: 'Pagos Fijos', icon: 'event_repeat', route: '/recurring-payments' },
     { label: 'Ajustes', icon: 'tune', route: '/settings' },
   ];
 

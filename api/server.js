@@ -27,6 +27,7 @@ app.use('/api/budget', require('./src/routes/budget'));
 app.use('/api/admin', require('./src/routes/admin'));
 app.use('/api', require('./src/routes/exportImport'));
 app.use('/api/site-settings', require('./src/routes/siteSettings'));
+app.use('/api/recurring-payments', require('./src/routes/recurringPayments'));
 
 app.get('/health', (_, res) => res.json({ status: 'ok' }));
 

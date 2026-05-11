@@ -1,0 +1,193 @@
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Pagos Fijos</h1>
+      <p class="text-dim" style="font-size:0.85rem;margin-top:2px;text-transform:capitalize;">{{ monthLabel() }}</p>
+    </div>
+    <button class="btn-primary" (click)="openForm()">
+      <mat-icon>add</mat-icon>
+      Agregar pago
+    </button>
+  </div>
+
+  <!-- Progress summary -->
+  @if (totalCount() > 0) {
+    <div class="card" style="margin-bottom:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div>
+          <span class="value-lg" [style.color]="allPaid() ? '#2dd4bf' : 'var(--text-primary)'">
+            {{ paidCount() }}/{{ totalCount() }}
+          </span>
+          <span class="text-dim" style="margin-left:8px;font-size:0.9rem;">pagados este mes</span>
+        </div>
+        <div style="text-align:right;">
+          <p style="font-size:0.75rem;" class="text-dim">Total pagado</p>
+          <p class="mono" style="color:#2dd4bf;font-weight:600;">{{ formatCOP(paidTotal()) }}</p>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill"
+          [style.width.%]="totalCount() ? (paidCount() / totalCount()) * 100 : 0"
+          [style.background]="allPaid() ? '#2dd4bf' : 'linear-gradient(to right,#0d9488,#5eead4)'">
+        </div>
+      </div>
+      @if (allPaid()) {
+        <p style="text-align:center;margin-top:10px;font-size:0.85rem;color:#2dd4bf;">
+          <mat-icon style="vertical-align:middle;font-size:1rem;">check_circle</mat-icon>
+          ¡Todos los pagos del mes completados!
+        </p>
+      }
+    </div>
+  }
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div style="text-align:center;padding:48px 0;" class="text-dim">
+      <mat-icon style="font-size:2rem;animation:spin 1s linear infinite;">sync</mat-icon>
+    </div>
+  }
+
+  <!-- Empty state -->
+  @if (!loading() && totalCount() === 0) {
+    <div class="card" style="text-align:center;padding:48px 24px;">
+      <mat-icon style="font-size:3rem;color:var(--text-dim);display:block;margin-bottom:12px;">receipt_long</mat-icon>
+      <p class="text-dim">No tienes pagos fijos registrados.</p>
+      <button class="btn-primary" style="margin-top:16px;" (click)="openForm()">
+        <mat-icon>add</mat-icon>
+        Agregar primer pago
+      </button>
+    </div>
+  }
+
+  <!-- Checklist -->
+  @if (!loading() && totalCount() > 0) {
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      @for (payment of payments(); track payment.id) {
+        <div class="card" [style.opacity]="isChecked(payment.id) ? '0.85' : '1'"
+          [style.border-left]="isChecked(payment.id) ? '3px solid #2dd4bf' : '3px solid transparent'">
+
+          <div style="display:flex;align-items:flex-start;gap:16px;">
+
+            <!-- Checkbox / status icon -->
+            <div style="padding-top:2px;flex-shrink:0;">
+              @if (isChecked(payment.id)) {
+                <mat-icon style="color:#2dd4bf;font-size:1.5rem;">check_circle</mat-icon>
+              } @else {
+                <mat-icon style="color:var(--text-dim);font-size:1.5rem;">radio_button_unchecked</mat-icon>
+              }
+            </div>
+
+            <!-- Content -->
+            <div style="flex:1;min-width:0;">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <mat-icon style="font-size:1.1rem;color:var(--text-dim);">{{ payment.icon }}</mat-icon>
+                <span style="font-weight:600;" [style.text-decoration]="isChecked(payment.id) ? 'line-through' : 'none'"
+                  [style.color]="isChecked(payment.id) ? 'var(--text-dim)' : 'var(--text-primary)'">
+                  {{ payment.name }}
+                </span>
+                @if (isChecked(payment.id)) {
+                  <span style="font-size:0.75rem;color:var(--text-dim);">
+                    · pagado el {{ paidAt(payment.id) }}
+                  </span>
+                }
+              </div>
+
+              @if (isChecked(payment.id)) {
+                <!-- Paid: show record amount -->
+                <p class="mono" style="color:#2dd4bf;font-weight:600;margin-top:4px;">
+                  {{ formatCOP(getRecord(payment.id)!.amount) }}
+                </p>
+              } @else {
+                <!-- Unpaid: amount input + pay button -->
+                <div style="display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap;">
+                  <mat-form-field appearance="outline" style="width:180px;" subscriptSizing="dynamic">
+                    <mat-label>Monto</mat-label>
+                    <input matInput type="number" min="0"
+                      [value]="getPendingAmount(payment.id)"
+                      (input)="setPendingAmount(payment.id, +$any($event.target).value)" />
+                  </mat-form-field>
+                  <button class="btn-primary" style="height:40px;" (click)="check(payment)">
+                    <mat-icon>check</mat-icon>
+                    Marcar pagado
+                  </button>
+                </div>
+              }
+            </div>
+
+            <!-- Actions (edit/delete) — only when unpaid -->
+            @if (!isChecked(payment.id)) {
+              <div style="display:flex;gap:4px;flex-shrink:0;">
+                <button class="btn-icon" (click)="openForm(payment)" title="Editar">
+                  <mat-icon class="icon-sm">edit</mat-icon>
+                </button>
+                @if (confirmDeleteId() === payment.id) {
+                  <button class="btn-danger-sm" (click)="deletePayment(payment.id)" title="Confirmar eliminar">
+                    <mat-icon class="icon-sm">delete_forever</mat-icon>
+                  </button>
+                  <button class="btn-icon" (click)="confirmDeleteId.set(null)" title="Cancelar">
+                    <mat-icon class="icon-sm">close</mat-icon>
+                  </button>
+                } @else {
+                  <button class="btn-icon" (click)="confirmDeleteId.set(payment.id)" title="Eliminar">
+                    <mat-icon class="icon-sm">delete</mat-icon>
+                  </button>
+                }
+              </div>
+            }
+
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+</div>
+
+<!-- Modal: Add / Edit payment -->
+@if (showForm()) {
+  <div class="modal-overlay" (click)="closeForm()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <h2 class="section-title" style="margin:0;">
+          {{ editingId() ? 'Editar pago fijo' : 'Nuevo pago fijo' }}
+        </h2>
+        <button class="btn-icon" (click)="closeForm()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px;">
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Nombre del pago</mat-label>
+          <input matInput [ngModel]="formName()" (ngModelChange)="formName.set($event)" placeholder="Ej: Arriendo, Netflix..." />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Ícono (Material Icon)</mat-label>
+          <input matInput [ngModel]="formIcon()" (ngModelChange)="formIcon.set($event)" placeholder="Ej: home, wifi, phone..." />
+          <mat-icon matSuffix>{{ formIcon() }}</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width:100%;">
+          <mat-label>Monto por defecto</mat-label>
+          <input matInput type="number" min="0"
+            [ngModel]="formAmount()" (ngModelChange)="formAmount.set(+$event)" />
+        </mat-form-field>
+
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:24px;">
+        <button class="btn-secondary" (click)="closeForm()" [disabled]="saving()">Cancelar</button>
+        <button class="btn-primary" (click)="saveForm()" [disabled]="saving()">
+          <mat-icon>{{ saving() ? 'sync' : 'save' }}</mat-icon>
+          {{ saving() ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

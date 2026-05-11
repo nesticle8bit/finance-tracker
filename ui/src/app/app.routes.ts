@@ -37,6 +37,11 @@ export const routes: Routes = [
           import('./pages/budget/budget').then((m) => m.BudgetComponent),
       },
       {
+        path: 'recurring-payments',
+        loadComponent: () =>
+          import('./pages/recurring-payments/recurring-payments').then((m) => m.RecurringPaymentsComponent),
+      },
+      {
         path: 'settings',
         loadComponent: () =>
           import('./pages/settings/settings').then((m) => m.SettingsComponent),
