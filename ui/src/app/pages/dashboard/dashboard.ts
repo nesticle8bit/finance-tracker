@@ -1,10 +1,11 @@
-import { Component, inject, computed, OnInit } from '@angular/core';
+import { Component, inject, computed, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Category } from '../../models/category';
+import { Transaction } from '../../models/transaction';
 import { CategoryBarComponent } from '../../components/shared/category-bar/category-bar';
 import { CircularProgressComponent } from '../../components/shared/circular-progress/circular-progress';
 import { KpiCardComponent } from '../../components/shared/kpi-card/kpi-card';
@@ -39,15 +40,23 @@ export class DashboardComponent implements OnInit {
   private dialog = inject(MatDialog);
   private router = inject(Router);
 
-  ngOnInit(): void {
-    // Ensure KPI signals always reflect the current calendar month
-    // (in case the transactions page was previously showing a different month)
-    this.finance.reloadCurrentMonth();
-  }
-
   protected readonly Math = Math;
 
-  monthLabel = computed(() => this.finance.getMonthLabel());
+  readonly todayMonth = this.buildMonthKey(new Date());
+  selectedMonth = signal(this.todayMonth);
+  dashTxns = signal<Transaction[]>([]);
+  loadingDash = signal(false);
+
+  private buildMonthKey(d: Date): string {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  }
+
+  isCurrentMonth = computed(() => this.selectedMonth() === this.todayMonth);
+
+  monthLabel = computed(() => {
+    const [year, month] = this.selectedMonth().split('-');
+    return new Date(+year, +month - 1).toLocaleDateString('es-CO', { month: 'long', year: 'numeric' });
+  });
 
   greeting = computed(() => {
     const name = this.auth.currentUser()?.name?.split(' ')[0] ?? '';
@@ -56,33 +65,43 @@ export class DashboardComponent implements OnInit {
     return name ? `${greet}, ${name}` : greet;
   });
 
-  // KPIs
-  budgetFmt = computed(() => this.finance.formatCOP(this.finance.budget()));
-  incomeFmt = computed(() => this.finance.formatCOP(this.finance.totalIncome()));
-  expenseFmt = computed(() => this.finance.formatCOP(this.finance.totalExpense()));
-  balanceFmt = computed(() => this.finance.formatCOP(this.finance.balance()));
-  balancePos = computed(() => this.finance.balance() >= 0);
+  // ── KPIs ─────────────────────────────────────────────────
+  totalIncome  = computed(() => this.dashTxns().filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0));
+  totalExpense = computed(() => this.dashTxns().filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0));
+  balance      = computed(() => this.totalIncome() - this.totalExpense());
+
+  budgetFmt  = computed(() => this.finance.formatCOP(this.finance.budget()));
+  incomeFmt  = computed(() => this.finance.formatCOP(this.totalIncome()));
+  expenseFmt = computed(() => this.finance.formatCOP(this.totalExpense()));
+  balanceFmt = computed(() => this.finance.formatCOP(this.balance()));
+  balancePos = computed(() => this.balance() >= 0);
 
   incomeCount = computed(() => {
-    const n = this.finance.currentMonthTransactions().filter((t) => t.type === 'income').length;
+    const n = this.dashTxns().filter(t => t.type === 'income').length;
     return `${n} transacción${n !== 1 ? 'es' : ''}`;
   });
   expenseCount = computed(() => {
-    const n = this.finance.currentMonthTransactions().filter((t) => t.type === 'expense').length;
+    const n = this.dashTxns().filter(t => t.type === 'expense').length;
     return `${n} transacción${n !== 1 ? 'es' : ''}`;
   });
 
-  // Circular progress
-  pct = computed(() => this.finance.budgetUsedPct());
-  spentFmt = computed(() => this.finance.formatCOP(this.finance.totalExpense()));
-  remainFmt = computed(() => this.finance.formatCOP(this.finance.budgetRemaining()));
+  pct       = computed(() => this.finance.budget() > 0 ? Math.min((this.totalExpense() / this.finance.budget()) * 100, 100) : 0);
+  spentFmt  = computed(() => this.finance.formatCOP(this.totalExpense()));
+  remainFmt = computed(() => this.finance.formatCOP(Math.max(this.finance.budget() - this.totalExpense(), 0)));
 
-  // Category bars
+  // ── Category stats ───────────────────────────────────────
+  private expenseByCategory = computed(() => {
+    const map: Record<string, number> = {};
+    this.dashTxns().filter(t => t.type === 'expense').forEach(t => {
+      map[t.categoryId] = (map[t.categoryId] || 0) + t.amount;
+    });
+    return map;
+  });
+
   categoryStats = computed<CategoryStat[]>(() => {
-    const map = this.finance.expenseByCategory();
-    const total = this.finance.totalExpense();
+    const map = this.expenseByCategory();
+    const total = this.totalExpense();
     const limits = this.finance.categoryLimits();
-
     return Object.entries(map)
       .map(([catId, amount]) => {
         const cat = this.finance.getCategoryById(catId)!;
@@ -95,66 +114,106 @@ export class DashboardComponent implements OnInit {
           limitLabel: limit ? this.finance.formatCOP(limit) : '',
         };
       })
-      .filter((s) => !!s.cat)
+      .filter(s => !!s.cat)
       .sort((a, b) => b.total - a.total);
   });
 
-  // Daily bar chart — pixel heights avoid the % height bug in nested flex containers
+  // ── Daily chart ──────────────────────────────────────────
   private readonly CHART_H = 148;
+
   dailyBars = computed(() => {
-    const now = new Date();
-    const daily = this.finance.dailyExpenses();
-    const today = now.getDate();
-    const start = Math.max(1, today - 13);
+    const daily: Record<number, number> = {};
+    this.dashTxns().filter(t => t.type === 'expense').forEach(t => {
+      const day = parseInt(t.date.slice(8, 10), 10);
+      daily[day] = (daily[day] || 0) + t.amount;
+    });
+
+    const [year, month] = this.selectedMonth().split('-').map(Number);
+    const isCurrent = this.isCurrentMonth();
+    const today = new Date().getDate();
+    const daysInMonth = new Date(year, month, 0).getDate();
+
+    const end   = isCurrent ? today : daysInMonth;
+    const start = isCurrent ? Math.max(1, end - 13) : 1;
     const maxVal = Math.max(...Object.values(daily), 1);
+
     const days: { day: number; heightPx: number; isToday: boolean; amount: number }[] = [];
-    for (let d = start; d <= today; d++) {
+    for (let d = start; d <= end; d++) {
       const amount = daily[d] || 0;
       days.push({
         day: d,
         heightPx: amount > 0 ? Math.max(Math.round((amount / maxVal) * this.CHART_H), 6) : 3,
-        isToday: d === today,
+        isToday: isCurrent && d === today,
         amount,
       });
     }
     return days;
   });
 
-  hasDailyData = computed(() => Object.values(this.finance.dailyExpenses()).some((v) => v > 0));
+  hasDailyData = computed(() => this.dailyBars().some(b => b.amount > 0));
 
-  incomeRatioPct = computed(() => {
-    const total = this.finance.totalIncome() + this.finance.totalExpense();
-    return total > 0 ? (this.finance.totalIncome() / total) * 100 : 50;
+  // ── Ratio ────────────────────────────────────────────────
+  incomeRatioPct  = computed(() => {
+    const total = this.totalIncome() + this.totalExpense();
+    return total > 0 ? (this.totalIncome() / total) * 100 : 50;
   });
-
   expenseRatioPct = computed(() => {
-    const total = this.finance.totalIncome() + this.finance.totalExpense();
-    return total > 0 ? (this.finance.totalExpense() / total) * 100 : 50;
+    const total = this.totalIncome() + this.totalExpense();
+    return total > 0 ? (this.totalExpense() / total) * 100 : 50;
   });
 
-  // Recent transactions
+  // ── Recent ───────────────────────────────────────────────
   recentTransactions = computed(() =>
-    [...this.finance.currentMonthTransactions()]
-      .sort((a, b) => b.date.localeCompare(a.date))
-      .slice(0, 6),
+    [...this.dashTxns()].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6),
   );
 
+  // ── Lifecycle ────────────────────────────────────────────
+  async ngOnInit(): Promise<void> {
+    await this.loadDashMonth();
+  }
+
+  async loadDashMonth(): Promise<void> {
+    this.loadingDash.set(true);
+    try {
+      this.dashTxns.set(await this.finance.fetchTransactionsForMonth(this.selectedMonth()));
+    } finally {
+      this.loadingDash.set(false);
+    }
+  }
+
+  // ── Month navigation ─────────────────────────────────────
+  prevMonth(): void {
+    const [y, m] = this.selectedMonth().split('-').map(Number);
+    this.selectedMonth.set(this.buildMonthKey(new Date(y, m - 2, 1)));
+    this.loadDashMonth();
+  }
+
+  nextMonth(): void {
+    if (this.isCurrentMonth()) return;
+    const [y, m] = this.selectedMonth().split('-').map(Number);
+    this.selectedMonth.set(this.buildMonthKey(new Date(y, m, 1)));
+    this.loadDashMonth();
+  }
+
+  // ── Actions ──────────────────────────────────────────────
   openAdd(): void {
-    this.dialog.open(TransactionModalComponent, {
+    const ref = this.dialog.open(TransactionModalComponent, {
       panelClass: 'transparent-dialog',
       width: '640px',
       maxWidth: '100vw',
     });
+    ref.afterClosed().subscribe(() => this.loadDashMonth());
   }
 
   goToTransactions(): void {
     this.router.navigate(['/transactions']);
   }
 
-  getCategory(id: string) {
+  getCategory(id: string): Category | undefined {
     return this.finance.getCategoryById(id);
   }
-  formatCOP(n: number) {
+
+  formatCOP(n: number): string {
     return this.finance.formatCOP(n);
   }
 

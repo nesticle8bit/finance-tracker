@@ -48,25 +48,26 @@ html.light { @include mat.all-component-themes($ft-light); }
 }
 
 html.light {
-  --bg:              #f1f5f9;
-  --surface:         #ffffff;
-  --surface-2:       #f8fafc;
-  --surface-3:       #f1f5f9;
-  --surface-hover:   rgba(0,0,0,0.04);
-  --border:          rgba(0,0,0,0.07);
-  --border-strong:   rgba(0,0,0,0.13);
-  --text:            #0f172a;
-  --text-muted:      #64748b;
-  --text-dim:        #94a3b8;
-  --input-bg:        rgba(0,0,0,0.04);
-  --input-border:    rgba(0,0,0,0.14);
+  // Light theme — palette: #37353e #44444e #715a5a #d3dad9
+  --bg:              #dde4e3;
+  --surface:         #edf0f0;
+  --surface-2:       #f6f8f8;
+  --surface-3:       #ffffff;
+  --surface-hover:   rgba(55,53,62,0.04);
+  --border:          rgba(113,90,90,0.14);
+  --border-strong:   rgba(113,90,90,0.24);
+  --text:            #37353e;
+  --text-muted:      rgba(55,53,62,0.58);
+  --text-dim:        rgba(55,53,62,0.38);
+  --input-bg:        rgba(55,53,62,0.04);
+  --input-border:    rgba(113,90,90,0.22);
   --input-focus:     #0d9488;
-  --nav-hover:       rgba(0,0,0,0.05);
-  --nav-active-bg:   rgba(13,148,136,0.1);
+  --nav-hover:       rgba(55,53,62,0.05);
+  --nav-active-bg:   rgba(13,148,136,0.10);
   --nav-active-text: #0d9488;
-  --card-bg:         #ffffff;
-  --shadow:          0 4px 24px rgba(0,0,0,0.08);
-  --shadow-sm:       0 1px 6px  rgba(0,0,0,0.06);
+  --card-bg:         #f6f8f8;
+  --shadow:          0 4px 24px rgba(55,53,62,0.10);
+  --shadow-sm:       0 1px 6px  rgba(55,53,62,0.07);
 }
 
 // ── Base reset ───────────────────────────────────────────
@@ -2857,4 +2858,99 @@ mat-icon.icon-lg {
 // ── Bar highlight for today ──────────────────────────────
 .daily-bar--today {
   box-shadow: 0 0 12px rgba(20,184,166,0.4);
+}
+
+// ── Dashboard month navigator ────────────────────────────
+.dash-month-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px;
+  margin-top: 10px;
+}
+
+.dash-month-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  flex-shrink: 0;
+
+  &:hover:not(:disabled) {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+}
+
+.dash-month-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  min-width: 148px;
+  justify-content: center;
+}
+
+.dash-month-loading {
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.dash-month-today-btn {
+  background: rgba(20,184,166,0.12);
+  border: 1px solid rgba(20,184,166,0.25);
+  color: #14b8a6;
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-family: 'DM Mono', monospace;
+  cursor: pointer;
+  transition: background .15s;
+  margin-right: 2px;
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba(20,184,166,0.22);
+  }
+}
+
+// ── Past-month info banner ───────────────────────────────
+.dash-past-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(113,90,90,0.08);
+  border: 1px solid rgba(113,90,90,0.18);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 20px;
+}
+
+// ── KPI accent strip override ────────────────────────────
+.dash-kpi-section {
+  margin-bottom: 16px;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
 }

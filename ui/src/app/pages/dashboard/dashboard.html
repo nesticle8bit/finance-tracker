@@ -1,150 +1,231 @@
 <div class="page-pad">
 
-  <!-- Hero header -->
+  <!-- ── Hero ─────────────────────────────────────────── -->
   <div class="dash-hero">
-    <div>
+    <div style="flex:1;min-width:0;">
       <h1 class="dash-greeting">{{ greeting() }}</h1>
-      <p class="page-subtitle">{{ monthLabel() }} · Resumen financiero</p>
+      <p class="page-subtitle">Resumen financiero</p>
+
+      <!-- Month pill navigator -->
+      <div class="dash-month-pill">
+        <button class="dash-month-btn" (click)="prevMonth()" title="Mes anterior">
+          <mat-icon class="icon-sm">chevron_left</mat-icon>
+        </button>
+
+        <div class="dash-month-text">
+          <mat-icon style="font-size:12px;width:12px;height:12px;opacity:.6;">calendar_month</mat-icon>
+          <span style="text-transform:capitalize;">{{ monthLabel() }}</span>
+          @if (loadingDash()) {
+            <span class="dash-month-loading">···</span>
+          }
+        </div>
+
+        <button class="dash-month-btn" (click)="nextMonth()"
+          [disabled]="isCurrentMonth()"
+          [style.opacity]="isCurrentMonth() ? '0.25' : '1'"
+          [style.pointer-events]="isCurrentMonth() ? 'none' : 'auto'"
+          title="Mes siguiente">
+          <mat-icon class="icon-sm">chevron_right</mat-icon>
+        </button>
+
+        @if (!isCurrentMonth()) {
+          <button class="dash-month-today-btn" (click)="selectedMonth.set(todayMonth); loadDashMonth()">
+            hoy
+          </button>
+        }
+      </div>
     </div>
+
     <button class="btn-primary" (click)="openAdd()">
       <mat-icon class="icon-md">add</mat-icon>
       Nueva transacción
     </button>
   </div>
 
-  <!-- KPI Cards -->
-  <div class="kpi-grid">
-    <app-kpi-card label="Presupuesto" [value]="budgetFmt()" sub="Presupuesto mensual"  icon="account_balance_wallet" color="blue" />
-    <app-kpi-card label="Ingresos"    [value]="incomeFmt()"  [sub]="incomeCount()"      icon="south"                  color="green" />
-    <app-kpi-card label="Gastos"      [value]="expenseFmt()" [sub]="expenseCount()"     icon="north"                  color="red" />
-    <app-kpi-card label="Balance"     [value]="balanceFmt()" sub="Ingresos − Gastos"    icon="balance"                [color]="balancePos() ? 'teal' : 'red'" />
-  </div>
-
-  <!-- Income vs Expense ratio bar -->
-  @if (finance.totalIncome() > 0 || finance.totalExpense() > 0) {
-    <div class="card dash-ratio-card">
-      <div class="dash-ratio-header">
-        <div class="dash-ratio-item">
-          <span class="dash-ratio-dot dash-ratio-dot--income"></span>
-          <div>
-            <p class="dash-ratio-label">Ingresos</p>
-            <p class="dash-ratio-val dash-ratio-val--income">{{ incomeFmt() }}</p>
-          </div>
-        </div>
-        <div class="dash-ratio-center">
-          <p class="dash-ratio-label">Ahorro del mes</p>
-          <p class="dash-ratio-val" [style.color]="balancePos() ? '#4ade80' : '#f87171'">{{ balanceFmt() }}</p>
-        </div>
-        <div class="dash-ratio-item dash-ratio-item--right">
-          <div>
-            <p class="dash-ratio-label">Gastos</p>
-            <p class="dash-ratio-val dash-ratio-val--expense">{{ expenseFmt() }}</p>
-          </div>
-          <span class="dash-ratio-dot dash-ratio-dot--expense"></span>
-        </div>
-      </div>
-      <div class="dash-ratio-track">
-        <div class="dash-ratio-fill--income" [style.width.%]="incomeRatioPct()"></div>
-        <div class="dash-ratio-fill--expense" [style.width.%]="expenseRatioPct()"></div>
-      </div>
+  <!-- Past-month banner -->
+  @if (!isCurrentMonth()) {
+    <div class="dash-past-banner">
+      <mat-icon class="icon-sm">history</mat-icon>
+      Visualizando datos históricos —
+      <button class="btn-link-brand" style="font-size:inherit;background:none;border:none;cursor:pointer;padding:0;"
+        (click)="selectedMonth.set(todayMonth); loadDashMonth()">
+        volver al mes actual
+      </button>
     </div>
   }
 
-  <!-- Budget circle + Categories -->
-  <div class="dash-grid-1-2">
+  <!-- ── Content (fades while loading) ─────────────────── -->
+  <div [style.opacity]="loadingDash() ? '0.4' : '1'"
+       [style.pointer-events]="loadingDash() ? 'none' : 'auto'"
+       style="transition:opacity .2s;">
 
-    <div class="card card-p col-center">
-      <h3 class="card-title">Uso del Presupuesto</h3>
-      <app-circular-progress [percentage]="pct()" [spent]="spentFmt()" [remaining]="remainFmt()" />
+    <!-- KPI grid -->
+    <div class="kpi-grid">
+      <app-kpi-card label="Presupuesto" [value]="budgetFmt()" sub="Presupuesto mensual" icon="account_balance_wallet" color="blue" />
+      <app-kpi-card label="Ingresos"    [value]="incomeFmt()"  [sub]="incomeCount()"    icon="south"                 color="green" />
+      <app-kpi-card label="Gastos"      [value]="expenseFmt()" [sub]="expenseCount()"   icon="north"                 color="red" />
+      <app-kpi-card label="Balance"     [value]="balanceFmt()" sub="Ingresos − Gastos"  icon="balance"               [color]="balancePos() ? 'teal' : 'red'" />
     </div>
 
-    <div class="card card-p">
-      <h3 class="card-title">Gastos por Categoría</h3>
-      @if (categoryStats().length === 0) {
-        <p class="empty-chart">Sin gastos este mes</p>
-      } @else {
-        <div class="form-stack dash-cat-stack">
-          @for (s of categoryStats(); track s.cat.id) {
-            <app-category-bar
-              [name]="s.cat.name" [icon]="s.cat.icon" [color]="s.cat.color"
-              [amount]="formatCOP(s.total)" [percentage]="s.percentage"
-              [limitPct]="s.limitPct" [limit]="s.limitLabel" />
-          }
+    <!-- Income vs Expense ratio -->
+    @if (totalIncome() > 0 || totalExpense() > 0) {
+      <div class="card dash-ratio-card">
+        <div class="dash-ratio-header">
+
+          <div class="dash-ratio-item">
+            <div class="dash-ratio-dot dash-ratio-dot--income"></div>
+            <div>
+              <p class="dash-ratio-label">Ingresos</p>
+              <p class="dash-ratio-val dash-ratio-val--income">{{ incomeFmt() }}</p>
+            </div>
+          </div>
+
+          <div class="dash-ratio-center">
+            <p class="dash-ratio-label">{{ balancePos() ? 'Ahorro' : 'Déficit' }}</p>
+            <p class="dash-ratio-val" [style.color]="balancePos() ? '#4ade80' : '#f87171'">
+              {{ balanceFmt() }}
+            </p>
+          </div>
+
+          <div class="dash-ratio-item dash-ratio-item--right">
+            <div>
+              <p class="dash-ratio-label">Gastos</p>
+              <p class="dash-ratio-val dash-ratio-val--expense">{{ expenseFmt() }}</p>
+            </div>
+            <div class="dash-ratio-dot dash-ratio-dot--expense"></div>
+          </div>
+
         </div>
-      }
-    </div>
+        <div class="dash-ratio-track">
+          <div class="dash-ratio-fill--income"  [style.width.%]="incomeRatioPct()"></div>
+          <div class="dash-ratio-fill--expense" [style.width.%]="expenseRatioPct()"></div>
+        </div>
+      </div>
+    }
 
-  </div>
+    <!-- Budget circle + Categories -->
+    <div class="dash-grid-1-2">
 
-  <!-- Daily chart + Recent transactions -->
-  <div class="dash-grid-1-1">
+      <div class="card card-p col-center">
+        <h3 class="card-title">Uso del Presupuesto</h3>
+        <app-circular-progress [percentage]="pct()" [spent]="spentFmt()" [remaining]="remainFmt()" />
+      </div>
 
-    <div class="card card-p">
-      <div class="dash-chart-header">
-        <h3 class="card-title" style="margin:0;">Gastos Diarios</h3>
-        @if (hasDailyData()) {
-          <span class="dash-chart-total">{{ expenseFmt() }}</span>
+      <div class="card card-p">
+        <h3 class="card-title">Gastos por Categoría</h3>
+        @if (categoryStats().length === 0) {
+          <div class="empty-chart" style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <mat-icon style="font-size:2rem;color:var(--text-dim);">pie_chart</mat-icon>
+            Sin gastos este mes
+          </div>
+        } @else {
+          <div class="form-stack dash-cat-stack">
+            @for (s of categoryStats(); track s.cat.id) {
+              <app-category-bar
+                [name]="s.cat.name" [icon]="s.cat.icon" [color]="s.cat.color"
+                [amount]="formatCOP(s.total)" [percentage]="s.percentage"
+                [limitPct]="s.limitPct" [limit]="s.limitLabel" />
+            }
+          </div>
         }
       </div>
-      @if (!hasDailyData()) {
-        <p class="empty-chart">Sin gastos registrados</p>
-      } @else {
-        <div class="daily-chart">
-          @for (bar of dailyBars(); track bar.day) {
-            <div class="daily-bar-col"
-              [title]="'Día ' + bar.day + (bar.amount ? ': ' + formatCOP(bar.amount) : '')">
-              <div class="daily-bar-track">
-                <div class="daily-bar"
-                  [class.daily-bar--today]="bar.isToday"
-                  [style.height.px]="bar.heightPx"
-                  [style.background]="bar.isToday
-                    ? 'linear-gradient(to top, #0d9488, #5eead4)'
-                    : bar.amount > 0 ? 'rgba(20,184,166,0.3)' : 'rgba(255,255,255,0.05)'">
+
+    </div>
+
+    <!-- Daily chart + Recent transactions -->
+    <div class="dash-grid-1-1">
+
+      <!-- Daily chart -->
+      <div class="card card-p">
+        <div class="dash-chart-header">
+          <div>
+            <h3 class="card-title" style="margin:0 0 2px;">Gastos Diarios</h3>
+            <p style="font-size:0.7rem;color:var(--text-dim);margin:0;font-family:'DM Mono',monospace;text-transform:capitalize;">
+              {{ monthLabel() }}
+            </p>
+          </div>
+          @if (hasDailyData()) {
+            <span class="dash-chart-total">{{ expenseFmt() }}</span>
+          }
+        </div>
+
+        @if (!hasDailyData()) {
+          <div class="empty-chart" style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <mat-icon style="font-size:2rem;color:var(--text-dim);">bar_chart</mat-icon>
+            Sin gastos registrados
+          </div>
+        } @else {
+          <div class="daily-chart">
+            @for (bar of dailyBars(); track bar.day) {
+              <div class="daily-bar-col"
+                [title]="'Día ' + bar.day + (bar.amount ? ': ' + formatCOP(bar.amount) : ': sin gastos')">
+                <div class="daily-bar-track">
+                  <div class="daily-bar"
+                    [class.daily-bar--today]="bar.isToday"
+                    [style.height.px]="bar.heightPx"
+                    [style.background]="bar.isToday
+                      ? 'linear-gradient(to top,#0d9488,#5eead4)'
+                      : bar.amount > 0 ? 'rgba(20,184,166,0.28)' : 'rgba(211,218,217,0.07)'">
+                  </div>
                 </div>
               </div>
-            </div>
-          }
-        </div>
-        <div class="daily-labels">
-          @for (bar of dailyBars(); track bar.day) {
-            <div class="daily-label" [style.color]="bar.isToday ? '#14b8a6' : ''">
-              {{ bar.day }}
-            </div>
-          }
-        </div>
-      }
-    </div>
-
-    <div class="card card-p">
-      <div class="dash-recent-header flex items-center justify-between">
-        <h3 class="card-title" style="margin:0;">Recientes</h3>
-        <button (click)="goToTransactions()" class="btn-link-brand">Ver todo →</button>
+            }
+          </div>
+          <div class="daily-labels">
+            @for (bar of dailyBars(); track bar.day) {
+              <div class="daily-label" [style.color]="bar.isToday ? '#14b8a6' : ''">
+                {{ bar.day }}
+              </div>
+            }
+          </div>
+        }
       </div>
 
-      @if (recentTransactions().length === 0) {
-        <p class="empty-chart">Sin transacciones este mes</p>
-      } @else {
-        <div class="form-stack">
-          @for (t of recentTransactions(); track t.id) {
-            @let cat = getCategory(t.categoryId);
-            <div class="txn-row">
-              <div class="icon-box" [style.background]="(cat?.color ?? '#6b7280') + '22'">
-                <mat-icon class="icon-sm" [style.color]="cat?.color ?? '#6b7280'">
-                  {{ cat?.icon ?? 'more_horiz' }}
-                </mat-icon>
-              </div>
-              <div class="flex-min">
-                <p class="txn-desc">{{ t.desc }}</p>
-                <p class="txn-meta">{{ formatDate(t.date) }} · {{ cat?.name }}</p>
-              </div>
-              <span class="txn-amount" [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
-                {{ t.type === 'income' ? '+' : '−' }}{{ formatCOP(t.amount) }}
-              </span>
-            </div>
-          }
+      <!-- Recent transactions -->
+      <div class="card card-p">
+        <div class="dash-recent-header flex items-center justify-between">
+          <div>
+            <h3 class="card-title" style="margin:0 0 2px;">Recientes</h3>
+            <p style="font-size:0.7rem;color:var(--text-dim);margin:0;font-family:'DM Mono',monospace;">
+              Últimas {{ recentTransactions().length }} transacciones
+            </p>
+          </div>
+          <button (click)="goToTransactions()" class="btn-link-brand"
+            style="display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;">
+            Ver todo
+            <mat-icon class="icon-sm">arrow_forward</mat-icon>
+          </button>
         </div>
-      }
+
+        @if (recentTransactions().length === 0) {
+          <div class="empty-chart" style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:8px;">
+            <mat-icon style="font-size:2rem;color:var(--text-dim);">receipt_long</mat-icon>
+            Sin transacciones este mes
+          </div>
+        } @else {
+          <div class="form-stack" style="gap:12px;margin-top:4px;">
+            @for (t of recentTransactions(); track t.id) {
+              @let cat = getCategory(t.categoryId);
+              <div class="txn-row">
+                <div class="icon-box" [style.background]="(cat?.color ?? '#715a5a') + '22'">
+                  <mat-icon class="icon-sm" [style.color]="cat?.color ?? '#715a5a'">
+                    {{ cat?.icon ?? 'more_horiz' }}
+                  </mat-icon>
+                </div>
+                <div class="flex-min">
+                  <p class="txn-desc">{{ t.desc || cat?.name }}</p>
+                  <p class="txn-meta">{{ formatDate(t.date) }} · {{ cat?.name }}</p>
+                </div>
+                <span class="txn-amount" [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
+                  {{ t.type === 'income' ? '+' : '−' }}{{ formatCOP(t.amount) }}
+                </span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
     </div>
 
-  </div>
+  </div><!-- /content -->
 </div>

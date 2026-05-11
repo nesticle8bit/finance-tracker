@@ -120,6 +120,14 @@ export class FinanceService {
     await this._loadCurrentMonthTxns();
   }
 
+  /** Fetch transactions for any month without mutating shared state */
+  async fetchTransactionsForMonth(month: string): Promise<Transaction[]> {
+    const res = await firstValueFrom(
+      this.http.get<ApiResponse<Transaction[]>>(`${API}/api/transactions?month=${month}`),
+    );
+    return res.data ?? [];
+  }
+
   /** Load transactions for a specific month into the page list signal */
   async loadTransactions(month?: string): Promise<void> {
     const m = month ?? this.currentMonthKey();
