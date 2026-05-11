@@ -1,0 +1,48 @@
+<div class="modal-box">
+
+  <div class="modal-header">
+    <h2 class="modal-title">{{ title }}</h2>
+    <button class="btn-ghost-close" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="form-stack">
+
+    <div>
+      <label class="form-label">Nombre del pago</label>
+      <input class="input-field" type="text" [(ngModel)]="form.name"
+        placeholder="Ej: Arriendo, Netflix, Internet...">
+    </div>
+
+    <div>
+      <label class="form-label">
+        Ícono Material
+        <span class="text-hint">
+          Busca en
+          <a href="https://fonts.google.com/icons" target="_blank" class="link-brand">Google Fonts Icons</a>
+        </span>
+      </label>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <input class="input-field" style="flex:1;" type="text" [(ngModel)]="form.icon"
+          placeholder="Ej: home, wifi, phone...">
+        <div class="icon-box-md" style="flex-shrink:0;background:var(--surface-2);">
+          <mat-icon style="color:var(--text-primary);">{{ form.icon || 'payment' }}</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label class="form-label">Monto por defecto (COP)</label>
+      <input class="input-field" type="number" min="0" [(ngModel)]="form.defaultAmount"
+        placeholder="Ej: 50000">
+    </div>
+
+  </div>
+
+  <button class="btn-primary btn-full" style="margin-top:24px;" (click)="save()" [disabled]="saving()">
+    <mat-icon class="icon-md">{{ saving() ? 'sync' : 'check' }}</mat-icon>
+    {{ saving() ? 'Guardando...' : saveLabel }}
+  </button>
+
+</div>

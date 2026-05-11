@@ -2,41 +2,33 @@ import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatDialog } from '@angular/material/dialog';
 import { ToastService } from '../../services/toast.service';
 import {
   RecurringPaymentsService,
   RecurringPayment,
   RecurringPaymentRecord,
 } from '../../services/recurring-payments.service';
+import { RecurringPaymentModalComponent } from '../../components/shared/recurring-payment-modal/recurring-payment-modal';
 
 @Component({
   selector: 'app-recurring-payments',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './recurring-payments.html',
 })
 export class RecurringPaymentsComponent implements OnInit {
   private svc = inject(RecurringPaymentsService);
   private toast = inject(ToastService);
+  private dialog = inject(MatDialog);
 
   payments = signal<RecurringPayment[]>([]);
   records = signal<RecurringPaymentRecord[]>([]);
   loading = signal(true);
+  confirmDeleteId = signal<string | null>(null);
+  pendingAmounts = signal<Record<string, number>>({});
 
   currentMonth = signal(this.buildMonth());
-
-  showForm = signal(false);
-  editingId = signal<string | null>(null);
-  formName = signal('');
-  formIcon = signal('payment');
-  formAmount = signal<number>(0);
-  saving = signal(false);
-  confirmDeleteId = signal<string | null>(null);
-
-  pendingAmounts = signal<Record<string, number>>({});
 
   private buildMonth(): string {
     const now = new Date();
@@ -52,6 +44,9 @@ export class RecurringPaymentsComponent implements OnInit {
   totalCount = computed(() => this.payments().length);
   paidTotal = computed(() => this.records().reduce((s, r) => s + r.amount, 0));
   allPaid = computed(() => this.totalCount() > 0 && this.paidCount() === this.totalCount());
+  progressPct = computed(() =>
+    this.totalCount() ? Math.round((this.paidCount() / this.totalCount()) * 100) : 0
+  );
 
   isChecked(paymentId: string): boolean {
     return this.records().some(r => r.paymentId === paymentId);
@@ -90,6 +85,33 @@ export class RecurringPaymentsComponent implements OnInit {
     }
   }
 
+  openAdd(): void {
+    const ref = this.dialog.open(RecurringPaymentModalComponent, {
+      data: {},
+      panelClass: 'transparent-dialog',
+      maxWidth: '100vw',
+    });
+    ref.afterClosed().subscribe((result: RecurringPayment | null) => {
+      if (result) {
+        this.payments.update(list => [...list, result]);
+        this.setPendingAmount(result.id, result.defaultAmount);
+      }
+    });
+  }
+
+  openEdit(payment: RecurringPayment): void {
+    const ref = this.dialog.open(RecurringPaymentModalComponent, {
+      data: { payment },
+      panelClass: 'transparent-dialog',
+      maxWidth: '100vw',
+    });
+    ref.afterClosed().subscribe((result: RecurringPayment | null) => {
+      if (result) {
+        this.payments.update(list => list.map(p => p.id === result.id ? result : p));
+      }
+    });
+  }
+
   async check(payment: RecurringPayment): Promise<void> {
     if (this.isChecked(payment.id)) return;
     const amount = this.getPendingAmount(payment.id);
@@ -100,52 +122,9 @@ export class RecurringPaymentsComponent implements OnInit {
     try {
       const record = await this.svc.checkPayment(payment.id, this.currentMonth(), amount);
       this.records.update(r => [...r, record]);
-      this.toast.success(`${payment.name} marcado como pagado ✓`);
+      this.toast.success(`${payment.name} pagado ✓`);
     } catch {
       this.toast.error('Error al registrar el pago');
-    }
-  }
-
-  openForm(payment?: RecurringPayment): void {
-    if (payment) {
-      this.editingId.set(payment.id);
-      this.formName.set(payment.name);
-      this.formIcon.set(payment.icon);
-      this.formAmount.set(payment.defaultAmount);
-    } else {
-      this.editingId.set(null);
-      this.formName.set('');
-      this.formIcon.set('payment');
-      this.formAmount.set(0);
-    }
-    this.showForm.set(true);
-  }
-
-  closeForm(): void {
-    this.showForm.set(false);
-    this.saving.set(false);
-  }
-
-  async saveForm(): Promise<void> {
-    const name = this.formName().trim();
-    if (!name) { this.toast.error('El nombre es requerido'); return; }
-    this.saving.set(true);
-    const dto = { name, icon: this.formIcon(), defaultAmount: this.formAmount() };
-    try {
-      if (this.editingId()) {
-        const updated = await this.svc.updatePayment(this.editingId()!, dto);
-        this.payments.update(list => list.map(p => p.id === updated.id ? updated : p));
-        this.toast.success('Pago fijo actualizado ✓');
-      } else {
-        const created = await this.svc.createPayment(dto);
-        this.payments.update(list => [...list, created]);
-        this.setPendingAmount(created.id, created.defaultAmount);
-        this.toast.success('Pago fijo agregado ✓');
-      }
-      this.closeForm();
-    } catch {
-      this.toast.error('Error al guardar');
-      this.saving.set(false);
     }
   }
 
@@ -162,9 +141,7 @@ export class RecurringPaymentsComponent implements OnInit {
 
   formatCOP(n: number): string {
     return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      maximumFractionDigits: 0,
+      style: 'currency', currency: 'COP', maximumFractionDigits: 0,
     }).format(n);
   }
 
