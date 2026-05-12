@@ -1,96 +1,120 @@
-<div class="login-page">
+<div class="lp">
 
-  <!-- Left panel — branding / features -->
-  <div class="login-left">
-    <div class="login-left__glow1"></div>
-    <div class="login-left__glow2"></div>
+  <!-- Left: Editorial panel -->
+  <div class="lp-editorial">
+    <div class="lp-grid-bg"></div>
+    <div class="lp-glow-orb lp-glow-orb--a"></div>
+    <div class="lp-glow-orb lp-glow-orb--b"></div>
 
-    <div class="login-left__content">
-      <!-- Brand -->
-      <div class="login-brand">
-        <div class="login-brand__icon">
+    <div class="lp-editorial__inner">
+
+      <div class="lp-brand">
+        <div class="lp-brand__mark">
           <mat-icon>trending_up</mat-icon>
         </div>
-        <span class="login-brand__name">{{ settings().siteName }}</span>
+        <span class="lp-brand__name">{{ settings().siteName }}</span>
       </div>
 
-      <h2 class="login-left__title" style="white-space:pre-line;">{{ settings().slogan }}</h2>
-      <p class="login-left__sub">{{ settings().loginSubtitle }}</p>
+      <div class="lp-headline">
+        <div class="lp-headline__eyebrow">Finanzas personales</div>
+        <h2 class="lp-headline__display" style="white-space:pre-line;">{{ settings().slogan }}</h2>
+        <p class="lp-headline__sub">{{ settings().loginSubtitle }}</p>
+      </div>
 
-      <div class="login-features">
-        <div class="login-feature">
-          <div class="login-feature__icon"><mat-icon>pie_chart</mat-icon></div>
-          <div>
-            <p class="login-feature__label">{{ settings().feature1Title }}</p>
-            <p class="login-feature__desc">{{ settings().feature1Desc }}</p>
+      <div class="lp-stats">
+        <div class="lp-stat">
+          <div class="lp-stat__icon"><mat-icon>pie_chart</mat-icon></div>
+          <div class="lp-stat__body">
+            <span class="lp-stat__label">{{ settings().feature1Title }}</span>
+            <span class="lp-stat__desc">{{ settings().feature1Desc }}</span>
           </div>
         </div>
-        <div class="login-feature">
-          <div class="login-feature__icon"><mat-icon>account_balance_wallet</mat-icon></div>
-          <div>
-            <p class="login-feature__label">{{ settings().feature2Title }}</p>
-            <p class="login-feature__desc">{{ settings().feature2Desc }}</p>
+        <div class="lp-stat">
+          <div class="lp-stat__icon"><mat-icon>account_balance_wallet</mat-icon></div>
+          <div class="lp-stat__body">
+            <span class="lp-stat__label">{{ settings().feature2Title }}</span>
+            <span class="lp-stat__desc">{{ settings().feature2Desc }}</span>
           </div>
         </div>
-        <div class="login-feature">
-          <div class="login-feature__icon"><mat-icon>lock</mat-icon></div>
-          <div>
-            <p class="login-feature__label">{{ settings().feature3Title }}</p>
-            <p class="login-feature__desc">{{ settings().feature3Desc }}</p>
+        <div class="lp-stat">
+          <div class="lp-stat__icon"><mat-icon>lock</mat-icon></div>
+          <div class="lp-stat__body">
+            <span class="lp-stat__label">{{ settings().feature3Title }}</span>
+            <span class="lp-stat__desc">{{ settings().feature3Desc }}</span>
           </div>
         </div>
+      </div>
+
+    </div>
+
+    <div class="lp-ticker" aria-hidden="true">
+      <div class="lp-ticker__track">
+        <span>▲ 2.4%</span><span>USD/EUR 1.08</span><span>▼ 0.3%</span><span>BTC 67,420</span><span>S&amp;P 5,241</span><span>▲ 1.7%</span><span>NASDAQ 18,340</span><span>EUR/MXN 19.82</span>
+        <span>▲ 2.4%</span><span>USD/EUR 1.08</span><span>▼ 0.3%</span><span>BTC 67,420</span><span>S&amp;P 5,241</span><span>▲ 1.7%</span><span>NASDAQ 18,340</span><span>EUR/MXN 19.82</span>
       </div>
     </div>
   </div>
 
-  <!-- Right panel — form -->
-  <div class="login-right">
-    <div class="login-form-wrap">
+  <!-- Right: Form panel -->
+  <div class="lp-form-panel">
+    <div class="lp-form-wrap">
 
-      <!-- Logo visible solo en mobile -->
-      <div class="login-mobile-brand">
-        <div class="login-brand__icon">
+      <div class="lp-mobile-brand">
+        <div class="lp-brand__mark">
           <mat-icon>trending_up</mat-icon>
         </div>
-        <span class="login-brand__name">{{ settings().siteName }}</span>
+        <span class="lp-brand__name">{{ settings().siteName }}</span>
       </div>
 
-      <h1 class="login-title">Iniciar sesión</h1>
-      <p class="login-subtitle">Accede a tu cuenta para continuar</p>
+      <div class="lp-form-header">
+        <h1 class="lp-form-title">Iniciar sesión</h1>
+        <p class="lp-form-subtitle">Accede a tu cuenta para continuar</p>
+      </div>
 
       @if (error()) {
-        <div class="login-error">
+        <div class="lp-error">
           <mat-icon>error_outline</mat-icon>
           {{ error() }}
         </div>
       }
 
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-        <div class="form-group">
-          <label class="form-label">Correo electrónico</label>
-          <input class="input-field" type="email" formControlName="email"
-            placeholder="tu@correo.com" autocomplete="email" />
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="lp-form">
+
+        <div class="lp-field">
+          <label class="lp-field__label">Correo electrónico</label>
+          <div class="lp-field__wrap">
+            <mat-icon class="lp-field__icon">mail_outline</mat-icon>
+            <input class="lp-field__input" type="email" formControlName="email"
+              placeholder="tu@correo.com" autocomplete="email" />
+          </div>
           @if (form.get('email')?.invalid && form.get('email')?.touched) {
-            <p class="form-error">Ingresa un correo válido</p>
+            <p class="lp-field__error">Ingresa un correo válido</p>
           }
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Contraseña</label>
-          <input class="input-field" type="password" formControlName="password"
-            placeholder="••••••••" autocomplete="current-password" />
+        <div class="lp-field">
+          <label class="lp-field__label">Contraseña</label>
+          <div class="lp-field__wrap">
+            <mat-icon class="lp-field__icon">lock_outline</mat-icon>
+            <input class="lp-field__input" type="password" formControlName="password"
+              placeholder="••••••••" autocomplete="current-password" />
+          </div>
           @if (form.get('password')?.invalid && form.get('password')?.touched) {
-            <p class="form-error">Mínimo 6 caracteres</p>
+            <p class="lp-field__error">Mínimo 6 caracteres</p>
           }
         </div>
 
-        <button type="submit" class="btn-primary login-submit" [disabled]="loading()">
-          @if (loading()) {
-            <mat-icon class="spin">sync</mat-icon> Verificando...
-          } @else {
-            <mat-icon>login</mat-icon> Entrar
-          }
+        <button type="submit" class="lp-submit" [disabled]="loading()">
+          <span class="lp-submit__bg"></span>
+          <span class="lp-submit__content">
+            @if (loading()) {
+              <mat-icon class="spin">sync</mat-icon> Verificando...
+            } @else {
+              Entrar <mat-icon>arrow_forward</mat-icon>
+            }
+          </span>
         </button>
+
       </form>
 
     </div>
