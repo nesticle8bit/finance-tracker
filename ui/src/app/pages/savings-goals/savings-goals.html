@@ -1,0 +1,100 @@
+<div class="page-pad">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Metas de Ahorro</h1>
+      <p class="page-subtitle">Sigue el progreso hacia tus objetivos</p>
+    </div>
+    <button class="btn-primary" (click)="openAdd()">
+      <mat-icon class="icon-md">add</mat-icon> Nueva meta
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="card card-p" style="text-align:center;padding:48px;"><p class="text-muted">Cargando...</p></div>
+  } @else if (!goals().length) {
+    <div class="card card-p" style="text-align:center;padding:48px 24px;">
+      <mat-icon style="font-size:2.5rem;color:var(--text-dim);display:block;margin-bottom:12px;">savings</mat-icon>
+      <p class="text-muted" style="margin-bottom:16px;">No tienes metas de ahorro aún.</p>
+      <button class="btn-primary" (click)="openAdd()"><mat-icon class="icon-md">add</mat-icon> Crear primera meta</button>
+    </div>
+  } @else {
+    <div class="cat-grid">
+      @for (g of goals(); track g.id) {
+        <div class="card card-p">
+
+          <!-- Header -->
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="icon-box-md" [style.background]="g.color + '22'">
+                <mat-icon [style.color]="g.color">{{ g.icon }}</mat-icon>
+              </div>
+              <div>
+                <p style="font-weight:600;margin:0;">{{ g.name }}</p>
+                @if (g.targetDate) {
+                  <p class="text-dim" style="font-size:0.72rem;margin:2px 0 0;">
+                    {{ daysLeft(g) === 0 ? '¡Hoy!' : daysLeft(g) + ' días restantes' }} · {{ formatDate(g.targetDate) }}
+                  </p>
+                }
+              </div>
+            </div>
+            <div style="display:flex;gap:4px;">
+              <button class="btn-icon-edit" (click)="openEdit(g)"><mat-icon class="icon-sm">edit</mat-icon></button>
+              @if (confirmDeleteId() === g.id) {
+                <button class="btn-icon-delete" (click)="deleteGoal(g.id)"><mat-icon class="icon-sm">delete_forever</mat-icon></button>
+                <button class="btn-icon-edit" (click)="confirmDeleteId.set(null)"><mat-icon class="icon-sm">close</mat-icon></button>
+              } @else {
+                <button class="btn-icon-delete" (click)="confirmDeleteId.set(g.id)"><mat-icon class="icon-sm">delete</mat-icon></button>
+              }
+            </div>
+          </div>
+
+          <!-- Amounts -->
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <div>
+              <p class="text-dim" style="font-size:0.7rem;margin:0;">Ahorrado</p>
+              <p class="mono" style="font-weight:700;margin:2px 0 0;" [style.color]="g.color">{{ formatCOP(g.currentAmount) }}</p>
+            </div>
+            <div style="text-align:right;">
+              <p class="text-dim" style="font-size:0.7rem;margin:0;">Meta</p>
+              <p class="mono" style="font-weight:700;margin:2px 0 0;">{{ formatCOP(g.targetAmount) }}</p>
+            </div>
+          </div>
+
+          <!-- Progress bar -->
+          <div class="progress-track" style="margin-bottom:6px;">
+            <div class="progress-fill" [style.width.%]="pct(g)" [style.background]="pct(g) >= 100 ? '#4ade80' : g.color"></div>
+          </div>
+          <p class="text-dim" style="font-size:0.7rem;text-align:right;margin-bottom:16px;">{{ pct(g) | number:'1.0-0' }}%</p>
+
+          <!-- Contribute row -->
+          @if (pct(g) < 100) {
+            @if (contributeId() === g.id) {
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <input class="input-field" type="number" min="0" style="flex:1;min-width:100px;"
+                  [ngModel]="contributeAmount()" (ngModelChange)="contributeAmount.set(+$event)" placeholder="Monto">
+                <button class="btn-primary" style="padding:8px 12px;" (click)="contribute(g)">
+                  <mat-icon class="icon-sm">add</mat-icon>
+                </button>
+                <button class="btn-icon-edit" (click)="withdraw(g)" title="Retirar">
+                  <mat-icon class="icon-sm">remove</mat-icon>
+                </button>
+                <button class="btn-icon-edit" (click)="contributeId.set(null)">
+                  <mat-icon class="icon-sm">close</mat-icon>
+                </button>
+              </div>
+            } @else {
+              <button class="btn-teal-outline" (click)="contributeId.set(g.id); contributeAmount.set(0)">
+                <mat-icon class="icon-sm">add</mat-icon> Aportar
+              </button>
+            }
+          } @else {
+            <div style="text-align:center;color:#4ade80;font-size:0.85rem;display:flex;align-items:center;justify-content:center;gap:6px;">
+              <mat-icon class="icon-sm">check_circle</mat-icon> ¡Meta alcanzada!
+            </div>
+          }
+
+        </div>
+      }
+    </div>
+  }
+</div>

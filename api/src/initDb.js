@@ -75,6 +75,40 @@ async function initDb() {
         UNIQUE ("UserId", "PaymentId", "Month")
       );
 
+      CREATE TABLE IF NOT EXISTS finance."savingsGoals" (
+        "Id"            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        "UserId"        UUID NOT NULL REFERENCES authentications.users("Id") ON DELETE CASCADE,
+        "Name"          TEXT NOT NULL,
+        "Icon"          TEXT NOT NULL DEFAULT 'savings',
+        "Color"         TEXT NOT NULL DEFAULT '#14b8a6',
+        "TargetAmount"  NUMERIC(18,2) NOT NULL DEFAULT 0,
+        "CurrentAmount" NUMERIC(18,2) NOT NULL DEFAULT 0,
+        "TargetDate"    DATE,
+        "CreatedAt"     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+
+      CREATE TABLE IF NOT EXISTS finance."recurringTransactions" (
+        "Id"         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        "UserId"     UUID NOT NULL REFERENCES authentications.users("Id") ON DELETE CASCADE,
+        "CategoryId" UUID NOT NULL REFERENCES parameters.categories("Id") ON DELETE RESTRICT,
+        "Desc"       TEXT NOT NULL DEFAULT '',
+        "Amount"     NUMERIC(18,2) NOT NULL DEFAULT 0,
+        "Type"       TEXT NOT NULL DEFAULT 'expense',
+        "DayOfMonth" INTEGER NOT NULL DEFAULT 1,
+        "Active"     BOOLEAN NOT NULL DEFAULT TRUE,
+        "CreatedAt"  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+
+      CREATE TABLE IF NOT EXISTS finance."recurringTransactionLogs" (
+        "Id"            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        "UserId"        UUID NOT NULL REFERENCES authentications.users("Id") ON DELETE CASCADE,
+        "RecurringId"   UUID NOT NULL REFERENCES finance."recurringTransactions"("Id") ON DELETE CASCADE,
+        "Month"         TEXT NOT NULL,
+        "TransactionId" UUID REFERENCES finance.transactions("Id") ON DELETE SET NULL,
+        "AppliedAt"     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        UNIQUE ("RecurringId", "Month")
+      );
+
       CREATE TABLE IF NOT EXISTS settings."siteSettings" (
         "Id"             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         "SiteName"       TEXT NOT NULL DEFAULT 'Finance Tracker',

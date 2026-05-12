@@ -1,0 +1,56 @@
+<div class="modal-box">
+  <div class="modal-header">
+    <h2 class="modal-title">{{ title }}</h2>
+    <button class="btn-ghost-close" (click)="close()"><mat-icon>close</mat-icon></button>
+  </div>
+  <div class="form-stack">
+    <div>
+      <label class="form-label">Tipo</label>
+      <div style="display:flex;gap:8px;">
+        <button class="tab-btn" style="flex:1;" [class.active]="form.type==='expense'" (click)="form.type='expense'">
+          <mat-icon class="icon-sm">north</mat-icon> Gasto
+        </button>
+        <button class="tab-btn" style="flex:1;" [class.active]="form.type==='income'" (click)="form.type='income'">
+          <mat-icon class="icon-sm">south</mat-icon> Ingreso
+        </button>
+      </div>
+    </div>
+    <div>
+      <label class="form-label">Categoría</label>
+      <select class="input-field" [(ngModel)]="form.categoryId">
+        <option value="">Selecciona categoría</option>
+        @for (c of categories(); track c.id) {
+          @if (c.type === form.type || c.type === 'both') {
+            <option [value]="c.id">{{ c.name }}</option>
+          }
+        }
+      </select>
+    </div>
+    <div>
+      <label class="form-label">Descripción</label>
+      <input class="input-field" [(ngModel)]="form.desc" placeholder="Ej: Netflix, Salario...">
+    </div>
+    <div>
+      <label class="form-label">Monto (COP)</label>
+      <input class="input-field" type="number" min="0" [(ngModel)]="form.amount">
+    </div>
+    <div>
+      <label class="form-label">Día del mes</label>
+      <select class="input-field" [(ngModel)]="form.dayOfMonth">
+        @for (d of days; track d) {
+          <option [value]="d">Día {{ d }}</option>
+        }
+      </select>
+    </div>
+    @if (isEdit) {
+      <div style="display:flex;align-items:center;gap:10px;">
+        <input type="checkbox" [(ngModel)]="form.active" style="width:16px;height:16px;">
+        <label class="form-label" style="margin:0;">Activa</label>
+      </div>
+    }
+  </div>
+  <button class="btn-primary btn-full" style="margin-top:24px;" (click)="save()" [disabled]="saving()">
+    <mat-icon class="icon-md">{{ saving() ? 'sync' : 'check' }}</mat-icon>
+    {{ saving() ? 'Guardando...' : title }}
+  </button>
+</div>

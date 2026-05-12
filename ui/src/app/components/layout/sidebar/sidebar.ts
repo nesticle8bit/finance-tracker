@@ -28,14 +28,22 @@ export class SidebarComponent {
   layout = inject(LayoutService);
   theme = inject(ThemeService);
 
-  navItems: NavItem[] = [
-    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
-    { label: 'Transacciones', icon: 'receipt_long', route: '/transactions' },
-    { label: 'Categorías', icon: 'category', route: '/categories' },
-    { label: 'Presupuesto', icon: 'savings', route: '/budget' },
-    { label: 'Pagos Fijos', icon: 'event_repeat', route: '/recurring-payments' },
-    { label: 'Ajustes', icon: 'tune', route: '/settings' },
+  mainItems: NavItem[] = [
+    { label: 'Dashboard',      icon: 'dashboard',     route: '/dashboard' },
+    { label: 'Transacciones',  icon: 'receipt_long',  route: '/transactions' },
+    { label: 'Categorías',     icon: 'category',      route: '/categories' },
+    { label: 'Presupuesto',    icon: 'savings',        route: '/budget' },
+    { label: 'Pagos Fijos',    icon: 'event_repeat',  route: '/recurring-payments' },
   ];
+
+  toolItems: NavItem[] = [
+    { label: 'Recurrentes',    icon: 'autorenew',       route: '/recurring-transactions' },
+    { label: 'Metas de Ahorro', icon: 'flag',           route: '/savings-goals' },
+    { label: 'Tendencias',     icon: 'trending_up',    route: '/trends' },
+    { label: 'Comparar Meses', icon: 'compare_arrows', route: '/compare' },
+  ];
+
+  settingsItem: NavItem = { label: 'Ajustes', icon: 'tune', route: '/settings' };
 
   monthLabel = computed(() => this.finance.getMonthLabel());
   balance = computed(() => this.finance.formatCOP(this.finance.balance()));

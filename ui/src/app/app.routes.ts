@@ -42,6 +42,26 @@ export const routes: Routes = [
           import('./pages/recurring-payments/recurring-payments').then((m) => m.RecurringPaymentsComponent),
       },
       {
+        path: 'recurring-transactions',
+        loadComponent: () =>
+          import('./pages/recurring-transactions/recurring-transactions').then((m) => m.RecurringTransactionsComponent),
+      },
+      {
+        path: 'savings-goals',
+        loadComponent: () =>
+          import('./pages/savings-goals/savings-goals').then((m) => m.SavingsGoalsComponent),
+      },
+      {
+        path: 'trends',
+        loadComponent: () =>
+          import('./pages/trends/trends').then((m) => m.TrendsComponent),
+      },
+      {
+        path: 'compare',
+        loadComponent: () =>
+          import('./pages/compare/compare').then((m) => m.CompareComponent),
+      },
+      {
         path: 'settings',
         loadComponent: () =>
           import('./pages/settings/settings').then((m) => m.SettingsComponent),

@@ -132,6 +132,47 @@
 
     </div>
 
+    <!-- Projection widget -->
+    @if (projection(); as proj) {
+      <div class="card card-p" style="margin-bottom:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <h3 class="card-title" style="margin:0;">Proyección del Mes</h3>
+          <span style="font-size:0.7rem;color:var(--text-dim);font-family:'DM Mono',monospace;">
+            {{ proj.pctComplete }}% del mes transcurrido
+          </span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;">
+          <div style="text-align:center;">
+            <p class="text-dim" style="font-size:0.68rem;margin:0 0 2px;">Gasto diario (prom.)</p>
+            <p class="mono" style="font-weight:700;color:#f87171;margin:0;font-size:0.9rem;">{{ formatCOP(proj.avgDaily) }}</p>
+          </div>
+          <div style="text-align:center;">
+            <p class="text-dim" style="font-size:0.68rem;margin:0 0 2px;">Proyección total</p>
+            <p class="mono" style="font-weight:700;margin:0;font-size:0.9rem;"
+              [style.color]="proj.projected <= finance.budget() ? '#4ade80' : '#f87171'">
+              {{ formatCOP(proj.projected) }}
+            </p>
+          </div>
+          <div style="text-align:center;">
+            <p class="text-dim" style="font-size:0.68rem;margin:0 0 2px;">Faltan {{ proj.daysLeft }} días</p>
+            <p class="mono" style="font-weight:700;color:var(--text-muted);margin:0;font-size:0.9rem;">{{ formatCOP(proj.remaining) }}</p>
+          </div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="transition:width .4s;"
+            [style.width.%]="proj.pctComplete"
+            [style.background]="proj.projected <= finance.budget() ? 'linear-gradient(to right,#0d9488,#5eead4)' : 'linear-gradient(to right,#dc2626,#f87171)'">
+          </div>
+        </div>
+        @if (proj.projected > finance.budget() && finance.budget() > 0) {
+          <p style="font-size:0.7rem;color:#f87171;margin:6px 0 0;">
+            <mat-icon class="icon-sm" style="vertical-align:middle;">warning</mat-icon>
+            Al ritmo actual superarás el presupuesto en {{ formatCOP(proj.projected - finance.budget()) }}
+          </p>
+        }
+      </div>
+    }
+
     <!-- Daily chart + Recent transactions -->
     <div class="dash-grid-1-1">
 

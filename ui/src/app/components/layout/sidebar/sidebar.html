@@ -25,7 +25,16 @@
   <nav class="flex-1" style="padding:0 8px;">
     <p class="nav-section-label">Principal</p>
 
-    @for (item of navItems.slice(0, 5); track item.route) {
+    @for (item of mainItems; track item.route) {
+      <a [routerLink]="item.route" routerLinkActive="active-nav" class="nav-item">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        {{ item.label }}
+      </a>
+    }
+
+    <p class="nav-section-label" style="margin-top:24px;">Herramientas</p>
+
+    @for (item of toolItems; track item.route) {
       <a [routerLink]="item.route" routerLinkActive="active-nav" class="nav-item">
         <mat-icon>{{ item.icon }}</mat-icon>
         {{ item.label }}
@@ -34,9 +43,9 @@
 
     <p class="nav-section-label" style="margin-top:24px;">Configuración</p>
 
-    <a [routerLink]="navItems[5].route" routerLinkActive="active-nav" class="nav-item">
-      <mat-icon>{{ navItems[5].icon }}</mat-icon>
-      {{ navItems[5].label }}
+    <a [routerLink]="settingsItem.route" routerLinkActive="active-nav" class="nav-item">
+      <mat-icon>{{ settingsItem.icon }}</mat-icon>
+      {{ settingsItem.label }}
     </a>
 
     @if (isAdmin()) {

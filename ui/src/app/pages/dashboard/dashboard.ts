@@ -162,6 +162,20 @@ export class DashboardComponent implements OnInit {
     return total > 0 ? (this.totalExpense() / total) * 100 : 50;
   });
 
+  // ── Projection ───────────────────────────────────────────
+  projection = computed(() => {
+    if (!this.isCurrentMonth()) return null;
+    const today = new Date().getDate();
+    if (today < 3) return null; // not enough data
+    const [year, month] = this.selectedMonth().split('-').map(Number);
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const avgDaily = this.totalExpense() / today;
+    const projected = Math.round(avgDaily * daysInMonth);
+    const remaining = Math.max(projected - this.totalExpense(), 0);
+    const pctComplete = Math.round((today / daysInMonth) * 100);
+    return { projected, remaining, avgDaily, pctComplete, daysLeft: daysInMonth - today };
+  });
+
   // ── Recent ───────────────────────────────────────────────
   recentTransactions = computed(() =>
     [...this.dashTxns()].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6),

@@ -1,0 +1,115 @@
+<div class="page-pad">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Transacciones Recurrentes</h1>
+      <p class="page-subtitle" style="text-transform:capitalize;">{{ monthLabel() }}</p>
+    </div>
+    <button class="btn-primary" (click)="openAdd()">
+      <mat-icon class="icon-md">add</mat-icon> Nueva recurrente
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="card card-p" style="text-align:center;padding:48px;"><p class="text-muted">Cargando...</p></div>
+  } @else if (!transactions().length) {
+    <div class="card card-p" style="text-align:center;padding:48px 24px;">
+      <mat-icon style="font-size:2.5rem;color:var(--text-dim);display:block;margin-bottom:12px;">autorenew</mat-icon>
+      <p class="text-muted" style="margin-bottom:16px;">No tienes transacciones recurrentes.</p>
+      <button class="btn-primary" (click)="openAdd()"><mat-icon class="icon-md">add</mat-icon> Agregar primera</button>
+    </div>
+  } @else {
+
+    <!-- Pending section -->
+    @if (pending().length) {
+      <div style="margin-bottom:24px;">
+        <p class="nav-section-label" style="margin-bottom:12px;">Pendientes este mes ({{ pending().length }})</p>
+        <div class="form-stack">
+          @for (t of pending(); track t.id) {
+            @let cat = getCategory(t.categoryId);
+            <div class="card card-p-sm" style="border-left:3px solid var(--border);">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div class="icon-box" [style.background]="(cat?.color ?? '#715a5a') + '22'">
+                  <mat-icon class="icon-sm" [style.color]="cat?.color ?? '#715a5a'">{{ cat?.icon ?? 'autorenew' }}</mat-icon>
+                </div>
+                <div style="flex:1;min-width:0;">
+                  <p style="font-weight:600;margin:0;">{{ t.desc || cat?.name }}</p>
+                  <p class="text-dim" style="font-size:0.75rem;margin:2px 0 0;">
+                    Día {{ t.dayOfMonth }} · {{ cat?.name }} ·
+                    <span [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
+                      {{ t.type === 'income' ? 'Ingreso' : 'Gasto' }}
+                    </span>
+                  </p>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+                  <span class="mono" style="font-weight:700;" [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
+                    {{ formatCOP(t.amount) }}
+                  </span>
+                  <button class="btn-primary" style="padding:6px 14px;font-size:0.8rem;" (click)="apply(t)"
+                    [disabled]="applying() === t.id">
+                    <mat-icon class="icon-sm">{{ applying() === t.id ? 'sync' : 'play_arrow' }}</mat-icon>
+                    Aplicar
+                  </button>
+                  <button class="btn-icon-edit" (click)="openEdit(t)"><mat-icon class="icon-sm">edit</mat-icon></button>
+                  @if (confirmDeleteId() === t.id) {
+                    <button class="btn-icon-delete" (click)="deleteItem(t.id)"><mat-icon class="icon-sm">delete_forever</mat-icon></button>
+                    <button class="btn-icon-edit" (click)="confirmDeleteId.set(null)"><mat-icon class="icon-sm">close</mat-icon></button>
+                  } @else {
+                    <button class="btn-icon-delete" (click)="confirmDeleteId.set(t.id)"><mat-icon class="icon-sm">delete</mat-icon></button>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Applied section -->
+    @if (applied().length) {
+      <div style="margin-bottom:24px;">
+        <p class="nav-section-label" style="margin-bottom:12px;">Aplicadas este mes ({{ applied().length }})</p>
+        <div class="form-stack">
+          @for (t of applied(); track t.id) {
+            @let cat = getCategory(t.categoryId);
+            <div class="card card-p-sm" style="border-left:3px solid #2dd4bf;opacity:0.8;">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <mat-icon style="color:#2dd4bf;flex-shrink:0;">check_circle</mat-icon>
+                <div class="icon-box" [style.background]="(cat?.color ?? '#715a5a') + '22'">
+                  <mat-icon class="icon-sm" [style.color]="cat?.color ?? '#715a5a'">{{ cat?.icon ?? 'autorenew' }}</mat-icon>
+                </div>
+                <div style="flex:1;min-width:0;">
+                  <p style="font-weight:600;margin:0;text-decoration:line-through;color:var(--text-dim);">{{ t.desc || cat?.name }}</p>
+                  <p class="text-dim" style="font-size:0.75rem;margin:2px 0 0;">Aplicada este mes</p>
+                </div>
+                <span class="mono" style="font-weight:700;flex-shrink:0;" [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
+                  {{ formatCOP(t.amount) }}
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Inactive -->
+    @if (inactive().length) {
+      <div>
+        <p class="nav-section-label" style="margin-bottom:12px;">Inactivas ({{ inactive().length }})</p>
+        <div class="form-stack">
+          @for (t of inactive(); track t.id) {
+            @let cat = getCategory(t.categoryId);
+            <div class="card card-p-sm" style="opacity:0.5;">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <mat-icon style="color:var(--text-dim);flex-shrink:0;">pause_circle</mat-icon>
+                <div style="flex:1;min-width:0;">
+                  <p style="margin:0;">{{ t.desc || cat?.name }}</p>
+                </div>
+                <button class="btn-icon-edit" (click)="openEdit(t)"><mat-icon class="icon-sm">edit</mat-icon></button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

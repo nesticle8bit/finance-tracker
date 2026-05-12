@@ -28,17 +28,45 @@ export class RecurringPaymentsComponent implements OnInit {
   confirmDeleteId = signal<string | null>(null);
   pendingAmounts = signal<Record<string, number>>({});
 
+  activeTab = signal<'checklist' | 'history'>('checklist');
+
   currentMonth = signal(this.buildMonth());
+
+  historyMonths = computed(() => {
+    const now = new Date();
+    return Array.from({ length: 12 }, (_, i) => {
+      const d = new Date(now.getFullYear(), now.getMonth() - 1 - i, 1);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      return { key, label: new Date(d.getFullYear(), d.getMonth()).toLocaleDateString('es-CO', { month: 'long', year: 'numeric' }) };
+    });
+  });
+
+  historyMonth = signal(this.buildPrevMonth());
+  historyRecords = signal<RecurringPaymentRecord[]>([]);
+  loadingHistory = signal(false);
 
   private buildMonth(): string {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
   }
 
+  private buildPrevMonth(): string {
+    const d = new Date();
+    d.setMonth(d.getMonth() - 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  }
+
   monthLabel = computed(() => {
     const [year, month] = this.currentMonth().split('-');
     return new Date(+year, +month - 1).toLocaleDateString('es-CO', { month: 'long', year: 'numeric' });
   });
+
+  historyMonthLabel = computed(() => {
+    const [y, m] = this.historyMonth().split('-');
+    return new Date(+y, +m - 1).toLocaleDateString('es-CO', { month: 'long', year: 'numeric' });
+  });
+
+  historyPaidTotal = computed(() => this.historyRecords().reduce((s, r) => s + r.amount, 0));
 
   paidCount = computed(() => this.records().length);
   totalCount = computed(() => this.payments().length);
@@ -66,6 +94,22 @@ export class RecurringPaymentsComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.load();
+  }
+
+  async loadHistory(): Promise<void> {
+    this.loadingHistory.set(true);
+    try {
+      this.historyRecords.set(await this.svc.getRecords(this.historyMonth()));
+    } finally {
+      this.loadingHistory.set(false);
+    }
+  }
+
+  async switchTab(tab: 'checklist' | 'history'): Promise<void> {
+    this.activeTab.set(tab);
+    if (tab === 'history' && this.historyRecords().length === 0) {
+      await this.loadHistory();
+    }
   }
 
   async load(): Promise<void> {
@@ -149,5 +193,9 @@ export class RecurringPaymentsComponent implements OnInit {
     const rec = this.getRecord(paymentId);
     if (!rec) return '';
     return new Date(rec.paidAt).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' });
+  }
+
+  formatHistoryDate(d: string): string {
+    return new Date(d).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
   }
 }

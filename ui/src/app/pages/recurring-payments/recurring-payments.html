@@ -11,8 +11,8 @@
     </button>
   </div>
 
-  <!-- Progress card -->
-  @if (totalCount() > 0) {
+  <!-- Progress card (checklist only) -->
+  @if (activeTab() === 'checklist' && totalCount() > 0) {
     <div class="card card-p" style="margin-bottom:24px;">
       <div class="flex justify-between items-center" style="margin-bottom:12px;">
         <div>
@@ -47,6 +47,24 @@
     </div>
   }
 
+  <!-- Tabs -->
+  <div style="display:flex;gap:4px;margin-bottom:24px;background:var(--surface-2);border-radius:10px;padding:4px;width:fit-content;">
+    <button (click)="switchTab('checklist')"
+      style="padding:6px 16px;border-radius:8px;border:none;cursor:pointer;font-size:0.85rem;font-weight:500;transition:all .15s;"
+      [style.background]="activeTab() === 'checklist' ? 'var(--surface-3)' : 'transparent'"
+      [style.color]="activeTab() === 'checklist' ? 'var(--text)' : 'var(--text-muted)'">
+      <mat-icon class="icon-sm" style="vertical-align:middle;margin-right:4px;">checklist</mat-icon>
+      Este mes
+    </button>
+    <button (click)="switchTab('history')"
+      style="padding:6px 16px;border-radius:8px;border:none;cursor:pointer;font-size:0.85rem;font-weight:500;transition:all .15s;"
+      [style.background]="activeTab() === 'history' ? 'var(--surface-3)' : 'transparent'"
+      [style.color]="activeTab() === 'history' ? 'var(--text)' : 'var(--text-muted)'">
+      <mat-icon class="icon-sm" style="vertical-align:middle;margin-right:4px;">history</mat-icon>
+      Historial
+    </button>
+  </div>
+
   <!-- Loading -->
   @if (loading()) {
     <div class="card card-p" style="text-align:center;padding:48px;">
@@ -54,8 +72,8 @@
     </div>
   }
 
-  <!-- Empty state -->
-  @if (!loading() && totalCount() === 0) {
+  <!-- Empty state (checklist only) -->
+  @if (activeTab() === 'checklist' && !loading() && totalCount() === 0) {
     <div class="card card-p" style="text-align:center;padding:48px 24px;">
       <mat-icon style="font-size:2.5rem;color:var(--text-dim);display:block;margin-bottom:12px;">event_repeat</mat-icon>
       <p class="text-muted" style="margin-bottom:16px;">No tienes pagos fijos registrados.</p>
@@ -66,7 +84,7 @@
   }
 
   <!-- Checklist -->
-  @if (!loading() && totalCount() > 0) {
+  @if (activeTab() === 'checklist' && !loading() && totalCount() > 0) {
     <div class="form-stack">
       @for (payment of payments(); track payment.id) {
         <div class="card card-p-sm"
@@ -147,6 +165,58 @@
         </div>
       }
     </div>
+  }
+
+  <!-- History tab -->
+  @if (activeTab() === 'history') {
+    <div class="card card-p" style="margin-bottom:24px;">
+      <div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:160px;">
+          <label class="form-label">Mes</label>
+          <select class="input-field" [value]="historyMonth()"
+            (change)="historyMonth.set($any($event.target).value); loadHistory()">
+            @for (m of historyMonths(); track m.key) {
+              <option [value]="m.key" style="text-transform:capitalize;">{{ m.label }}</option>
+            }
+          </select>
+        </div>
+        @if (historyRecords().length > 0) {
+          <div style="text-align:right;">
+            <p class="text-dim" style="font-size:0.7rem;margin:0;">Total pagado</p>
+            <p class="mono" style="color:#2dd4bf;font-weight:700;margin:0;">{{ formatCOP(historyPaidTotal()) }}</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (loadingHistory()) {
+      <div class="card card-p" style="text-align:center;padding:32px;">
+        <p class="text-muted">Cargando...</p>
+      </div>
+    } @else if (historyRecords().length === 0) {
+      <div class="card card-p" style="text-align:center;padding:32px 24px;">
+        <mat-icon style="font-size:2rem;color:var(--text-dim);display:block;margin-bottom:8px;">receipt_long</mat-icon>
+        <p class="text-muted" style="text-transform:capitalize;">Sin registros para {{ historyMonthLabel() }}</p>
+      </div>
+    } @else {
+      <div class="form-stack">
+        @for (rec of historyRecords(); track rec.id) {
+          @let pay = payments().find(p => p.id === rec.paymentId);
+          <div class="card card-p-sm" style="border-left:3px solid #2dd4bf;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <mat-icon style="color:#2dd4bf;flex-shrink:0;">check_circle</mat-icon>
+              <div style="flex:1;min-width:0;">
+                <p style="font-weight:600;margin:0;">{{ pay?.name ?? 'Pago' }}</p>
+                <p class="text-dim" style="font-size:0.75rem;margin:2px 0 0;">
+                  Pagado el {{ formatHistoryDate(rec.paidAt) }}
+                </p>
+              </div>
+              <span class="mono" style="color:#2dd4bf;font-weight:700;flex-shrink:0;">{{ formatCOP(rec.amount) }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
   }
 
 </div>
