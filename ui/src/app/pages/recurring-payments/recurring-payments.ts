@@ -195,6 +195,10 @@ export class RecurringPaymentsComponent implements OnInit {
     return new Date(rec.paidAt).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' });
   }
 
+  getPaymentName(paymentId: string): string {
+    return this.payments().find(p => p.id === paymentId)?.name ?? 'Pago';
+  }
+
   formatHistoryDate(d: string): string {
     return new Date(d).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
   }

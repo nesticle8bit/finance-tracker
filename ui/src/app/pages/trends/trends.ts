@@ -14,6 +14,7 @@ import { FinanceService } from '../../services/finance';
 export class TrendsComponent implements OnInit {
   private analytics = inject(AnalyticsService);
   finance = inject(FinanceService);
+  protected readonly Math = Math;
 
   monthsOption = signal(6);
   trends = signal<MonthTrend[]>([]);

@@ -201,12 +201,11 @@
     } @else {
       <div class="form-stack">
         @for (rec of historyRecords(); track rec.id) {
-          @let pay = payments().find(p => p.id === rec.paymentId);
           <div class="card card-p-sm" style="border-left:3px solid #2dd4bf;">
             <div style="display:flex;align-items:center;gap:12px;">
               <mat-icon style="color:#2dd4bf;flex-shrink:0;">check_circle</mat-icon>
               <div style="flex:1;min-width:0;">
-                <p style="font-weight:600;margin:0;">{{ pay?.name ?? 'Pago' }}</p>
+                <p style="font-weight:600;margin:0;">{{ getPaymentName(rec.paymentId) }}</p>
                 <p class="text-dim" style="font-size:0.75rem;margin:2px 0 0;">
                   Pagado el {{ formatHistoryDate(rec.paidAt) }}
                 </p>
