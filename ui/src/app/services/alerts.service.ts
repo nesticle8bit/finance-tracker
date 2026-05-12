@@ -9,7 +9,7 @@ export class AlertsService {
   private finance = inject(FinanceService);
   private toast = inject(ToastService);
 
-  init(): void {
+  constructor() {
     effect(() => {
       const pct = this.finance.budgetUsedPct();
       const month = this.finance.getCurrentMonthKey();
@@ -52,6 +52,8 @@ export class AlertsService {
       }
     });
   }
+
+  init(): void {}
 
   private getShown(): Record<string, boolean> {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
