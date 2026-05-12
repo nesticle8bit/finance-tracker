@@ -21,7 +21,7 @@ export class FinanceService {
   private auth = inject(AuthService);
   private storage = inject(StorageService);
 
-  // ── State ────────────────────────
+  //  State 
   // _currentMonthTxns: always the current calendar month — powers KPIs & dashboard
   // _transactions: the month currently displayed in the transactions page
   private _currentMonthTxns = signal<Transaction[]>([]);
@@ -32,14 +32,14 @@ export class FinanceService {
 
   readonly loading = signal(false);
 
-  // ── Public read-only signals ─────
+  //  Public read-only signals 
   /** Full transaction list for the currently selected page month */
   readonly transactions = this._transactions.asReadonly();
   readonly categories = this._categories.asReadonly();
   readonly budget = this._budget.asReadonly();
   readonly categoryLimits = this._categoryLimits.asReadonly();
 
-  // ── Computed (always based on current-month data) ───────────────────────────
+  //  Computed (always based on current-month data) 
   readonly currentMonthKey = computed(() => {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
@@ -99,7 +99,7 @@ export class FinanceService {
     });
   }
 
-  // ── Bootstrap ────────────────────
+  //  Bootstrap 
   async loadAll(): Promise<void> {
     this.loading.set(true);
     try {
@@ -179,7 +179,7 @@ export class FinanceService {
     this._categoryLimits.set(map);
   }
 
-  // ── Transactions ────────────────
+  //  Transactions 
   async addTransaction(t: Omit<Transaction, 'id'>): Promise<void> {
     const res = await firstValueFrom(
       this.http.post<ApiResponse<Transaction>>(`${API}/api/transactions`, t),
@@ -206,7 +206,7 @@ export class FinanceService {
     this._currentMonthTxns.update((list) => list.filter((t) => t.id !== id));
   }
 
-  // ── Categories ──────────────────
+  //  Categories 
   async addCategory(c: Omit<Category, 'id'>): Promise<void> {
     const res = await firstValueFrom(
       this.http.post<ApiResponse<Category>>(`${API}/api/categories`, c),
@@ -226,7 +226,7 @@ export class FinanceService {
     this._categories.update((list) => list.filter((c) => c.id !== id));
   }
 
-  // ── Budget ──────────────────────
+  //  Budget 
   async setBudget(amount: number): Promise<void> {
     await firstValueFrom(this.http.put<ApiResponse<null>>(`${API}/api/budget`, { amount }));
     this._budget.set(amount);
@@ -250,7 +250,7 @@ export class FinanceService {
     });
   }
 
-  // ── Helpers ─────────────────────
+  //  Helpers 
   getCategoryById(id: string): Category | undefined {
     return this._categories().find((c) => c.id === id);
   }
@@ -259,7 +259,7 @@ export class FinanceService {
     return DEFAULT_CATEGORY_IDS.includes(id);
   }
 
-  // ── Data management (settings page) ────────────────────────────────────────
+  //  Data management (settings page) 
   async exportJson(): Promise<void> {
     const blob = await firstValueFrom(
       this.http.get(`${API}/api/export/json`, { responseType: 'blob' }),
@@ -290,7 +290,7 @@ export class FinanceService {
     URL.revokeObjectURL(url);
   }
 
-  // ── Utils ───────────────────────
+  //  Utils 
   formatCOP(n: number): string {
     return '$' + Math.abs(n).toLocaleString('es-CO');
   }

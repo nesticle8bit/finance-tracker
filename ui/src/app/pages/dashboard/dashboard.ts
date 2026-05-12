@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
     return name ? `${greet}, ${name}` : greet;
   });
 
-  // ── KPIs ─────────────────────────────────────────────────
+  //  KPIs 
   totalIncome  = computed(() => this.dashTxns().filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0));
   totalExpense = computed(() => this.dashTxns().filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0));
   balance      = computed(() => this.totalIncome() - this.totalExpense());
@@ -89,7 +89,7 @@ export class DashboardComponent implements OnInit {
   spentFmt  = computed(() => this.finance.formatCOP(this.totalExpense()));
   remainFmt = computed(() => this.finance.formatCOP(Math.max(this.finance.budget() - this.totalExpense(), 0)));
 
-  // ── Category stats ───────────────────────────────────────
+  //  Category stats 
   private expenseByCategory = computed(() => {
     const map: Record<string, number> = {};
     this.dashTxns().filter(t => t.type === 'expense').forEach(t => {
@@ -118,7 +118,7 @@ export class DashboardComponent implements OnInit {
       .sort((a, b) => b.total - a.total);
   });
 
-  // ── Daily chart ──────────────────────────────────────────
+  //  Daily chart 
   private readonly CHART_H = 148;
 
   dailyBars = computed(() => {
@@ -152,7 +152,7 @@ export class DashboardComponent implements OnInit {
 
   hasDailyData = computed(() => this.dailyBars().some(b => b.amount > 0));
 
-  // ── Ratio ────────────────────────────────────────────────
+  //  Ratio 
   incomeRatioPct  = computed(() => {
     const total = this.totalIncome() + this.totalExpense();
     return total > 0 ? (this.totalIncome() / total) * 100 : 50;
@@ -162,7 +162,7 @@ export class DashboardComponent implements OnInit {
     return total > 0 ? (this.totalExpense() / total) * 100 : 50;
   });
 
-  // ── Projection ───────────────────────────────────────────
+  //  Projection 
   projection = computed(() => {
     if (!this.isCurrentMonth()) return null;
     const today = new Date().getDate();
@@ -176,12 +176,12 @@ export class DashboardComponent implements OnInit {
     return { projected, remaining, avgDaily, pctComplete, daysLeft: daysInMonth - today };
   });
 
-  // ── Recent ───────────────────────────────────────────────
+  //  Recent 
   recentTransactions = computed(() =>
     [...this.dashTxns()].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6),
   );
 
-  // ── Lifecycle ────────────────────────────────────────────
+  //  Lifecycle 
   async ngOnInit(): Promise<void> {
     await this.loadDashMonth();
   }
@@ -195,7 +195,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // ── Month navigation ─────────────────────────────────────
+  //  Month navigation 
   prevMonth(): void {
     const [y, m] = this.selectedMonth().split('-').map(Number);
     this.selectedMonth.set(this.buildMonthKey(new Date(y, m - 2, 1)));
@@ -209,7 +209,7 @@ export class DashboardComponent implements OnInit {
     this.loadDashMonth();
   }
 
-  // ── Actions ──────────────────────────────────────────────
+  //  Actions 
   openAdd(): void {
     const ref = this.dialog.open(TransactionModalComponent, {
       panelClass: 'transparent-dialog',

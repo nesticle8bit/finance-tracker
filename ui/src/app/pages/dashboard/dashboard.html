@@ -1,6 +1,6 @@
 <div class="page-pad">
 
-  <!-- ── Hero ─────────────────────────────────────────── -->
+  <!--  Hero  -->
   <div class="dash-hero">
     <div style="flex:1;min-width:0;">
       <h1 class="dash-greeting">{{ greeting() }}</h1>
@@ -54,7 +54,7 @@
     </div>
   }
 
-  <!-- ── Content (fades while loading) ─────────────────── -->
+  <!--  Content (fades while loading)  -->
   <div [style.opacity]="loadingDash() ? '0.4' : '1'"
        [style.pointer-events]="loadingDash() ? 'none' : 'auto'"
        style="transition:opacity .2s;">

@@ -1,22 +1,22 @@
 @use '@angular/material' as mat;
 
-// ── Angular Material themes (dark + light) ───────────────
+//  Angular Material themes (dark + light) 
 $ft-dark:  mat.define-theme((color: (theme-type: dark,  primary: mat.$cyan-palette)));
 $ft-light: mat.define-theme((color: (theme-type: light, primary: mat.$cyan-palette)));
 
 html.dark  { @include mat.all-component-themes($ft-dark);  }
 html.light { @include mat.all-component-themes($ft-light); }
 
-// ── Tailwind ─────────────────────────────────────────────
+//  Tailwind 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-// ── Fonts ────────────────────────────────────────────────
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@100..800&display=swap');
+//  Fonts 
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@400;700&family=Sora:wght@100..800&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
-// ── CSS Design Tokens ────────────────────────────────────
+//  CSS Design Tokens 
 :root {
   // Brand
   --brand-300: #5eead4;
@@ -70,7 +70,7 @@ html.light {
   --shadow-sm:       0 1px 6px  rgba(55,53,62,0.07);
 }
 
-// ── Base reset ───────────────────────────────────────────
+//  Base reset 
 *, *::before, *::after { box-sizing: border-box; }
 
 html, body {
@@ -87,7 +87,7 @@ a { color: inherit; text-decoration: none; }
 
 //  7. Core UI classes (from the original <style> block) 
 
-// ── Sidebar ───────────────────────────────────────────────
+//  Sidebar 
 .sidebar {
   width: 260px;
   height: 100%;
@@ -2362,7 +2362,7 @@ mat-icon.icon-lg {
   }
 }
 
-// ── User table cell ──────────────────────────────────────
+//  User table cell 
 .user-cell {
   display: flex;
   align-items: center;
@@ -2407,7 +2407,7 @@ mat-icon.icon-lg {
   letter-spacing: 0.03em;
 }
 
-// ── User dialog ──────────────────────────────────────────
+//  User dialog 
 .user-dialog {
   max-width: 560px;
   width: calc(100vw - 32px);
@@ -2463,7 +2463,7 @@ mat-icon.icon-lg {
   }
 }
 
-// ── Profile avatar zone (settings page) ─────────────────
+//  Profile avatar zone (settings page) 
 .profile-avatar-zone {
   display: flex;
   flex-direction: column;
@@ -2472,7 +2472,7 @@ mat-icon.icon-lg {
   padding: 8px 0 20px;
 }
 
-// ── Avatar upload ────────────────────────────────────────
+//  Avatar upload 
 .avatar-upload-zone {
   display: flex;
   flex-direction: column;
@@ -2543,7 +2543,7 @@ mat-icon.icon-lg {
   margin: 0;
 }
 
-// ── Dialog grid row ──────────────────────────────────────
+//  Dialog grid row 
 .dialog-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2552,7 +2552,7 @@ mat-icon.icon-lg {
   @media (max-width: 520px) { grid-template-columns: 1fr; }
 }
 
-// ── Label with icon ──────────────────────────────────────
+//  Label with icon 
 .label-icon {
   font-size: 0.95rem !important;
   width: 0.95rem !important;
@@ -2562,7 +2562,7 @@ mat-icon.icon-lg {
   color: #0d9488;
 }
 
-// ── Role selector ────────────────────────────────────────
+//  Role selector 
 .role-selector {
   display: flex;
   gap: 8px;
@@ -2603,7 +2603,7 @@ mat-icon.icon-lg {
   }
 }
 
-// ── Missing dialog utilities ──────────────────────────────
+//  Missing dialog utilities 
 
 .btn-secondary {
   display: inline-flex;
@@ -2667,7 +2667,7 @@ mat-icon.icon-lg {
   @media (max-width: 639px) { font-size: 1.35rem; }
 }
 
-// ── KPI card (new design) ────────────────────────────────
+//  KPI card (new design) 
 .kpi-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
@@ -2746,7 +2746,7 @@ mat-icon.icon-lg {
   font-family: 'DM Mono', monospace;
 }
 
-// ── Income / Expense ratio strip ─────────────────────────
+//  Income / Expense ratio strip 
 .dash-ratio-card {
   padding: 20px 24px;
   margin-bottom: 24px;
@@ -2836,7 +2836,7 @@ mat-icon.icon-lg {
   transition: width .6s cubic-bezier(0.4,0,0.2,1);
 }
 
-// ── Daily chart header ───────────────────────────────────
+//  Daily chart header 
 .dash-chart-header {
   display: flex;
   align-items: center;
@@ -2855,12 +2855,12 @@ mat-icon.icon-lg {
   padding: 4px 10px;
 }
 
-// ── Bar highlight for today ──────────────────────────────
+//  Bar highlight for today 
 .daily-bar--today {
   box-shadow: 0 0 12px rgba(20,184,166,0.4);
 }
 
-// ── Dashboard month navigator ────────────────────────────
+//  Dashboard month navigator 
 .dash-month-pill {
   display: inline-flex;
   align-items: center;
@@ -2930,7 +2930,7 @@ mat-icon.icon-lg {
   }
 }
 
-// ── Past-month info banner ───────────────────────────────
+//  Past-month info banner 
 .dash-past-banner {
   display: flex;
   align-items: center;
@@ -2945,7 +2945,7 @@ mat-icon.icon-lg {
   margin-bottom: 20px;
 }
 
-// ── KPI accent strip override ────────────────────────────
+//  KPI accent strip override 
 .dash-kpi-section {
   margin-bottom: 16px;
 }
