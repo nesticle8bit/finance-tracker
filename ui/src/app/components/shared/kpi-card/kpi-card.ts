@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
 const COLOR_MAP: Record<string, { bg: string; text: string }> = {
-  teal: { bg: 'rgba(20,184,166,0.1)', text: '#2dd4bf' },
-  green: { bg: 'rgba(34,197,94,0.1)', text: '#4ade80' },
-  red: { bg: 'rgba(239,68,68,0.1)', text: '#f87171' },
+  teal: { bg: 'rgba(20,184,166,0.1)', text: '#0d9488' },
+  green: { bg: 'rgba(34,197,94,0.1)', text: '#16a34a' },
+  red: { bg: 'rgba(239,68,68,0.1)', text: '#dc2626' },
   blue: { bg: 'rgba(59,130,246,0.1)', text: '#60a5fa' },
 };
 

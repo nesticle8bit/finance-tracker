@@ -75,7 +75,7 @@
                       {{ cat?.icon ?? 'more_horiz' }}
                     </mat-icon>
                   </div>
-                  <span style="font-size:0.875rem;color:rgba(255,255,255,0.6);">{{ cat?.name ?? '—' }}</span>
+                  <span style="font-size:0.875rem;color:var(--text-muted);">{{ cat?.name ?? '—' }}</span>
                 </div>
               </td>
 
@@ -86,7 +86,7 @@
               </td>
 
               <td class="td-cell mono td-amount"
-                [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
+                [style.color]="t.type === 'income' ? '#16a34a' : '#dc2626'">
                 {{ t.type === 'income' ? '+' : '-' }}{{ formatCOP(t.amount) }}
               </td>
 
@@ -127,7 +127,7 @@
               </p>
             </div>
             <span class="mono txn-mobile-amount"
-              [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
+              [style.color]="t.type === 'income' ? '#16a34a' : '#dc2626'">
               {{ t.type === 'income' ? '+' : '-' }}{{ formatCOP(t.amount) }}
             </span>
           </div>

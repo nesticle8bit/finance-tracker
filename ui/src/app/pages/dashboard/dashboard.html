@@ -121,18 +121,18 @@
 
         <div class="progress-track" style="height:10px;">
           <div class="progress-fill" [style.width.%]="pct()"
-            [style.background]="pct() > 90 ? '#ef4444' : pct() > 70 ? '#f59e0b' : 'linear-gradient(to right,#0d9488,#5eead4)'">
+            [style.background]="pct() > 90 ? '#ef4444' : pct() > 70 ? '#f59e0b' : 'linear-gradient(to right,#0d9488,#2fbfae)'">
           </div>
         </div>
 
         <div class="dash-budget__legend">
           <div>
             <p class="dash-budget__legend-label">Gastado</p>
-            <p class="mono dash-budget__legend-value" style="color:#f87171;">{{ spentFmt() }}</p>
+            <p class="mono dash-budget__legend-value" style="color:#dc2626;">{{ spentFmt() }}</p>
           </div>
           <div style="text-align:right;">
             <p class="dash-budget__legend-label">Disponible</p>
-            <p class="mono dash-budget__legend-value" style="color:#4ade80;">{{ remainFmt() }}</p>
+            <p class="mono dash-budget__legend-value" style="color:#16a34a;">{{ remainFmt() }}</p>
           </div>
         </div>
 
@@ -141,7 +141,7 @@
             <div class="dash-budget__proj-row">
               <span class="dash-budget__legend-label">Proyección a fin de mes</span>
               <span class="mono dash-budget__legend-value"
-                [style.color]="proj.projected <= finance.budget() ? '#4ade80' : '#f87171'">
+                [style.color]="proj.projected <= finance.budget() ? '#16a34a' : '#dc2626'">
                 {{ formatCOP(proj.projected) }}
               </span>
             </div>
@@ -213,7 +213,7 @@
                     [class.daily-bar--today]="bar.isToday"
                     [style.height.px]="bar.heightPx"
                     [style.background]="bar.isToday
-                      ? 'linear-gradient(to top,#0d9488,#5eead4)'
+                      ? 'linear-gradient(to top,#0d9488,#2fbfae)'
                       : bar.amount > 0 ? 'rgba(20,184,166,0.28)' : 'var(--surface-3)'">
                   </div>
                 </div>
@@ -222,7 +222,7 @@
           </div>
           <div class="daily-labels">
             @for (bar of dailyBars(); track bar.day) {
-              <div class="daily-label" [style.color]="bar.isToday ? '#14b8a6' : ''">
+              <div class="daily-label" [style.color]="bar.isToday ? '#0d9488' : ''">
                 {{ bar.day }}
               </div>
             }
@@ -265,7 +265,7 @@
                   <p class="txn-desc">{{ t.desc || cat?.name }}</p>
                   <p class="txn-meta">{{ formatDate(t.date) }} · {{ cat?.name }}</p>
                 </div>
-                <span class="txn-amount" [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
+                <span class="txn-amount" [style.color]="t.type === 'income' ? '#16a34a' : '#dc2626'">
                   {{ t.type === 'income' ? '+' : '−' }}{{ formatCOP(t.amount) }}
                 </span>
               </div>

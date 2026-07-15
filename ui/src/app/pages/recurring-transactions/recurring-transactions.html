@@ -33,13 +33,13 @@
                   <p style="font-weight:600;margin:0;">{{ t.desc || cat?.name }}</p>
                   <p class="text-dim" style="font-size:0.75rem;margin:2px 0 0;">
                     Día {{ t.dayOfMonth }} · {{ cat?.name }} ·
-                    <span [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
+                    <span [style.color]="t.type === 'income' ? '#16a34a' : '#dc2626'">
                       {{ t.type === 'income' ? 'Ingreso' : 'Gasto' }}
                     </span>
                   </p>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-                  <span class="mono" style="font-weight:700;" [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
+                  <span class="mono" style="font-weight:700;" [style.color]="t.type === 'income' ? '#16a34a' : '#dc2626'">
                     {{ formatCOP(t.amount) }}
                   </span>
                   <button class="btn-primary" style="padding:6px 14px;font-size:0.8rem;" (click)="apply(t)"
@@ -69,9 +69,9 @@
         <div class="form-stack">
           @for (t of applied(); track t.id) {
             @let cat = getCategory(t.categoryId);
-            <div class="card card-p-sm" style="border-left:3px solid #2dd4bf;opacity:0.8;">
+            <div class="card card-p-sm" style="border-left:3px solid #0d9488;opacity:0.8;">
               <div style="display:flex;align-items:center;gap:12px;">
-                <mat-icon style="color:#2dd4bf;flex-shrink:0;">check_circle</mat-icon>
+                <mat-icon style="color:#0d9488;flex-shrink:0;">check_circle</mat-icon>
                 <div class="icon-box" [style.background]="(cat?.color ?? '#715a5a') + '22'">
                   <mat-icon class="icon-sm" [style.color]="cat?.color ?? '#715a5a'">{{ cat?.icon ?? 'autorenew' }}</mat-icon>
                 </div>
@@ -79,7 +79,7 @@
                   <p style="font-weight:600;margin:0;text-decoration:line-through;color:var(--text-dim);">{{ t.desc || cat?.name }}</p>
                   <p class="text-dim" style="font-size:0.75rem;margin:2px 0 0;">Aplicada este mes</p>
                 </div>
-                <span class="mono" style="font-weight:700;flex-shrink:0;" [style.color]="t.type === 'income' ? '#4ade80' : '#f87171'">
+                <span class="mono" style="font-weight:700;flex-shrink:0;" [style.color]="t.type === 'income' ? '#16a34a' : '#dc2626'">
                   {{ formatCOP(t.amount) }}
                 </span>
               </div>

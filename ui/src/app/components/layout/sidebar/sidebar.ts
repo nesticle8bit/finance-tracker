@@ -6,7 +6,6 @@ import { filter } from 'rxjs/operators';
 import { FinanceService } from '../../../services/finance';
 import { AuthService } from '../../../services/auth.service';
 import { LayoutService } from '../../../core/services/layout.service';
-import { ThemeService } from '../../../../core/services/theme.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { environment } from '../../../../environments/environment';
 
@@ -26,7 +25,6 @@ export class SidebarComponent {
   finance = inject(FinanceService);
   auth = inject(AuthService);
   layout = inject(LayoutService);
-  theme = inject(ThemeService);
 
   mainItems: NavItem[] = [
     { label: 'Panel',          icon: 'dashboard',     route: '/dashboard' },

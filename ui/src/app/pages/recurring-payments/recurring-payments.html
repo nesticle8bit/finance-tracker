@@ -15,29 +15,29 @@
       <div class="flex justify-between items-center" style="margin-bottom:12px;">
         <div>
           <span class="mono" style="font-size:1.5rem;font-weight:700;"
-            [style.color]="allPaid() ? '#2dd4bf' : 'var(--text-primary)'">
+            [style.color]="allPaid() ? '#0d9488' : 'var(--text-primary)'">
             {{ paidCount() }}/{{ totalCount() }}
           </span>
           <span class="text-muted" style="margin-left:8px;font-size:0.875rem;">pagados este mes</span>
         </div>
         <div style="text-align:right;">
           <p class="text-muted" style="font-size:0.75rem;">Total pagado</p>
-          <p class="mono" style="color:#2dd4bf;font-weight:600;">{{ formatCOP(paidTotal()) }}</p>
+          <p class="mono" style="color:#0d9488;font-weight:600;">{{ formatCOP(paidTotal()) }}</p>
         </div>
       </div>
 
       <div class="flex justify-between" style="font-size:0.875rem;margin-bottom:8px;">
         <span class="text-muted">Progreso</span>
-        <span class="mono" style="color:#fff;">{{ progressPct() }}%</span>
+        <span class="mono" style="color: var(--text);">{{ progressPct() }}%</span>
       </div>
       <div class="progress-track" style="height:10px;">
         <div class="progress-fill" [style.width.%]="progressPct()"
-          [style.background]="allPaid() ? '#2dd4bf' : 'linear-gradient(to right,#0d9488,#5eead4)'">
+          [style.background]="allPaid() ? '#0d9488' : 'linear-gradient(to right,#0d9488,#2fbfae)'">
         </div>
       </div>
 
       @if (allPaid()) {
-        <p style="text-align:center;margin-top:12px;font-size:0.85rem;color:#2dd4bf;" class="flex items-center justify-center" style="gap:6px;">
+        <p style="text-align:center;margin-top:12px;font-size:0.85rem;color:#0d9488;" class="flex items-center justify-center" style="gap:6px;">
           <mat-icon style="font-size:1rem;vertical-align:middle;">check_circle</mat-icon>
           ¡Todos los pagos del mes completados!
         </p>
@@ -80,14 +80,14 @@
     <div class="form-stack">
       @for (payment of payments(); track payment.id) {
         <div class="card card-p-sm"
-          [style.border-left]="isChecked(payment.id) ? '3px solid #2dd4bf' : '3px solid transparent'">
+          [style.border-left]="isChecked(payment.id) ? '3px solid #0d9488' : '3px solid transparent'">
 
           <div class="flex items-start" style="gap:14px;">
 
             <!-- Status icon -->
             <div style="padding-top:2px;flex-shrink:0;">
               @if (isChecked(payment.id)) {
-                <mat-icon style="color:#2dd4bf;">check_circle</mat-icon>
+                <mat-icon style="color:#0d9488;">check_circle</mat-icon>
               } @else {
                 <mat-icon style="color:var(--text-dim);">radio_button_unchecked</mat-icon>
               }
@@ -113,7 +113,7 @@
 
               @if (isChecked(payment.id)) {
                 <!-- Paid amount -->
-                <p class="mono" style="color:#2dd4bf;font-weight:600;">
+                <p class="mono" style="color:#0d9488;font-weight:600;">
                   {{ formatCOP(getRecord(payment.id)!.amount) }}
                 </p>
               } @else {
@@ -175,7 +175,7 @@
         @if (historyRecords().length > 0) {
           <div style="text-align:right;">
             <p class="text-dim" style="font-size:0.7rem;margin:0;">Total pagado</p>
-            <p class="mono" style="color:#2dd4bf;font-weight:700;margin:0;">{{ formatCOP(historyPaidTotal()) }}</p>
+            <p class="mono" style="color:#0d9488;font-weight:700;margin:0;">{{ formatCOP(historyPaidTotal()) }}</p>
           </div>
         }
       </div>
@@ -193,16 +193,16 @@
     } @else {
       <div class="form-stack">
         @for (rec of historyRecords(); track rec.id) {
-          <div class="card card-p-sm" style="border-left:3px solid #2dd4bf;">
+          <div class="card card-p-sm" style="border-left:3px solid #0d9488;">
             <div style="display:flex;align-items:center;gap:12px;">
-              <mat-icon style="color:#2dd4bf;flex-shrink:0;">check_circle</mat-icon>
+              <mat-icon style="color:#0d9488;flex-shrink:0;">check_circle</mat-icon>
               <div style="flex:1;min-width:0;">
                 <p style="font-weight:600;margin:0;">{{ getPaymentName(rec.paymentId) }}</p>
                 <p class="text-dim" style="font-size:0.75rem;margin:2px 0 0;">
                   Pagado el {{ formatHistoryDate(rec.paidAt) }}
                 </p>
               </div>
-              <span class="mono" style="color:#2dd4bf;font-weight:700;flex-shrink:0;">{{ formatCOP(rec.amount) }}</span>
+              <span class="mono" style="color:#0d9488;font-weight:700;flex-shrink:0;">{{ formatCOP(rec.amount) }}</span>
             </div>
           </div>
         }

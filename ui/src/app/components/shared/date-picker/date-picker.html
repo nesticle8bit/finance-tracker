@@ -4,7 +4,7 @@
   <button type="button" class="picker-btn" [class.picker-btn--open]="isOpen" (click)="isOpen ? close() : open()">
 
     <mat-icon class="icon-md"
-      [style.color]="selDay ? '#14b8a6' : 'var(--text-dim)'">
+      [style.color]="selDay ? '#0d9488' : 'var(--text-dim)'">
       calendar_today
     </mat-icon>
 
@@ -56,12 +56,12 @@
             style="aspect-ratio:1;border:none;border-radius:8px;font-size:0.8rem;
                    font-family:'Sora',sans-serif;cursor:pointer;transition:all .15s;
                    display:flex;align-items:center;justify-content:center;position:relative;"
-            [style.background]="isSelected(day) ? '#14b8a6'
+            [style.background]="isSelected(day) ? '#0d9488'
                               : isToday(day)   ? 'rgba(20,184,166,0.15)'
                               : day             ? 'transparent'
                                                 : 'transparent'"
-            [style.color]="isSelected(day) ? '#04211d'
-                         : isToday(day)   ? '#14b8a6'
+            [style.color]="isSelected(day) ? '#ffffff'
+                         : isToday(day)   ? '#0d9488'
                          : day            ? 'var(--text-muted)'
                                           : 'transparent'"
             [style.font-weight]="(isSelected(day) || isToday(day)) ? '700' : '400'"

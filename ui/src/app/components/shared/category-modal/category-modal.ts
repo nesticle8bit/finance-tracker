@@ -8,7 +8,7 @@ import { Category } from '../../../models/category';
 import { FinanceService } from '../../../services/finance';
 
 export const PALETTE = [
-  '#14b8a6',
+  '#0d9488',
   '#3b82f6',
   '#8b5cf6',
   '#ef4444',

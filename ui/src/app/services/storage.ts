@@ -13,7 +13,7 @@ export const DEFAULT_CATEGORIES: Category[] = [
   { id: 'c6', name: 'Compras', icon: 'shopping_bag', color: '#f59e0b', type: 'expense' },
   { id: 'c7', name: 'Educación', icon: 'school', color: '#06b6d4', type: 'expense' },
   { id: 'c8', name: 'Salario', icon: 'payments', color: '#22c55e', type: 'income' },
-  { id: 'c9', name: 'Freelance', icon: 'work', color: '#14b8a6', type: 'income' },
+  { id: 'c9', name: 'Freelance', icon: 'work', color: '#0d9488', type: 'income' },
   { id: 'c10', name: 'Otros', icon: 'more_horiz', color: '#6b7280', type: 'both' },
 ];
 

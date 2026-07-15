@@ -91,7 +91,7 @@
           <label class="form-label">Confirmar contraseña</label>
           <input class="input-field" type="password" placeholder="••••••••" [value]="confirmPwd()"
             (input)="confirmPwd.set($any($event.target).value)"
-            [style.borderColor]="confirmPwd() && newPwd() !== confirmPwd() ? '#f87171' : ''">
+            [style.borderColor]="confirmPwd() && newPwd() !== confirmPwd() ? '#dc2626' : ''">
           @if (confirmPwd() && newPwd() !== confirmPwd()) {
           <p class="mono text-expense text-xs-indent">
             Las contraseñas no coinciden

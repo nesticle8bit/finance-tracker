@@ -1,55 +1,33 @@
 @use '@angular/material' as mat;
 
-//  Angular Material themes (dark + light) 
-$ft-dark:  mat.define-theme((color: (theme-type: dark,  primary: mat.$cyan-palette)));
+//  Angular Material theme — single light theme
 $ft-light: mat.define-theme((color: (theme-type: light, primary: mat.$cyan-palette)));
 
-html.dark  { @include mat.all-component-themes($ft-dark);  }
-html.light { @include mat.all-component-themes($ft-light); }
+html { @include mat.all-component-themes($ft-light); }
 
-//  Tailwind 
+//  Tailwind
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-//  Fonts 
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@100..800&display=swap');
+//  Fonts: Inter (UI/body) · Sora (display) · DM Mono (cifras)
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@300..700&family=Sora:wght@400..800&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
-//  CSS Design Tokens 
+//  CSS Design Tokens — single clean light theme
 :root {
-  // Brand
+  // Brand (teal ramp)
   --brand-300: #5eead4;
   --brand-400: #2dd4bf;
   --brand-500: #14b8a6;
   --brand-600: #0d9488;
   --brand-700: #0f766e;
 
-  // Dark theme — neutral graphite scale, hairline borders
-  --bg:              #131316;
-  --surface:         #1a1a1f;
-  --surface-2:       #222228;
-  --surface-3:       #2b2b33;
-  --surface-hover:   rgba(255,255,255,0.045);
-  --border:          rgba(255,255,255,0.07);
-  --border-strong:   rgba(255,255,255,0.13);
-  --text:            #e7e9e9;
-  --text-muted:      rgba(231,233,233,0.62);
-  --text-dim:        rgba(231,233,233,0.38);
-  --input-bg:        rgba(255,255,255,0.04);
-  --input-border:    rgba(255,255,255,0.10);
-  --input-focus:     #14b8a6;
-  --focus-ring:      rgba(20,184,166,0.22);
-  --nav-hover:       rgba(255,255,255,0.05);
-  --nav-active-bg:   rgba(20,184,166,0.12);
-  --nav-active-text: #2dd4bf;
-  --card-bg:         #1d1d23;
-  --shadow:          0 8px 32px rgba(0,0,0,0.45);
-  --shadow-sm:       0 1px 4px  rgba(0,0,0,0.30);
-}
+  // Semantic accents (AA on white)
+  --income:  #16a34a;
+  --expense: #dc2626;
 
-html.light {
-  // Light theme — cool near-white, crisp gray hairlines
+  // Neutral scale — cool near-white, crisp gray hairlines
   --bg:              #f0f1f4;
   --surface:         #ffffff;
   --surface-2:       #f4f5f8;
@@ -57,32 +35,31 @@ html.light {
   --surface-hover:   rgba(20,24,34,0.04);
   --border:          rgba(20,24,34,0.08);
   --border-strong:   rgba(20,24,34,0.15);
-  --text:            #1c1f26;
-  --text-muted:      rgba(28,31,38,0.60);
-  --text-dim:        rgba(28,31,38,0.38);
-  --input-bg:        rgba(20,24,34,0.03);
-  --input-border:    rgba(20,24,34,0.12);
+  --text:            #17202e;
+  --text-muted:      rgba(23,32,46,0.62);
+  --text-dim:        rgba(23,32,46,0.40);
+  --input-bg:        #ffffff;
+  --input-border:    rgba(20,24,34,0.14);
   --input-focus:     #0d9488;
   --focus-ring:      rgba(13,148,136,0.18);
   --nav-hover:       rgba(20,24,34,0.05);
   --nav-active-bg:   rgba(13,148,136,0.10);
   --nav-active-text: #0d9488;
   --card-bg:         #ffffff;
-  --shadow:          0 8px 32px rgba(28,31,38,0.10);
-  --shadow-sm:       0 1px 3px  rgba(28,31,38,0.06);
+  --shadow:          0 8px 32px rgba(23,32,46,0.10);
+  --shadow-sm:       0 1px 3px  rgba(23,32,46,0.06);
 }
 
-//  Base reset 
+//  Base reset
 *, *::before, *::after { box-sizing: border-box; }
 
 html, body {
   height: 100%;
   margin: 0;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
-  transition: background 0.25s ease, color 0.2s ease;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -298,24 +275,24 @@ a { color: inherit; text-decoration: none; }
 
 .badge-income {
   background: rgba(34, 197, 94, 0.15);
-  color: #4ade80;
+  color: #16a34a;
 }
 
 .badge-expense {
   background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
+  color: #dc2626;
 }
 
 // Primary button
 .btn-primary {
-  background: var(--brand-500);
-  color: #04211d;
+  background: var(--brand-600);
+  color: #ffffff;
   font-weight: 600;
   border: none;
   border-radius: 12px;
   padding: 10px 22px;
   cursor: pointer;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   transition: background .15s, transform .15s, box-shadow .15s;
   display: inline-flex;
@@ -324,7 +301,7 @@ a { color: inherit; text-decoration: none; }
   -webkit-tap-highlight-color: transparent;
 
   &:hover {
-    background: var(--brand-400);
+    background: var(--brand-700);
   }
 
   &:active {
@@ -345,12 +322,12 @@ a { color: inherit; text-decoration: none; }
 // Danger button
 .btn-danger {
   background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
+  color: #dc2626;
   border: 1px solid rgba(239, 68, 68, 0.2);
   border-radius: 8px;
   padding: 4px 10px;
   cursor: pointer;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   transition: all .2s;
 
@@ -366,7 +343,7 @@ a { color: inherit; text-decoration: none; }
   border-radius: 12px;
   padding: 11px 14px;
   color: var(--text);
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   width: 100%;
   outline: none;
@@ -457,15 +434,15 @@ a { color: inherit; text-decoration: none; }
   cursor: pointer;
   border: none;
   transition: all .2s;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
 
   &.active {
-    background: #14b8a6;
-    color: #000;
+    background: #0d9488;
+    color: #ffffff;
   }
 
   &:not(.active) {
@@ -491,21 +468,21 @@ a { color: inherit; text-decoration: none; }
 //  8. Angular Material overrides 
 
 .mat-mdc-form-field {
-  --mdc-outlined-text-field-outline-color: rgba(255, 255, 255, 0.12);
-  --mdc-outlined-text-field-hover-outline-color: rgba(255, 255, 255, 0.25);
-  --mdc-outlined-text-field-focus-outline-color: #14b8a6;
-  --mdc-outlined-text-field-label-text-color: rgba(255, 255, 255, 0.5);
-  --mdc-outlined-text-field-focus-label-text-color: #14b8a6;
-  --mdc-outlined-text-field-input-text-color: #ffffff;
+  --mdc-outlined-text-field-outline-color: var(--input-border);
+  --mdc-outlined-text-field-hover-outline-color: var(--border-strong);
+  --mdc-outlined-text-field-focus-outline-color: #0d9488;
+  --mdc-outlined-text-field-label-text-color: var(--text-muted);
+  --mdc-outlined-text-field-focus-label-text-color: #0d9488;
+  --mdc-outlined-text-field-input-text-color: var(--text);
   --mdc-outlined-text-field-container-shape: 10px;
-  --mat-form-field-container-text-font: 'Sora', sans-serif;
+  --mat-form-field-container-text-font: 'Inter', sans-serif;
   --mat-form-field-container-text-size: 0.9rem;
 }
 
 .mat-mdc-input-element {
   color: var(--text) !important;
   caret-color: var(--input-focus) !important;
-  font-family: 'Sora', sans-serif !important;
+  font-family: 'Inter', sans-serif !important;
 }
 
 .mat-mdc-select-value,
@@ -521,7 +498,7 @@ a { color: inherit; text-decoration: none; }
 
 .mat-mdc-option {
   color: var(--text-muted) !important;
-  font-family: 'Sora', sans-serif !important;
+  font-family: 'Inter', sans-serif !important;
 
   &:hover:not(.mdc-list-item--disabled) {
     background: rgba(20, 184, 166, 0.08) !important;
@@ -529,7 +506,7 @@ a { color: inherit; text-decoration: none; }
 
   &.mdc-list-item--selected {
     background: rgba(20, 184, 166, 0.15) !important;
-    color: #14b8a6 !important;
+    color: #0d9488 !important;
   }
 }
 
@@ -552,7 +529,7 @@ a { color: inherit; text-decoration: none; }
 .mat-mdc-raised-button,
 .mat-mdc-flat-button,
 .mat-mdc-outlined-button {
-  font-family: 'Sora', sans-serif !important;
+  font-family: 'Inter', sans-serif !important;
   letter-spacing: 0 !important;
 }
 
@@ -654,10 +631,16 @@ app-kpi-card {
 .dash-grid-1-1 {
   display: grid;
   gap: 24px;
+  margin-bottom: 24px;
   grid-template-columns: 1fr;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   @media (max-width: 639px) {
     gap: 14px;
+    margin-bottom: 14px;
   }
 
   @media (min-width: 768px) {
@@ -794,19 +777,19 @@ app-kpi-card {
 .text-faint { color: var(--text-dim); }
 
 .text-brand {
-  color: #2dd4bf;
+  color: #0d9488;
 }
 
 .text-teal {
-  color: #14b8a6;
+  color: #0d9488;
 }
 
 .text-income {
-  color: #4ade80;
+  color: #16a34a;
 }
 
 .text-expense {
-  color: #f87171;
+  color: #dc2626;
 }
 
 .mono {
@@ -950,11 +933,11 @@ mat-icon.icon-lg {
 .btn-edit {
   background: rgba(45, 212, 191, 0.1);
   border: 1px solid rgba(45, 212, 191, 0.2);
-  color: #2dd4bf;
+  color: #0d9488;
   border-radius: 8px;
   padding: 4px 10px;
   cursor: pointer;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   display: flex;
   align-items: center;
@@ -976,7 +959,7 @@ mat-icon.icon-lg {
   cursor: pointer;
   background: rgba(45, 212, 191, 0.08);
   border: 1px solid rgba(45, 212, 191, 0.15);
-  color: #2dd4bf;
+  color: #0d9488;
   transition: all .2s;
 
   &:hover {
@@ -994,7 +977,7 @@ mat-icon.icon-lg {
   cursor: pointer;
   background: rgba(239, 68, 68, 0.08);
   border: 1px solid rgba(239, 68, 68, 0.15);
-  color: #f87171;
+  color: #dc2626;
   transition: all .2s;
 
   &:hover {
@@ -1023,7 +1006,7 @@ mat-icon.icon-lg {
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: 500;
   transition: border-color .15s, color .15s, background .15s;
@@ -1051,9 +1034,9 @@ mat-icon.icon-lg {
   background: rgba(20, 184, 166, 0.08);
   border: 1px solid rgba(20, 184, 166, 0.2);
   border-radius: 10px;
-  color: #2dd4bf;
+  color: #0d9488;
   cursor: pointer;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   transition: all .2s;
@@ -1075,18 +1058,18 @@ mat-icon.icon-lg {
   border-radius: 10px;
   color: var(--text-muted);
   cursor: pointer;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   transition: all .2s;
 
   &:hover {
-    border-color: #14b8a6;
+    border-color: #0d9488;
     color: var(--text);
   }
 }
 
 .btn-icon-ghost {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--surface-2);
   border: none;
   border-radius: 8px;
   width: 32px;
@@ -1095,22 +1078,22 @@ mat-icon.icon-lg {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   transition: background .2s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--surface-3);
   }
 }
 
 .btn-teal-sm {
   background: rgba(20, 184, 166, 0.1);
   border: 1px solid rgba(20, 184, 166, 0.2);
-  color: #14b8a6;
+  color: #0d9488;
   border-radius: 8px;
   padding: 6px 16px;
   cursor: pointer;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   font-weight: 600;
   transition: all .2s;
@@ -1131,7 +1114,7 @@ mat-icon.icon-lg {
   align-items: center;
   transition: color .2s;
 
-  &:hover { color: #f87171; }
+  &:hover { color: #dc2626; }
 }
 
 //  18. Modal header 
@@ -1198,7 +1181,7 @@ mat-icon.icon-lg {
   border: 1px solid rgba(239, 68, 68, 0.25);
   border-radius: 10px;
   padding: 10px 14px;
-  color: #f87171;
+  color: #dc2626;
   font-size: 0.875rem;
   margin-bottom: 16px;
 }
@@ -1235,14 +1218,14 @@ mat-icon.icon-lg {
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: #14b8a6;
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 
   mat-icon {
-    color: #000;
+    color: #ffffff;
   }
 }
 
@@ -1273,7 +1256,7 @@ mat-icon.icon-lg {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   margin-left: .4rem;
 }
 
@@ -1467,7 +1450,7 @@ mat-icon.icon-lg {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #14b8a6;
+  background: #0d9488;
 }
 
 .balance-card-label {
@@ -1541,7 +1524,7 @@ mat-icon.icon-lg {
 }
 
 .link-brand {
-  color: #2dd4bf;
+  color: #0d9488;
   text-decoration: none;
 
   &:hover {
@@ -1691,7 +1674,7 @@ mat-icon.icon-lg {
 
 // Calendar title
 .cal-title {
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text);
@@ -1712,7 +1695,7 @@ mat-icon.icon-lg {
 
 // Button: link style, brand color
 .btn-link-brand {
-  color: #2dd4bf;
+  color: #0d9488;
   font-size: 0.75rem;
   font-family: 'DM Mono', monospace;
   background: none;
@@ -1764,7 +1747,7 @@ mat-icon.icon-lg {
 // Date-picker selected date display span
 .picker-display {
   flex: 1;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   color: var(--text);
   text-transform: capitalize;
@@ -1773,7 +1756,7 @@ mat-icon.icon-lg {
 // Category picker selected text
 .picker-selected-text {
   font-size: 0.9rem;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 500;
   flex: 1;
 }
@@ -1789,7 +1772,7 @@ mat-icon.icon-lg {
 .td-desc {
   color: var(--text);
   font-weight: 500;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 // Table: amount cell alignment
@@ -1979,7 +1962,7 @@ mat-icon.icon-lg {
   }
 
   &.active-nav {
-    color: #14b8a6;
+    color: #0d9488;
 
     mat-icon {
       transform: translateY(-1px);
@@ -2010,8 +1993,8 @@ mat-icon.icon-lg {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0d9488, #14b8a6);
-  color: #fff;
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  color: var(--text);
   box-shadow: 0 4px 14px rgba(13, 148, 136, 0.45);
   -webkit-tap-highlight-color: transparent;
   transition: transform .15s, box-shadow .15s;
@@ -2196,7 +2179,7 @@ mat-icon.icon-lg {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #14b8a6;
+  color: #0d9488;
   flex-shrink: 0;
 }
 
@@ -2235,7 +2218,7 @@ mat-icon.icon-lg {
   border-radius: 12px;
   border: 1px solid transparent;
   cursor: pointer;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   transition: all .2s;
@@ -2250,13 +2233,13 @@ mat-icon.icon-lg {
   &--active-expense {
     background: rgba(239, 68, 68, 0.1);
     border-color: rgba(239, 68, 68, 0.25);
-    color: #f87171;
+    color: #dc2626;
   }
 
   &--active-income {
     background: rgba(34, 197, 94, 0.1);
     border-color: rgba(34, 197, 94, 0.25);
-    color: #4ade80;
+    color: #16a34a;
   }
 }
 
@@ -2277,12 +2260,12 @@ mat-icon.icon-lg {
 
   &--expense {
     background: rgba(239, 68, 68, 0.15);
-    color: #f87171;
+    color: #dc2626;
   }
 
   &--income {
     background: rgba(34, 197, 94, 0.15);
-    color: #4ade80;
+    color: #16a34a;
   }
 }
 
@@ -2481,7 +2464,7 @@ mat-icon.icon-lg {
 
   &--admin {
     background: rgba(13, 148, 136, 0.2);
-    color: #2dd4bf;
+    color: #0d9488;
     border: 1px solid rgba(45, 212, 191, 0.3);
   }
 }
@@ -2512,7 +2495,7 @@ mat-icon.icon-lg {
 
   &--danger:hover {
     background: rgba(239, 68, 68, 0.15);
-    color: #f87171;
+    color: #dc2626;
   }
 
   &:disabled {
@@ -2581,7 +2564,7 @@ mat-icon.icon-lg {
 .avatar-initials-sm {
   font-size: 0.7rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
   letter-spacing: 0.03em;
 }
 
@@ -2669,7 +2652,7 @@ mat-icon.icon-lg {
   justify-content: center;
   cursor: pointer;
   overflow: hidden;
-  border: 3px solid rgba(255,255,255,0.12);
+  border: 3px solid var(--border-strong);
   transition: border-color 0.2s;
 
   &--lg {
@@ -2693,7 +2676,7 @@ mat-icon.icon-lg {
 .avatar-upload-initials {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #fff;
+  color: #ffffff; // sits on the teal/blue gradient
   letter-spacing: 0.03em;
   user-select: none;
 }
@@ -2709,7 +2692,7 @@ mat-icon.icon-lg {
   gap: 2px;
   opacity: 0;
   transition: opacity 0.2s;
-  color: #fff;
+  color: #ffffff; // sits on the dark overlay
 
   mat-icon { font-size: 1.3rem; width: 1.3rem; height: 1.3rem; }
   span { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
@@ -2771,7 +2754,7 @@ mat-icon.icon-lg {
   &--active {
     border-color: #0d9488;
     background: rgba(13,148,136,0.12);
-    color: #2dd4bf;
+    color: #0d9488;
   }
 
   &--admin#{&}--active {
@@ -2791,7 +2774,7 @@ mat-icon.icon-lg {
   border-radius: 10px;
   font-size: 0.875rem;
   font-weight: 600;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Inter', sans-serif;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s, color 0.15s;
   border: 1.5px solid var(--border-strong);
@@ -2818,7 +2801,7 @@ mat-icon.icon-lg {
 
 .form-error {
   font-size: 0.75rem;
-  color: #f87171;
+  color: #dc2626;
   margin: 2px 0 0;
   font-family: 'DM Mono', monospace;
 }
@@ -2975,8 +2958,8 @@ mat-icon.icon-lg {
   border-radius: 50%;
   flex-shrink: 0;
 
-  &--income  { background: #4ade80; }
-  &--expense { background: #f87171; }
+  &--income  { background: #16a34a; }
+  &--expense { background: #dc2626; }
 }
 
 .dash-ratio-label {
@@ -2995,8 +2978,8 @@ mat-icon.icon-lg {
   color: var(--text);
   margin: 0;
 
-  &--income  { color: #4ade80; }
-  &--expense { color: #f87171; }
+  &--income  { color: #16a34a; }
+  &--expense { color: #dc2626; }
 }
 
 .dash-ratio-track {
@@ -3010,14 +2993,14 @@ mat-icon.icon-lg {
 
 .dash-ratio-fill--income {
   height: 100%;
-  background: linear-gradient(to right, #16a34a, #4ade80);
+  background: linear-gradient(to right, #16a34a, #16a34a);
   border-radius: 999px 0 0 999px;
   transition: width .6s cubic-bezier(0.4,0,0.2,1);
 }
 
 .dash-ratio-fill--expense {
   height: 100%;
-  background: linear-gradient(to right, #f87171, #ef4444);
+  background: linear-gradient(to right, #dc2626, #ef4444);
   border-radius: 0 999px 999px 0;
   transition: width .6s cubic-bezier(0.4,0,0.2,1);
 }
@@ -3034,7 +3017,7 @@ mat-icon.icon-lg {
   font-family: 'DM Mono', monospace;
   font-size: 0.85rem;
   font-weight: 700;
-  color: #f87171;
+  color: #dc2626;
   background: rgba(239,68,68,0.08);
   border: 1px solid rgba(239,68,68,0.15);
   border-radius: 8px;
@@ -3100,7 +3083,7 @@ mat-icon.icon-lg {
 .dash-month-today-btn {
   background: rgba(20,184,166,0.12);
   border: 1px solid rgba(20,184,166,0.25);
-  color: #14b8a6;
+  color: #0d9488;
   border-radius: 999px;
   padding: 3px 12px;
   font-size: 0.7rem;
@@ -3175,12 +3158,12 @@ mat-icon.icon-lg {
   font-size: clamp(2rem, 5vw, 2.6rem);
   font-weight: 700;
   line-height: 1.05;
-  color: #2dd4bf;
+  color: #0d9488;
   margin: 0;
   letter-spacing: -0.02em;
 
   &--neg {
-    color: #f87171;
+    color: #dc2626;
   }
 }
 
@@ -3229,12 +3212,12 @@ mat-icon.icon-lg {
 
   &--income {
     background: rgba(34, 197, 94, 0.12);
-    color: #4ade80;
+    color: #16a34a;
   }
 
   &--expense {
     background: rgba(239, 68, 68, 0.12);
-    color: #f87171;
+    color: #dc2626;
   }
 }
 
@@ -3251,8 +3234,8 @@ mat-icon.icon-lg {
   font-weight: 700;
   margin: 0;
 
-  &--income { color: #4ade80; }
-  &--expense { color: #f87171; }
+  &--income { color: #16a34a; }
+  &--expense { color: #dc2626; }
 
   @media (max-width: 479px) {
     font-size: 0.85rem;
@@ -3352,7 +3335,7 @@ mat-icon.icon-lg {
   align-items: center;
   gap: 6px;
   font-size: 0.72rem;
-  color: #f87171;
+  color: #dc2626;
   margin: 4px 0 0;
 
   mat-icon {
