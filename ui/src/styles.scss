@@ -25,49 +25,51 @@ html.light { @include mat.all-component-themes($ft-light); }
   --brand-600: #0d9488;
   --brand-700: #0f766e;
 
-  // Dark theme — palette: #37353e #44444e #715a5a #d3dad9
-  --bg:              #2e2c35;
-  --surface:         #37353e;
-  --surface-2:       #3e3c47;
-  --surface-3:       #44444e;
-  --surface-hover:   rgba(211,218,217,0.04);
-  --border:          rgba(113,90,90,0.22);
-  --border-strong:   rgba(113,90,90,0.38);
-  --text:            #d3dad9;
-  --text-muted:      rgba(211,218,217,0.60);
-  --text-dim:        rgba(211,218,217,0.35);
-  --input-bg:        rgba(211,218,217,0.05);
-  --input-border:    rgba(113,90,90,0.30);
+  // Dark theme — neutral graphite scale, hairline borders
+  --bg:              #131316;
+  --surface:         #1a1a1f;
+  --surface-2:       #222228;
+  --surface-3:       #2b2b33;
+  --surface-hover:   rgba(255,255,255,0.045);
+  --border:          rgba(255,255,255,0.07);
+  --border-strong:   rgba(255,255,255,0.13);
+  --text:            #e7e9e9;
+  --text-muted:      rgba(231,233,233,0.62);
+  --text-dim:        rgba(231,233,233,0.38);
+  --input-bg:        rgba(255,255,255,0.04);
+  --input-border:    rgba(255,255,255,0.10);
   --input-focus:     #14b8a6;
-  --nav-hover:       rgba(211,218,217,0.05);
+  --focus-ring:      rgba(20,184,166,0.22);
+  --nav-hover:       rgba(255,255,255,0.05);
   --nav-active-bg:   rgba(20,184,166,0.12);
-  --nav-active-text: #14b8a6;
-  --card-bg:         #44444e;
-  --shadow:          0 4px 24px rgba(20,18,25,0.55);
-  --shadow-sm:       0 1px 6px  rgba(20,18,25,0.40);
+  --nav-active-text: #2dd4bf;
+  --card-bg:         #1d1d23;
+  --shadow:          0 8px 32px rgba(0,0,0,0.45);
+  --shadow-sm:       0 1px 4px  rgba(0,0,0,0.30);
 }
 
 html.light {
-  // Light theme — palette: #37353e #44444e #715a5a #d3dad9
-  --bg:              #dde4e3;
-  --surface:         #edf0f0;
-  --surface-2:       #f6f8f8;
-  --surface-3:       #ffffff;
-  --surface-hover:   rgba(55,53,62,0.04);
-  --border:          rgba(113,90,90,0.14);
-  --border-strong:   rgba(113,90,90,0.24);
-  --text:            #37353e;
-  --text-muted:      rgba(55,53,62,0.58);
-  --text-dim:        rgba(55,53,62,0.38);
-  --input-bg:        rgba(55,53,62,0.04);
-  --input-border:    rgba(113,90,90,0.22);
+  // Light theme — cool near-white, crisp gray hairlines
+  --bg:              #f0f1f4;
+  --surface:         #ffffff;
+  --surface-2:       #f4f5f8;
+  --surface-3:       #eaecf1;
+  --surface-hover:   rgba(20,24,34,0.04);
+  --border:          rgba(20,24,34,0.08);
+  --border-strong:   rgba(20,24,34,0.15);
+  --text:            #1c1f26;
+  --text-muted:      rgba(28,31,38,0.60);
+  --text-dim:        rgba(28,31,38,0.38);
+  --input-bg:        rgba(20,24,34,0.03);
+  --input-border:    rgba(20,24,34,0.12);
   --input-focus:     #0d9488;
-  --nav-hover:       rgba(55,53,62,0.05);
+  --focus-ring:      rgba(13,148,136,0.18);
+  --nav-hover:       rgba(20,24,34,0.05);
   --nav-active-bg:   rgba(13,148,136,0.10);
   --nav-active-text: #0d9488;
-  --card-bg:         #f6f8f8;
-  --shadow:          0 4px 24px rgba(55,53,62,0.10);
-  --shadow-sm:       0 1px 6px  rgba(55,53,62,0.07);
+  --card-bg:         #ffffff;
+  --shadow:          0 8px 32px rgba(28,31,38,0.10);
+  --shadow-sm:       0 1px 3px  rgba(28,31,38,0.06);
 }
 
 //  Base reset 
@@ -84,6 +86,21 @@ html, body {
 }
 
 a { color: inherit; text-decoration: none; }
+
+// Visible keyboard focus everywhere, without rings on mouse clicks
+:focus-visible {
+  outline: 2px solid var(--input-focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 
 //  7. Core UI classes (from the original <style> block) 
 
@@ -291,23 +308,37 @@ a { color: inherit; text-decoration: none; }
 
 // Primary button
 .btn-primary {
-  background: #14b8a6;
-  color: #000;
+  background: var(--brand-500);
+  color: #04211d;
   font-weight: 600;
   border: none;
-  border-radius: 10px;
-  padding: 10px 24px;
+  border-radius: 12px;
+  padding: 10px 22px;
   cursor: pointer;
   font-family: 'Sora', sans-serif;
   font-size: 0.9rem;
-  transition: all .2s;
+  transition: background .15s, transform .15s, box-shadow .15s;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  -webkit-tap-highlight-color: transparent;
 
   &:hover {
-    background: #0d9488;
-    transform: translateY(-1px);
+    background: var(--brand-400);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 
@@ -332,21 +363,27 @@ a { color: inherit; text-decoration: none; }
 .input-field {
   background: var(--input-bg);
   border: 1px solid var(--input-border);
-  border-radius: 10px;
-  padding: 10px 14px;
+  border-radius: 12px;
+  padding: 11px 14px;
   color: var(--text);
   font-family: 'Sora', sans-serif;
   font-size: 0.9rem;
   width: 100%;
   outline: none;
-  transition: border .2s, background .25s;
+  transition: border-color .15s, background .2s, box-shadow .15s;
+
+  &::placeholder {
+    color: var(--text-dim);
+  }
 
   &:focus {
     border-color: var(--input-focus);
+    box-shadow: 0 0 0 3px var(--focus-ring);
   }
 
   option {
-    background: #37353e;
+    background: var(--surface-2);
+    color: var(--text);
   }
 }
 
@@ -689,9 +726,10 @@ app-kpi-card {
 //  14. Typography 
 
 .page-title {
-  font-family: 'Miranda Sans', serif;
+  font-family: 'Sora', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text);
   margin: 0;
 
@@ -760,6 +798,7 @@ app-kpi-card {
 
 .mono {
   font-family: 'DM Mono', monospace;
+  font-variant-numeric: tabular-nums;
 }
 
 .value-lg {
@@ -1186,7 +1225,8 @@ mat-icon.icon-lg {
 
 .logo-text {
   cursor: pointer;
-  font-family: 'Miranda Sans', serif;
+  font-family: 'Sora', sans-serif;
+  letter-spacing: -0.02em;
   font-size: 1.125rem;
   font-weight: 700;
   color: var(--text);
@@ -1787,7 +1827,8 @@ mat-icon.icon-lg {
 
 // Serif title (mobile topbar brand name)
 .title-serif {
-  font-family: 'Miranda Sans', serif;
+  font-family: 'Sora', sans-serif;
+  letter-spacing: -0.02em;
   font-size: 1rem;
   font-weight: 700;
   color: var(--text);
@@ -2754,7 +2795,8 @@ mat-icon.icon-lg {
 }
 
 .dash-greeting {
-  font-family: 'Miranda Sans', serif;
+  font-family: 'Sora', sans-serif;
+  letter-spacing: -0.02em;
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--text);
@@ -3034,8 +3076,8 @@ mat-icon.icon-lg {
   gap: 8px;
   padding: 10px 16px;
   border-radius: 10px;
-  background: rgba(113,90,90,0.08);
-  border: 1px solid rgba(113,90,90,0.18);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
   color: var(--text-muted);
   font-size: 0.8rem;
   font-family: 'DM Mono', monospace;

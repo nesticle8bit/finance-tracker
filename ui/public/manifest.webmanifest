@@ -4,8 +4,8 @@
   "description": "Organiza tus finanzas personales",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#2e2c35",
-  "theme_color": "#37353e",
+  "background_color": "#131316",
+  "theme_color": "#1a1a1f",
   "orientation": "portrait-primary",
   "icons": [
     {
