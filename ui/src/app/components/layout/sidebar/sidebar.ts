@@ -29,18 +29,10 @@ export class SidebarComponent {
   theme = inject(ThemeService);
 
   mainItems: NavItem[] = [
-    { label: 'Dashboard',      icon: 'dashboard',     route: '/dashboard' },
-    { label: 'Transacciones',  icon: 'receipt_long',  route: '/transactions' },
-    { label: 'Categorías',     icon: 'category',      route: '/categories' },
-    { label: 'Presupuesto',    icon: 'savings',        route: '/budget' },
-    { label: 'Pagos Fijos',    icon: 'event_repeat',  route: '/recurring-payments' },
-  ];
-
-  toolItems: NavItem[] = [
-    { label: 'Recurrentes',    icon: 'autorenew',       route: '/recurring-transactions' },
-    { label: 'Metas de Ahorro', icon: 'flag',           route: '/savings-goals' },
-    { label: 'Tendencias',     icon: 'trending_up',    route: '/trends' },
-    { label: 'Comparar Meses', icon: 'compare_arrows', route: '/compare' },
+    { label: 'Panel',          icon: 'dashboard',     route: '/dashboard' },
+    { label: 'Movimientos',    icon: 'receipt_long',  route: '/transactions' },
+    { label: 'Presupuesto',    icon: 'savings',       route: '/budget' },
+    { label: 'Recurrentes',    icon: 'event_repeat',  route: '/recurring' },
   ];
 
   settingsItem: NavItem = { label: 'Ajustes', icon: 'tune', route: '/settings' };

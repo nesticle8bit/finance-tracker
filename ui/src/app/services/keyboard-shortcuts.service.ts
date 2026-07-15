@@ -44,10 +44,8 @@ export class KeyboardShortcutsService {
         d: '/dashboard',
         t: '/transactions',
         b: '/budget',
-        p: '/recurring-payments',
-        s: '/savings-goals',
-        r: '/recurring-transactions',
-        a: '/trends',
+        r: '/recurring',
+        s: '/settings',
       };
       if (map[e.key]) {
         e.preventDefault();

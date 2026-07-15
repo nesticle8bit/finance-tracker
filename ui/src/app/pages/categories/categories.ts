@@ -16,7 +16,7 @@ interface CategoryCard {
 }
 
 @Component({
-  selector: 'app-categories',
+  selector: 'app-categories-panel',
   standalone: true,
   imports: [CommonModule, MatIconModule],
   templateUrl: './categories.html',

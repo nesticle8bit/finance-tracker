@@ -1,15 +1,13 @@
-<div class="page-pad">
+<div>
 
-  <!-- Header -->
-  <div class="page-header">
-    <div>
-      <h1 class="page-title">Pagos Fijos</h1>
-      <p class="page-subtitle" style="text-transform:capitalize;">{{ monthLabel() }}</p>
+  <!-- Add action -->
+  @if (!loading() && totalCount() > 0) {
+    <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+      <button class="btn-primary" (click)="openAdd()">
+        <mat-icon class="icon-md">add</mat-icon> Agregar pago
+      </button>
     </div>
-    <button class="btn-primary" (click)="openAdd()">
-      <mat-icon class="icon-md">add</mat-icon> Agregar pago
-    </button>
-  </div>
+  }
 
   <!-- Progress card (checklist only) -->
   @if (activeTab() === 'checklist' && totalCount() > 0) {
@@ -48,19 +46,13 @@
   }
 
   <!-- Tabs -->
-  <div style="display:flex;gap:4px;margin-bottom:24px;background:var(--surface-2);border-radius:10px;padding:4px;width:fit-content;">
-    <button (click)="switchTab('checklist')"
-      style="padding:6px 16px;border-radius:8px;border:none;cursor:pointer;font-size:0.85rem;font-weight:500;transition:all .15s;"
-      [style.background]="activeTab() === 'checklist' ? 'var(--surface-3)' : 'transparent'"
-      [style.color]="activeTab() === 'checklist' ? 'var(--text)' : 'var(--text-muted)'">
-      <mat-icon class="icon-sm" style="vertical-align:middle;margin-right:4px;">checklist</mat-icon>
+  <div class="seg-control seg-control--sm" style="margin-bottom:24px;">
+    <button class="seg-btn" [class.seg-btn--active]="activeTab() === 'checklist'" (click)="switchTab('checklist')">
+      <mat-icon class="icon-sm">checklist</mat-icon>
       Este mes
     </button>
-    <button (click)="switchTab('history')"
-      style="padding:6px 16px;border-radius:8px;border:none;cursor:pointer;font-size:0.85rem;font-weight:500;transition:all .15s;"
-      [style.background]="activeTab() === 'history' ? 'var(--surface-3)' : 'transparent'"
-      [style.color]="activeTab() === 'history' ? 'var(--text)' : 'var(--text-muted)'">
-      <mat-icon class="icon-sm" style="vertical-align:middle;margin-right:4px;">history</mat-icon>
+    <button class="seg-btn" [class.seg-btn--active]="activeTab() === 'history'" (click)="switchTab('history')">
+      <mat-icon class="icon-sm">history</mat-icon>
       Historial
     </button>
   </div>

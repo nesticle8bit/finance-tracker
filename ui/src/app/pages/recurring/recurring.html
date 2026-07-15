@@ -1,0 +1,26 @@
+<div class="page-pad">
+
+  <div style="margin-bottom:20px;">
+    <h1 class="page-title">Recurrentes</h1>
+    <p class="page-subtitle" style="text-transform:capitalize;">{{ monthLabel() }}</p>
+  </div>
+
+  <!-- Section switch -->
+  <div class="seg-control" style="margin-bottom:20px;">
+    <button class="seg-btn" [class.seg-btn--active]="section() === 'pagos'" (click)="section.set('pagos')">
+      <mat-icon class="icon-sm">checklist</mat-icon>
+      Pagos fijos
+    </button>
+    <button class="seg-btn" [class.seg-btn--active]="section() === 'auto'" (click)="section.set('auto')">
+      <mat-icon class="icon-sm">autorenew</mat-icon>
+      Automáticas
+    </button>
+  </div>
+
+  @if (section() === 'pagos') {
+    <app-recurring-payments />
+  } @else {
+    <app-recurring-transactions />
+  }
+
+</div>

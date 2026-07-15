@@ -7,13 +7,14 @@ import { FinanceService } from '../../services/finance';
 import { ToastService } from '../../services/toast.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { environment } from '../../../environments/environment';
+import { CategoriesComponent } from '../categories/categories';
 
 const API = environment.financeTrackerAPI;
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, MatTooltipModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatTooltipModule, CategoriesComponent],
   templateUrl: './settings.html',
 })
 export class SettingsComponent implements OnInit {

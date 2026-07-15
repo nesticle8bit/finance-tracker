@@ -1,18 +1,15 @@
-<div class="page-pad">
+<div class="card card-p">
 
-  <div class="page-header">
-    <div>
-      <h1 class="page-title">Categorías</h1>
-      <p class="page-subtitle">Administra tus categorías</p>
-    </div>
-    <button class="btn-primary" (click)="openAdd()">
-      <mat-icon class="icon-md">add</mat-icon> Nueva categoría
+  <div class="flex items-center justify-between" style="margin-bottom:16px;">
+    <h3 class="card-title" style="margin:0;">Categorías</h3>
+    <button class="btn-primary" style="padding:6px 14px;font-size:0.8rem;" (click)="openAdd()">
+      <mat-icon class="icon-sm">add</mat-icon> Nueva
     </button>
   </div>
 
   <div class="cat-grid">
     @for (card of cards(); track card.cat.id) {
-      <div class="card card-p-sm">
+      <div class="card card-p-sm" style="background:var(--surface-2);">
 
         <!-- Top row: icon + name + actions -->
         <div class="flex items-center justify-between" style="margin-bottom:16px;">

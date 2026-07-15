@@ -27,45 +27,25 @@ export const routes: Routes = [
           import('./pages/transactions/transactions').then((m) => m.TransactionsComponent),
       },
       {
-        path: 'categories',
-        loadComponent: () =>
-          import('./pages/categories/categories').then((m) => m.CategoriesComponent),
-      },
-      {
         path: 'budget',
         loadComponent: () =>
           import('./pages/budget/budget').then((m) => m.BudgetComponent),
       },
       {
-        path: 'recurring-payments',
+        path: 'recurring',
         loadComponent: () =>
-          import('./pages/recurring-payments/recurring-payments').then((m) => m.RecurringPaymentsComponent),
-      },
-      {
-        path: 'recurring-transactions',
-        loadComponent: () =>
-          import('./pages/recurring-transactions/recurring-transactions').then((m) => m.RecurringTransactionsComponent),
-      },
-      {
-        path: 'savings-goals',
-        loadComponent: () =>
-          import('./pages/savings-goals/savings-goals').then((m) => m.SavingsGoalsComponent),
-      },
-      {
-        path: 'trends',
-        loadComponent: () =>
-          import('./pages/trends/trends').then((m) => m.TrendsComponent),
-      },
-      {
-        path: 'compare',
-        loadComponent: () =>
-          import('./pages/compare/compare').then((m) => m.CompareComponent),
+          import('./pages/recurring/recurring').then((m) => m.RecurringComponent),
       },
       {
         path: 'settings',
         loadComponent: () =>
           import('./pages/settings/settings').then((m) => m.SettingsComponent),
       },
+
+      // Legacy paths
+      { path: 'recurring-payments', redirectTo: 'recurring' },
+      { path: 'recurring-transactions', redirectTo: 'recurring' },
+      { path: 'categories', redirectTo: 'settings' },
 
       // Admin-only routes
       {

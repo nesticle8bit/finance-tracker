@@ -32,15 +32,6 @@
       </a>
     }
 
-    <p class="nav-section-label" style="margin-top:24px;">Herramientas</p>
-
-    @for (item of toolItems; track item.route) {
-      <a [routerLink]="item.route" routerLinkActive="active-nav" class="nav-item">
-        <mat-icon>{{ item.icon }}</mat-icon>
-        {{ item.label }}
-      </a>
-    }
-
     <p class="nav-section-label" style="margin-top:24px;">Configuración</p>
 
     <a [routerLink]="settingsItem.route" routerLinkActive="active-nav" class="nav-item">

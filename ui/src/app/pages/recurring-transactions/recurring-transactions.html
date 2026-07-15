@@ -1,13 +1,11 @@
-<div class="page-pad">
-  <div class="page-header">
-    <div>
-      <h1 class="page-title">Transacciones Recurrentes</h1>
-      <p class="page-subtitle" style="text-transform:capitalize;">{{ monthLabel() }}</p>
+<div>
+  @if (!loading() && transactions().length) {
+    <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+      <button class="btn-primary" (click)="openAdd()">
+        <mat-icon class="icon-md">add</mat-icon> Nueva automática
+      </button>
     </div>
-    <button class="btn-primary" (click)="openAdd()">
-      <mat-icon class="icon-md">add</mat-icon> Nueva recurrente
-    </button>
-  </div>
+  }
 
   @if (loading()) {
     <div class="card card-p" style="text-align:center;padding:48px;"><p class="text-muted">Cargando...</p></div>

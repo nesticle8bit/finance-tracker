@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { SidebarComponent } from './components/layout/sidebar/sidebar';
 import { ToastComponent } from './components/shared/toast/toast';
@@ -11,7 +11,7 @@ import { AlertsService } from './services/alerts.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SidebarComponent, ToastComponent, MatIconModule, BottomNavComponent],
+  imports: [RouterOutlet, RouterLink, SidebarComponent, ToastComponent, MatIconModule, BottomNavComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
