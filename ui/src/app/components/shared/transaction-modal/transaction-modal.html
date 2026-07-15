@@ -74,8 +74,7 @@
     <!-- Category -->
     <div style="position:relative;">
       <label class="form-label">Categoría</label>
-      <button type="button" class="picker-btn" (click)="catOpen = !catOpen"
-        [style.border-color]="catOpen ? '#14b8a6' : 'rgba(255,255,255,0.12)'">
+      <button type="button" class="picker-btn" [class.picker-btn--open]="catOpen" (click)="catOpen = !catOpen">
         @if (selectedCat) {
           <div class="icon-box-xxs" [style.background]="selectedCat.color + '25'">
             <mat-icon class="icon-xs" [style.color]="selectedCat.color">{{ selectedCat.icon }}</mat-icon>
@@ -97,7 +96,7 @@
                 <mat-icon class="icon-sm" [style.color]="cat.color">{{ cat.icon }}</mat-icon>
               </div>
               <span class="dropdown-item-text"
-                [style.color]="form.categoryId === cat.id ? cat.color : 'rgba(255,255,255,0.8)'">
+                [style.color]="form.categoryId === cat.id ? cat.color : 'var(--text-muted)'">
                 {{ cat.name }}
               </span>
               @if (form.categoryId === cat.id) {

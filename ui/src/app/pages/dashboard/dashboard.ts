@@ -7,8 +7,6 @@ import { Router } from '@angular/router';
 import { Category } from '../../models/category';
 import { Transaction } from '../../models/transaction';
 import { CategoryBarComponent } from '../../components/shared/category-bar/category-bar';
-import { CircularProgressComponent } from '../../components/shared/circular-progress/circular-progress';
-import { KpiCardComponent } from '../../components/shared/kpi-card/kpi-card';
 import { TransactionModalComponent } from '../../components/shared/transaction-modal/transaction-modal';
 import { FinanceService } from '../../services/finance';
 import { AuthService } from '../../services/auth.service';
@@ -28,8 +26,6 @@ interface CategoryStat {
     CommonModule,
     MatIconModule,
     MatButtonModule,
-    KpiCardComponent,
-    CircularProgressComponent,
     CategoryBarComponent,
   ],
   templateUrl: './dashboard.html',

@@ -405,9 +405,10 @@ a { color: inherit; text-decoration: none; }
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1001;
-  background: var(--surface-2);
-  border: 1px solid var(--border-strong);
-  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
   padding: 28px;
   width: calc(100% - 32px);
   max-width: 480px;
@@ -424,6 +425,17 @@ a { color: inherit; text-decoration: none; }
     margin: 0;
     border-radius: 24px 24px 0 0;
     max-height: 92dvh;
+
+    // Bottom-sheet grab handle
+    &::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--border-strong);
+      margin: -8px auto 16px;
+    }
     overflow-y: auto;
     padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
   }
@@ -532,8 +544,9 @@ a { color: inherit; text-decoration: none; }
 }
 
 .cdk-overlay-dark-backdrop {
-  background: rgba(0, 0, 0, 0.7) !important;
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.55) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .mat-mdc-raised-button,
@@ -1004,19 +1017,27 @@ mat-icon.icon-lg {
 
 .btn-cancel {
   flex: 1;
-  padding: 10px;
-  border-radius: 10px;
+  padding: 12px;
+  border-radius: 12px;
   border: 1px solid var(--border-strong);
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
   font-family: 'Sora', sans-serif;
   font-size: 0.9rem;
-  transition: all .2s;
+  font-weight: 500;
+  transition: border-color .15s, color .15s, background .15s;
+  -webkit-tap-highlight-color: transparent;
 
   &:hover {
     border-color: var(--text-dim);
     color: var(--text);
+    background: var(--surface-hover);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring);
   }
 }
 
@@ -1123,8 +1144,10 @@ mat-icon.icon-lg {
 }
 
 .modal-title {
+  font-family: 'Sora', sans-serif;
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text);
   margin: 0;
 }
@@ -1618,13 +1641,20 @@ mat-icon.icon-lg {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
+  padding: 11px 14px;
   background: var(--input-bg);
-  border: 1px solid;
-  border-radius: 10px;
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
   cursor: pointer;
-  transition: border-color .2s;
+  transition: border-color .15s, box-shadow .15s;
   text-align: left;
+
+  &--open,
+  &:focus-visible {
+    outline: none;
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+  }
 }
 
 // Category dropdown panel (transaction modal)
@@ -1636,10 +1666,11 @@ mat-icon.icon-lg {
   z-index: 200;
   background: var(--surface-2);
   border: 1px solid var(--border-strong);
-  border-radius: 12px;
+  border-radius: 14px;
   overflow-y: auto;
   max-height: 240px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow);
+  padding: 4px;
 }
 
 .dropdown-item {
@@ -1647,10 +1678,15 @@ mat-icon.icon-lg {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
+  padding: 10px 12px;
   border: none;
+  border-radius: 10px;
   cursor: pointer;
   transition: background .15s;
+
+  &:hover {
+    background: var(--surface-hover);
+  }
 }
 
 // Calendar title
@@ -2130,6 +2166,17 @@ mat-icon.icon-lg {
     padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
     max-height: 92dvh;
     overflow-y: auto;
+
+    // Bottom-sheet grab handle
+    &::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--border-strong);
+      margin: -8px auto 16px;
+    }
   }
 }
 
@@ -3092,4 +3139,223 @@ mat-icon.icon-lg {
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.3; }
+}
+//  36. Dashboard v2 — balance hero + budget card 
+
+.dash-balance {
+  padding: 28px;
+  margin-bottom: 24px;
+
+  @media (max-width: 639px) {
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+}
+
+.dash-balance__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.dash-balance__label {
+  font-size: 0.72rem;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 8px;
+}
+
+.dash-balance__value {
+  font-family: 'DM Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(2rem, 5vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.05;
+  color: #2dd4bf;
+  margin: 0;
+  letter-spacing: -0.02em;
+
+  &--neg {
+    color: #f87171;
+  }
+}
+
+.dash-balance__hint {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin: 8px 0 0;
+}
+
+.dash-balance__stats {
+  display: flex;
+  gap: 28px;
+
+  @media (max-width: 639px) {
+    width: 100%;
+    gap: 12px;
+  }
+}
+
+.dash-balance__stat {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 150px;
+
+  @media (max-width: 639px) {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.dash-balance__stat-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 17px !important;
+    width: 17px !important;
+    height: 17px !important;
+  }
+
+  &--income {
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
+  }
+
+  &--expense {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+  }
+}
+
+.dash-balance__stat-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin: 0 0 3px;
+}
+
+.dash-balance__stat-value {
+  font-family: 'DM Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+
+  &--income { color: #4ade80; }
+  &--expense { color: #f87171; }
+
+  @media (max-width: 479px) {
+    font-size: 0.85rem;
+  }
+}
+
+.dash-balance__stat-sub {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  margin: 2px 0 0;
+  font-family: 'DM Mono', monospace;
+}
+
+.dash-balance__ratio {
+  margin-top: 22px;
+  height: 6px;
+  display: flex;
+  overflow: hidden;
+  border-radius: 999px;
+}
+
+//  Budget card 
+
+.dash-budget__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.dash-budget__total {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.dash-budget__pct-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.dash-budget__pct {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.dash-budget__pct-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.dash-budget__legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.dash-budget__legend-label {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  margin: 0 0 2px;
+}
+
+.dash-budget__legend-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.dash-budget__projection {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dash-budget__proj-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dash-budget__proj-avg {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.dash-budget__warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: #f87171;
+  margin: 4px 0 0;
+
+  mat-icon {
+    flex-shrink: 0;
+  }
 }

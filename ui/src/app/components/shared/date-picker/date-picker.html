@@ -1,11 +1,10 @@
 <div style="position:relative;">
 
   <!-- Trigger button -->
-  <button type="button" class="picker-btn" (click)="isOpen ? close() : open()"
-    [style.border-color]="isOpen ? '#14b8a6' : 'rgba(255,255,255,0.12)'">
+  <button type="button" class="picker-btn" [class.picker-btn--open]="isOpen" (click)="isOpen ? close() : open()">
 
     <mat-icon class="icon-md"
-      [style.color]="selDay ? '#14b8a6' : 'rgba(255,255,255,0.3)'">
+      [style.color]="selDay ? '#14b8a6' : 'var(--text-dim)'">
       calendar_today
     </mat-icon>
 
@@ -61,9 +60,9 @@
                               : isToday(day)   ? 'rgba(20,184,166,0.15)'
                               : day             ? 'transparent'
                                                 : 'transparent'"
-            [style.color]="isSelected(day) ? '#000'
+            [style.color]="isSelected(day) ? '#04211d'
                          : isToday(day)   ? '#14b8a6'
-                         : day            ? 'rgba(255,255,255,0.8)'
+                         : day            ? 'var(--text-muted)'
                                           : 'transparent'"
             [style.font-weight]="(isSelected(day) || isToday(day)) ? '700' : '400'"
             [style.cursor]="day ? 'pointer' : 'default'">

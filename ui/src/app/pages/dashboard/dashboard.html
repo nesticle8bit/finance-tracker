@@ -4,7 +4,6 @@
   <div class="dash-hero">
     <div style="flex:1;min-width:0;">
       <h1 class="dash-greeting">{{ greeting() }}</h1>
-      <p class="page-subtitle">Resumen financiero</p>
 
       <!-- Month pill navigator -->
       <div class="dash-month-pill">
@@ -59,58 +58,108 @@
        [style.pointer-events]="loadingDash() ? 'none' : 'auto'"
        style="transition:opacity .2s;">
 
-    <!-- KPI grid -->
-    <div class="kpi-grid">
-      <app-kpi-card label="Presupuesto" [value]="budgetFmt()" sub="Presupuesto mensual" icon="account_balance_wallet" color="blue" />
-      <app-kpi-card label="Ingresos"    [value]="incomeFmt()"  [sub]="incomeCount()"    icon="south"                 color="green" />
-      <app-kpi-card label="Gastos"      [value]="expenseFmt()" [sub]="expenseCount()"   icon="north"                 color="red" />
-      <app-kpi-card label="Balance"     [value]="balanceFmt()" sub="Ingresos − Gastos"  icon="balance"               [color]="balancePos() ? 'teal' : 'red'" />
-    </div>
+    <!--  Balance hero card  -->
+    <div class="card dash-balance">
+      <div class="dash-balance__top">
 
-    <!-- Income vs Expense ratio -->
-    @if (totalIncome() > 0 || totalExpense() > 0) {
-      <div class="card dash-ratio-card">
-        <div class="dash-ratio-header">
-
-          <div class="dash-ratio-item">
-            <div class="dash-ratio-dot dash-ratio-dot--income"></div>
-            <div>
-              <p class="dash-ratio-label">Ingresos</p>
-              <p class="dash-ratio-val dash-ratio-val--income">{{ incomeFmt() }}</p>
-            </div>
-          </div>
-
-          <div class="dash-ratio-center">
-            <p class="dash-ratio-label">{{ balancePos() ? 'Ahorro' : 'Déficit' }}</p>
-            <p class="dash-ratio-val" [style.color]="balancePos() ? '#4ade80' : '#f87171'">
-              {{ balanceFmt() }}
-            </p>
-          </div>
-
-          <div class="dash-ratio-item dash-ratio-item--right">
-            <div>
-              <p class="dash-ratio-label">Gastos</p>
-              <p class="dash-ratio-val dash-ratio-val--expense">{{ expenseFmt() }}</p>
-            </div>
-            <div class="dash-ratio-dot dash-ratio-dot--expense"></div>
-          </div>
-
+        <div class="dash-balance__main">
+          <p class="dash-balance__label">Balance del mes</p>
+          <p class="dash-balance__value" [class.dash-balance__value--neg]="!balancePos()">
+            {{ balanceFmt() }}
+          </p>
+          <p class="dash-balance__hint">{{ balancePos() ? 'Ahorro' : 'Déficit' }} · ingresos − gastos</p>
         </div>
-        <div class="dash-ratio-track">
+
+        <div class="dash-balance__stats">
+          <div class="dash-balance__stat">
+            <div class="dash-balance__stat-icon dash-balance__stat-icon--income">
+              <mat-icon>south</mat-icon>
+            </div>
+            <div class="flex-min">
+              <p class="dash-balance__stat-label">Ingresos</p>
+              <p class="dash-balance__stat-value dash-balance__stat-value--income">{{ incomeFmt() }}</p>
+              <p class="dash-balance__stat-sub">{{ incomeCount() }}</p>
+            </div>
+          </div>
+
+          <div class="dash-balance__stat">
+            <div class="dash-balance__stat-icon dash-balance__stat-icon--expense">
+              <mat-icon>north</mat-icon>
+            </div>
+            <div class="flex-min">
+              <p class="dash-balance__stat-label">Gastos</p>
+              <p class="dash-balance__stat-value dash-balance__stat-value--expense">{{ expenseFmt() }}</p>
+              <p class="dash-balance__stat-sub">{{ expenseCount() }}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      @if (totalIncome() > 0 || totalExpense() > 0) {
+        <div class="dash-ratio-track dash-balance__ratio">
           <div class="dash-ratio-fill--income"  [style.width.%]="incomeRatioPct()"></div>
           <div class="dash-ratio-fill--expense" [style.width.%]="expenseRatioPct()"></div>
         </div>
+      }
+    </div>
+
+    <!-- Budget + Categories -->
+    <div class="dash-grid-1-1">
+
+      <!-- Presupuesto (progress + projection merged) -->
+      <div class="card card-p dash-budget">
+        <div class="dash-budget__header">
+          <h3 class="card-title" style="margin:0;">Presupuesto</h3>
+          <span class="mono dash-budget__total">{{ budgetFmt() }}</span>
+        </div>
+
+        <div class="dash-budget__pct-row">
+          <span class="dash-budget__pct mono">{{ pct() | number: '1.0-0' }}%</span>
+          <span class="dash-budget__pct-label">utilizado</span>
+        </div>
+
+        <div class="progress-track" style="height:10px;">
+          <div class="progress-fill" [style.width.%]="pct()"
+            [style.background]="pct() > 90 ? '#ef4444' : pct() > 70 ? '#f59e0b' : 'linear-gradient(to right,#0d9488,#5eead4)'">
+          </div>
+        </div>
+
+        <div class="dash-budget__legend">
+          <div>
+            <p class="dash-budget__legend-label">Gastado</p>
+            <p class="mono dash-budget__legend-value" style="color:#f87171;">{{ spentFmt() }}</p>
+          </div>
+          <div style="text-align:right;">
+            <p class="dash-budget__legend-label">Disponible</p>
+            <p class="mono dash-budget__legend-value" style="color:#4ade80;">{{ remainFmt() }}</p>
+          </div>
+        </div>
+
+        @if (projection(); as proj) {
+          <div class="dash-budget__projection">
+            <div class="dash-budget__proj-row">
+              <span class="dash-budget__legend-label">Proyección a fin de mes</span>
+              <span class="mono dash-budget__legend-value"
+                [style.color]="proj.projected <= finance.budget() ? '#4ade80' : '#f87171'">
+                {{ formatCOP(proj.projected) }}
+              </span>
+            </div>
+            <div class="dash-budget__proj-row">
+              <span class="dash-budget__legend-label">Promedio diario</span>
+              <span class="mono dash-budget__proj-avg">{{ formatCOP(proj.avgDaily) }} · faltan {{ proj.daysLeft }} días</span>
+            </div>
+            @if (proj.projected > finance.budget() && finance.budget() > 0) {
+              <p class="dash-budget__warning">
+                <mat-icon class="icon-sm">warning</mat-icon>
+                Al ritmo actual superarás el presupuesto en {{ formatCOP(proj.projected - finance.budget()) }}
+              </p>
+            }
+          </div>
+        }
       </div>
-    }
 
-    <!-- Budget circle + Categories -->
-    <div class="dash-grid-1-2">
-
-      <div class="card card-p col-center">
-        <h3 class="card-title">Uso del Presupuesto</h3>
-        <app-circular-progress [percentage]="pct()" [spent]="spentFmt()" [remaining]="remainFmt()" />
-      </div>
-
+      <!-- Gastos por categoría -->
       <div class="card card-p">
         <h3 class="card-title">Gastos por Categoría</h3>
         @if (categoryStats().length === 0) {
@@ -131,47 +180,6 @@
       </div>
 
     </div>
-
-    <!-- Projection widget -->
-    @if (projection(); as proj) {
-      <div class="card card-p" style="margin-bottom:24px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-          <h3 class="card-title" style="margin:0;">Proyección del Mes</h3>
-          <span style="font-size:0.7rem;color:var(--text-dim);font-family:'DM Mono',monospace;">
-            {{ proj.pctComplete }}% del mes transcurrido
-          </span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;">
-          <div style="text-align:center;">
-            <p class="text-dim" style="font-size:0.68rem;margin:0 0 2px;">Gasto diario (prom.)</p>
-            <p class="mono" style="font-weight:700;color:#f87171;margin:0;font-size:0.9rem;">{{ formatCOP(proj.avgDaily) }}</p>
-          </div>
-          <div style="text-align:center;">
-            <p class="text-dim" style="font-size:0.68rem;margin:0 0 2px;">Proyección total</p>
-            <p class="mono" style="font-weight:700;margin:0;font-size:0.9rem;"
-              [style.color]="proj.projected <= finance.budget() ? '#4ade80' : '#f87171'">
-              {{ formatCOP(proj.projected) }}
-            </p>
-          </div>
-          <div style="text-align:center;">
-            <p class="text-dim" style="font-size:0.68rem;margin:0 0 2px;">Faltan {{ proj.daysLeft }} días</p>
-            <p class="mono" style="font-weight:700;color:var(--text-muted);margin:0;font-size:0.9rem;">{{ formatCOP(proj.remaining) }}</p>
-          </div>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" style="transition:width .4s;"
-            [style.width.%]="proj.pctComplete"
-            [style.background]="proj.projected <= finance.budget() ? 'linear-gradient(to right,#0d9488,#5eead4)' : 'linear-gradient(to right,#dc2626,#f87171)'">
-          </div>
-        </div>
-        @if (proj.projected > finance.budget() && finance.budget() > 0) {
-          <p style="font-size:0.7rem;color:#f87171;margin:6px 0 0;">
-            <mat-icon class="icon-sm" style="vertical-align:middle;">warning</mat-icon>
-            Al ritmo actual superarás el presupuesto en {{ formatCOP(proj.projected - finance.budget()) }}
-          </p>
-        }
-      </div>
-    }
 
     <!-- Daily chart + Recent transactions -->
     <div class="dash-grid-1-1">
@@ -248,8 +256,8 @@
             @for (t of recentTransactions(); track t.id) {
               @let cat = getCategory(t.categoryId);
               <div class="txn-row">
-                <div class="icon-box" [style.background]="(cat?.color ?? '#715a5a') + '22'">
-                  <mat-icon class="icon-sm" [style.color]="cat?.color ?? '#715a5a'">
+                <div class="icon-box" [style.background]="(cat?.color ?? '#8b8b96') + '22'">
+                  <mat-icon class="icon-sm" [style.color]="cat?.color ?? '#8b8b96'">
                     {{ cat?.icon ?? 'more_horiz' }}
                   </mat-icon>
                 </div>
