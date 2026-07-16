@@ -97,35 +97,36 @@
   <!-- Dialog -->
   <div class="modal-box user-dialog">
 
-    <!-- Dialog header -->
-    <div class="user-dialog__header">
-      <button class="modal-close" (click)="closeDialog()">
+    <!-- Dialog header: gradient banner + overlapping avatar -->
+    <div class="user-dialog__banner">
+      <button class="modal-close user-dialog__close" (click)="closeDialog()">
         <mat-icon>close</mat-icon>
       </button>
+    </div>
 
-      <!-- Avatar upload zone -->
-      <div class="avatar-upload-zone">
-        <label class="avatar-upload-circle" for="avatar-input" title="Cambiar foto">
-          @if (avatarPreview()) {
-            <img [src]="avatarPreview()!" alt="Avatar" class="avatar-upload-img" />
-          } @else {
-            <span class="avatar-upload-initials">{{ dialogInitials() }}</span>
-          }
-          <div class="avatar-upload-overlay">
-            <mat-icon>photo_camera</mat-icon>
-            <span>Cambiar</span>
-          </div>
-        </label>
-        <input id="avatar-input" type="file" accept="image/*" style="display:none"
-          (change)="pickAvatar($event)" />
-        <p class="avatar-upload-hint">
-          {{ isEditing ? 'Foto de perfil' : 'Foto (opcional)' }}
-        </p>
-      </div>
+    <div class="user-dialog__identity">
+      <label class="avatar-upload-circle user-dialog__avatar" for="avatar-input" title="Cambiar foto">
+        @if (avatarPreview()) {
+          <img [src]="avatarPreview()!" alt="Avatar" class="avatar-upload-img" />
+        } @else {
+          <span class="avatar-upload-initials">{{ dialogInitials() }}</span>
+        }
+        <div class="avatar-upload-overlay">
+          <mat-icon>photo_camera</mat-icon>
+          <span>Cambiar</span>
+        </div>
+      </label>
+      <input id="avatar-input" type="file" accept="image/*" style="display:none"
+        (change)="pickAvatar($event)" />
 
       <h2 class="user-dialog__title">
         {{ isEditing ? 'Editar usuario' : 'Nuevo usuario' }}
       </h2>
+      <p class="user-dialog__subtitle">
+        {{ isEditing
+          ? 'Modifica los datos de ' + (editingUser()?.name ?? '')
+          : 'Completa los datos para crear la cuenta' }}
+      </p>
     </div>
 
     <!-- Form -->
@@ -137,7 +138,8 @@
             <mat-icon class="label-icon">person</mat-icon>
             Nombre
           </label>
-          <input class="input-field" type="text" formControlName="name" placeholder="Nombre completo" />
+          <input class="input-field" type="text" formControlName="name" placeholder="Nombre completo"
+            [class.input-field--error]="form.get('name')?.invalid && form.get('name')?.touched" />
           @if (form.get('name')?.invalid && form.get('name')?.touched) {
             <p class="form-error">El nombre es requerido</p>
           }
@@ -148,44 +150,54 @@
             <mat-icon class="label-icon">mail</mat-icon>
             Correo electrónico
           </label>
-          <input class="input-field" type="email" formControlName="email" placeholder="correo@ejemplo.com" />
+          <input class="input-field" type="email" formControlName="email" placeholder="correo@ejemplo.com"
+            [class.input-field--error]="form.get('email')?.invalid && form.get('email')?.touched" />
           @if (form.get('email')?.invalid && form.get('email')?.touched) {
             <p class="form-error">Ingresa un correo válido</p>
           }
         </div>
       </div>
 
-      <div class="dialog-row">
-        <div class="form-group">
-          <label class="form-label">
-            <mat-icon class="label-icon">shield</mat-icon>
-            Rol
-          </label>
-          <div class="role-selector">
-            <label class="role-option" [class.role-option--active]="form.get('role')?.value === 'user'">
+      <div class="form-group">
+        <label class="form-label">
+          <mat-icon class="label-icon">shield</mat-icon>
+          Rol
+        </label>
+        <div class="role-selector">
+            <label class="role-card" [class.role-card--active]="form.get('role')?.value === 'user'">
               <input type="radio" formControlName="role" value="user" />
-              <mat-icon>person</mat-icon>
-              <span>Usuario</span>
+              <mat-icon class="role-card__icon">person</mat-icon>
+              <span class="role-card__name">Usuario</span>
+              <span class="role-card__desc">Gestiona solo sus finanzas</span>
+              <mat-icon class="role-card__check">check_circle</mat-icon>
             </label>
-            <label class="role-option role-option--admin" [class.role-option--active]="form.get('role')?.value === 'admin'">
+            <label class="role-card role-card--admin" [class.role-card--active]="form.get('role')?.value === 'admin'">
               <input type="radio" formControlName="role" value="admin" />
-              <mat-icon>admin_panel_settings</mat-icon>
-              <span>Admin</span>
+              <mat-icon class="role-card__icon">admin_panel_settings</mat-icon>
+              <span class="role-card__name">Admin</span>
+              <span class="role-card__desc">Gestiona usuarios y sitio</span>
+              <mat-icon class="role-card__check">check_circle</mat-icon>
             </label>
-          </div>
         </div>
+      </div>
 
-        <div class="form-group">
-          <label class="form-label">
-            <mat-icon class="label-icon">lock</mat-icon>
-            {{ isEditing ? 'Nueva contraseña (opcional)' : 'Contraseña' }}
-          </label>
-          <input class="input-field" type="password" formControlName="password"
+      <div class="form-group">
+        <label class="form-label">
+          <mat-icon class="label-icon">lock</mat-icon>
+          {{ isEditing ? 'Nueva contraseña (opcional)' : 'Contraseña' }}
+        </label>
+        <div class="input-password">
+          <input class="input-field" [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+            [class.input-field--error]="form.get('password')?.invalid && form.get('password')?.touched"
             [placeholder]="isEditing ? 'Dejar en blanco para no cambiar' : 'Mínimo 6 caracteres'" />
-          @if (form.get('password')?.invalid && form.get('password')?.touched) {
-            <p class="form-error">Mínimo 6 caracteres</p>
-          }
+          <button type="button" class="input-password__toggle" (click)="showPassword.set(!showPassword())"
+            [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+            <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
         </div>
+        @if (form.get('password')?.invalid && form.get('password')?.touched) {
+          <p class="form-error">Mínimo 6 caracteres</p>
+        }
       </div>
 
       <div class="user-dialog__footer">

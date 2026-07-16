@@ -30,6 +30,7 @@ export class AdminUsersComponent implements OnInit {
   readonly avatarFile = signal<File | null>(null);
   readonly uploadingAvatar = signal(false);
   readonly togglingTour = signal<string | null>(null);
+  readonly showPassword = signal(false);
 
   form = this.fb.group({
     name:     ['', Validators.required],
@@ -62,6 +63,7 @@ export class AdminUsersComponent implements OnInit {
     this.editingUser.set(null);
     this.avatarPreview.set(null);
     this.avatarFile.set(null);
+    this.showPassword.set(false);
     this.form.reset({ name: '', email: '', role: 'user', password: '' });
     this.form.get('password')!.setValidators([Validators.required, Validators.minLength(6)]);
     this.form.get('password')!.updateValueAndValidity();
@@ -71,6 +73,7 @@ export class AdminUsersComponent implements OnInit {
   openEdit(user: AuthUser): void {
     this.editingUser.set(user);
     this.avatarFile.set(null);
+    this.showPassword.set(false);
     this.avatarPreview.set(user.avatarUrl ? `${API}${user.avatarUrl.split('?')[0]}` : null);
     this.form.reset({ name: user.name, email: user.email, role: user.role, password: '' });
     this.form.get('password')!.clearValidators();
