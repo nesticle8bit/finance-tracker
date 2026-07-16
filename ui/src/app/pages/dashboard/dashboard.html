@@ -67,7 +67,14 @@
           <p class="dash-balance__value" [class.dash-balance__value--neg]="!balancePos()">
             {{ balanceFmt() }}
           </p>
-          <p class="dash-balance__hint">{{ balancePos() ? 'Ahorro' : 'Déficit' }} · ingresos − gastos</p>
+          @if (balanceDelta(); as delta) {
+            <p class="dash-delta" [class.dash-delta--down]="!delta.up">
+              <mat-icon class="dash-delta__icon">{{ delta.up ? 'north_east' : 'south_east' }}</mat-icon>
+              {{ delta.fmt }} vs mes anterior
+            </p>
+          } @else {
+            <p class="dash-balance__hint">{{ balancePos() ? 'Ahorro' : 'Déficit' }} · ingresos − gastos</p>
+          }
         </div>
 
         <div class="dash-balance__stats">
@@ -119,10 +126,11 @@
           <span class="dash-budget__pct-label">utilizado</span>
         </div>
 
-        <div class="progress-track" style="height:10px;">
-          <div class="progress-fill" [style.width.%]="pct()"
-            [style.background]="pct() > 90 ? '#ef4444' : pct() > 70 ? '#f59e0b' : 'linear-gradient(to right,#0d9488,#2fbfae)'">
-          </div>
+        <div class="dash-ticks" role="img"
+          [attr.aria-label]="'Presupuesto utilizado: ' + (pct() | number: '1.0-0') + '%'">
+          @for (tick of budgetTicks(); track $index) {
+            <span class="dash-tick" [style.background]="tick.color"></span>
+          }
         </div>
 
         <div class="dash-budget__legend">
@@ -193,39 +201,38 @@
               {{ monthLabel() }}
             </p>
           </div>
-          @if (hasDailyData()) {
-            <span class="dash-chart-total">{{ expenseFmt() }}</span>
-          }
+          <div style="display:flex;align-items:center;gap:10px;">
+            @if (expenseDelta(); as delta) {
+              <span class="dash-delta" [class.dash-delta--down]="delta.up"
+                title="Comparado con el mismo día del mes anterior">
+                <mat-icon class="dash-delta__icon">{{ delta.up ? 'north_east' : 'south_east' }}</mat-icon>
+                {{ delta.pct | number: '1.0-1' }}%
+              </span>
+            }
+            @if (hasDailyData()) {
+              <span class="dash-chart-total">{{ expenseFmt() }}</span>
+            }
+          </div>
         </div>
 
         @if (!hasDailyData()) {
           <div class="empty-chart" style="display:flex;flex-direction:column;align-items:center;gap:8px;">
-            <mat-icon style="font-size:2rem;color:var(--text-dim);">bar_chart</mat-icon>
+            <mat-icon style="font-size:2rem;color:var(--text-dim);">show_chart</mat-icon>
             Sin gastos registrados
           </div>
         } @else {
-          <div class="daily-chart">
-            @for (bar of dailyBars(); track bar.day) {
-              <div class="daily-bar-col"
-                [title]="'Día ' + bar.day + (bar.amount ? ': ' + formatCOP(bar.amount) : ': sin gastos')">
-                <div class="daily-bar-track">
-                  <div class="daily-bar"
-                    [class.daily-bar--today]="bar.isToday"
-                    [style.height.px]="bar.heightPx"
-                    [style.background]="bar.isToday
-                      ? 'linear-gradient(to top,#0d9488,#2fbfae)'
-                      : bar.amount > 0 ? 'rgba(20,184,166,0.28)' : 'var(--surface-3)'">
-                  </div>
-                </div>
-              </div>
-            }
+          <div class="dash-line-chart">
+            <canvas baseChart type="line" [data]="chartData()" [options]="chartOptions"></canvas>
           </div>
-          <div class="daily-labels">
-            @for (bar of dailyBars(); track bar.day) {
-              <div class="daily-label" [style.color]="bar.isToday ? '#0d9488' : ''">
-                {{ bar.day }}
-              </div>
-            }
+          <div class="dash-chart-legend">
+            <span class="dash-chart-legend__item">
+              <span class="dash-chart-legend__dot" style="background:#0d9488;"></span>
+              Este mes
+            </span>
+            <span class="dash-chart-legend__item">
+              <span class="dash-chart-legend__dot" style="background:rgba(23,32,46,0.25);"></span>
+              Mes anterior
+            </span>
           </div>
         }
       </div>

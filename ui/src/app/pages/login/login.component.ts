@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit {
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
+    rememberMe: [false],
   });
 
   async onSubmit(): Promise<void> {
@@ -62,6 +63,7 @@ export class LoginComponent implements OnInit {
       await this.auth.login({
         email: this.form.value.email!,
         password: this.form.value.password!,
+        rememberMe: this.form.value.rememberMe ?? false,
       });
       this.toast.success('Bienvenido');
     } catch (err: any) {

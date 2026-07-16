@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
 
-function signToken(user) {
+function signToken(user, rememberMe = false) {
   return jwt.sign(
     { id: user.Id, email: user.Email, name: user.Name, role: user.Role },
     process.env.JWT_SECRET,
-    { expiresIn: '7d', issuer: process.env.JWT_ISSUER, audience: process.env.JWT_AUDIENCE }
+    { expiresIn: rememberMe ? '365d' : '30d', issuer: process.env.JWT_ISSUER, audience: process.env.JWT_AUDIENCE }
   );
 }
 

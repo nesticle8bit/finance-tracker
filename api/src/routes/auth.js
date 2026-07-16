@@ -47,7 +47,7 @@ router.post('/register', async (req, res) => {
 
 // POST /api/auth/login
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, rememberMe } = req.body;
   if (!email || !password) return fail(res, 'Email and password are required');
 
   try {
@@ -62,7 +62,7 @@ router.post('/login', async (req, res) => {
     await pool.query(
       `UPDATE authentications.users SET "LastSeenAt" = NOW() WHERE "Id" = $1`, [user.Id]
     );
-    return ok(res, signToken(user));
+    return ok(res, signToken(user, rememberMe === true));
   } catch (e) {
     return fail(res, e.message, 500);
   }
