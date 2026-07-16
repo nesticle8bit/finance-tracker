@@ -10,7 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
   template: `
     <nav class="mobile-bottom-nav">
       @for (item of leftItems; track item.route) {
-        <a [routerLink]="item.route" routerLinkActive="active-nav" class="mobile-nav-item">
+        <a [routerLink]="item.route" routerLinkActive="active-nav" class="mobile-nav-item"
+          [attr.data-tour]="'nav-' + item.route.slice(1)">
           <mat-icon>{{ item.icon }}</mat-icon>
           <span>{{ item.label }}</span>
         </a>
@@ -18,13 +19,14 @@ import { MatDialog } from '@angular/material/dialog';
 
       <!-- Quick add transaction -->
       <div class="mobile-nav-fab-slot">
-        <button class="mobile-nav-fab" (click)="openAdd()" aria-label="Nueva transacción">
+        <button class="mobile-nav-fab" data-tour="add-txn" (click)="openAdd()" aria-label="Nueva transacción">
           <mat-icon>add</mat-icon>
         </button>
       </div>
 
       @for (item of rightItems; track item.route) {
-        <a [routerLink]="item.route" routerLinkActive="active-nav" class="mobile-nav-item">
+        <a [routerLink]="item.route" routerLinkActive="active-nav" class="mobile-nav-item"
+          [attr.data-tour]="'nav-' + item.route.slice(1)">
           <mat-icon>{{ item.icon }}</mat-icon>
           <span>{{ item.label }}</span>
         </a>

@@ -26,6 +26,7 @@
             <th>Usuario</th>
             <th>Correo</th>
             <th>Rol</th>
+            <th>Recorrido</th>
             <th>Últ. conexión</th>
             <th></th>
           </tr>
@@ -49,6 +50,20 @@
               <td>
                 <span class="role-badge" [class.role-badge--admin]="user.role === 'admin'">
                   {{ user.role === 'admin' ? 'Admin' : 'Usuario' }}
+                </span>
+              </td>
+              <td>
+                <button class="tour-toggle"
+                  [class.tour-toggle--on]="user.tourEnabled !== false"
+                  [disabled]="togglingTour() === user.id"
+                  (click)="toggleTour(user)"
+                  [title]="user.tourEnabled !== false
+                    ? (user.tourCompletedAt ? 'Completado — clic para reiniciarlo' : 'Pendiente — clic para deshabilitar')
+                    : 'Deshabilitado — clic para habilitar'">
+                  <span class="tour-toggle__knob"></span>
+                </button>
+                <span class="tour-status mono">
+                  {{ user.tourEnabled === false ? 'off' : (user.tourCompletedAt ? 'visto' : 'pendiente') }}
                 </span>
               </td>
               <td class="text-dim mono" style="font-size:0.78rem;">

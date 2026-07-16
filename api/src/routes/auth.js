@@ -72,11 +72,23 @@ router.post('/login', async (req, res) => {
 router.get('/me', auth, async (req, res) => {
   try {
     const { rows } = await pool.query(
-      `SELECT "Id","Email","Name","Role","CreatedAt","LastSeenAt","AvatarUrl" FROM authentications.users WHERE "Id" = $1`,
+      `SELECT "Id","Email","Name","Role","CreatedAt","LastSeenAt","AvatarUrl","TourEnabled","TourCompletedAt" FROM authentications.users WHERE "Id" = $1`,
       [req.user.id]
     );
     if (!rows[0]) return fail(res, 'User not found', 404);
     return ok(res, rows[0]);
+  } catch (e) {
+    return fail(res, e.message, 500);
+  }
+});
+
+// POST /api/auth/tour-complete — marks the onboarding tour as done for the current user
+router.post('/tour-complete', auth, async (req, res) => {
+  try {
+    await pool.query(
+      `UPDATE authentications.users SET "TourCompletedAt" = NOW() WHERE "Id" = $1`, [req.user.id]
+    );
+    return ok(res, null);
   } catch (e) {
     return fail(res, e.message, 500);
   }

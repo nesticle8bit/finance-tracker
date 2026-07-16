@@ -49,6 +49,12 @@ export class AdminService {
     ).then(r => r.data!);
   }
 
+  setTourEnabled(userId: string, enabled: boolean): Promise<AuthUser> {
+    return firstValueFrom(
+      this.http.put<ApiResponse<AuthUser>>(`${API}/api/admin/users/${userId}/tour`, { enabled })
+    ).then(r => r.data!);
+  }
+
   uploadAvatar(userId: string, file: File): Promise<AuthUser> {
     const form = new FormData();
     form.append('avatar', file);

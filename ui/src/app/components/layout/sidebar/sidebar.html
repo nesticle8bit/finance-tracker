@@ -26,7 +26,8 @@
     <p class="nav-section-label">Principal</p>
 
     @for (item of mainItems; track item.route) {
-      <a [routerLink]="item.route" routerLinkActive="active-nav" class="nav-item">
+      <a [routerLink]="item.route" routerLinkActive="active-nav" class="nav-item"
+        [attr.data-tour]="'nav-' + item.route.slice(1)">
         <mat-icon>{{ item.icon }}</mat-icon>
         {{ item.label }}
       </a>
@@ -34,7 +35,7 @@
 
     <p class="nav-section-label" style="margin-top:24px;">Configuración</p>
 
-    <a [routerLink]="settingsItem.route" routerLinkActive="active-nav" class="nav-item">
+    <a [routerLink]="settingsItem.route" routerLinkActive="active-nav" class="nav-item" data-tour="nav-settings">
       <mat-icon>{{ settingsItem.icon }}</mat-icon>
       {{ settingsItem.label }}
     </a>

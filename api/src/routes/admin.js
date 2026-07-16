@@ -21,7 +21,7 @@ const upload = multer({
     file.mimetype.startsWith('image/') ? cb(null, true) : cb(new Error('Solo se permiten imágenes')),
 });
 
-const USER_COLS = `"Id","Email","Name","Role","CreatedAt","LastSeenAt","AvatarUrl"`;
+const USER_COLS = `"Id","Email","Name","Role","CreatedAt","LastSeenAt","AvatarUrl","TourEnabled","TourCompletedAt"`;
 
 // GET /api/admin/users
 router.get('/users', async (req, res) => {
@@ -97,6 +97,26 @@ router.put('/users/:id', async (req, res) => {
     }
 
     const { rows, rowCount } = await pool.query(query, params);
+    if (rowCount === 0) return fail(res, 'User not found', 404);
+    return ok(res, rows[0]);
+  } catch (e) {
+    return fail(res, e.message, 500);
+  }
+});
+
+// PUT /api/admin/users/:id/tour — enable (and reset) or disable the onboarding tour
+router.put('/users/:id/tour', async (req, res) => {
+  const { enabled } = req.body;
+  if (typeof enabled !== 'boolean') return fail(res, 'enabled (boolean) is required');
+
+  try {
+    // Enabling resets completion so the tour shows again on next login
+    const { rows, rowCount } = await pool.query(
+      enabled
+        ? `UPDATE authentications.users SET "TourEnabled"=TRUE, "TourCompletedAt"=NULL WHERE "Id"=$1 RETURNING ${USER_COLS}`
+        : `UPDATE authentications.users SET "TourEnabled"=FALSE WHERE "Id"=$1 RETURNING ${USER_COLS}`,
+      [req.params.id]
+    );
     if (rowCount === 0) return fail(res, 'User not found', 404);
     return ok(res, rows[0]);
   } catch (e) {

@@ -17,6 +17,8 @@ export interface AuthUser {
   role: 'user' | 'admin';
   lastSeenAt?: string;
   avatarUrl?: string;
+  tourEnabled?: boolean;
+  tourCompletedAt?: string | null;
 }
 
 export interface UpdateProfileRequest {

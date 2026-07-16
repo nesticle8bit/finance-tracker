@@ -16,7 +16,9 @@ async function initDb() {
         "PasswordHash" TEXT NOT NULL,
         "Role"         TEXT NOT NULL DEFAULT 'user',
         "CreatedAt"    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-        "LastSeenAt"   TIMESTAMPTZ
+        "LastSeenAt"   TIMESTAMPTZ,
+        "TourEnabled"     BOOLEAN NOT NULL DEFAULT TRUE,
+        "TourCompletedAt" TIMESTAMPTZ
       );
 
       CREATE TABLE IF NOT EXISTS parameters.categories (
@@ -128,7 +130,9 @@ async function initDb() {
       ALTER TABLE authentications.users
         ADD COLUMN IF NOT EXISTS "Role"       TEXT NOT NULL DEFAULT 'user',
         ADD COLUMN IF NOT EXISTS "LastSeenAt" TIMESTAMPTZ,
-        ADD COLUMN IF NOT EXISTS "AvatarUrl"  TEXT;
+        ADD COLUMN IF NOT EXISTS "AvatarUrl"  TEXT,
+        ADD COLUMN IF NOT EXISTS "TourEnabled"     BOOLEAN NOT NULL DEFAULT TRUE,
+        ADD COLUMN IF NOT EXISTS "TourCompletedAt" TIMESTAMPTZ;
     `);
 
     console.log('DB schema ready');

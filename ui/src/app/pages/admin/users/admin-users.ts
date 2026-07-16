@@ -29,6 +29,7 @@ export class AdminUsersComponent implements OnInit {
   readonly avatarPreview = signal<string | null>(null);
   readonly avatarFile = signal<File | null>(null);
   readonly uploadingAvatar = signal(false);
+  readonly togglingTour = signal<string | null>(null);
 
   form = this.fb.group({
     name:     ['', Validators.required],
@@ -139,6 +140,20 @@ export class AdminUsersComponent implements OnInit {
       this.toast.error(e?.error?.errors?.[0] ?? 'Error guardando usuario');
     } finally {
       this.saving.set(false);
+    }
+  }
+
+  async toggleTour(user: AuthUser): Promise<void> {
+    const enable = user.tourEnabled === false;
+    this.togglingTour.set(user.id);
+    try {
+      const updated = await this.adminService.setTourEnabled(user.id, enable);
+      this.users.update(list => list.map(u => (u.id === user.id ? updated : u)));
+      this.toast.success(enable ? 'Recorrido habilitado (se mostrará de nuevo)' : 'Recorrido deshabilitado');
+    } catch {
+      this.toast.error('Error actualizando el recorrido');
+    } finally {
+      this.togglingTour.set(null);
     }
   }
 

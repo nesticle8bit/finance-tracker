@@ -1312,6 +1312,160 @@ mat-icon.icon-lg {
 
 //  23. Dashboard charts 
 
+//  Onboarding tour
+.tour-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 990;
+
+  // when there's a spotlight, the dark layer comes from its box-shadow
+  &--dim {
+    background: rgba(10, 14, 20, 0.55);
+    backdrop-filter: blur(2px);
+  }
+}
+
+.tour-spotlight {
+  position: fixed;
+  z-index: 991;
+  border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(10, 14, 20, 0.55);
+  border: 2px solid var(--brand-400);
+  pointer-events: none;
+  transition: top .3s ease, left .3s ease, width .3s ease, height .3s ease;
+}
+
+.tour-card {
+  position: fixed;
+  z-index: 992;
+  width: min(320px, calc(100vw - 32px));
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  transition: top .3s ease, left .3s ease;
+}
+
+.tour-card__step {
+  font-size: 0.68rem;
+  color: var(--brand-600);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.tour-card__title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: var(--text);
+}
+
+.tour-card__text {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin: 0 0 14px;
+}
+
+.tour-card__dots {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.tour-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--surface-3);
+  transition: background .2s;
+
+  &--active {
+    background: var(--brand-500);
+  }
+}
+
+.tour-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tour-btn-skip {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  padding: 6px 4px;
+
+  &:hover { color: var(--text-muted); }
+}
+
+.tour-btn-ghost {
+  background: none;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 7px 12px;
+
+  &:hover { background: var(--surface-hover); }
+}
+
+.tour-btn-next {
+  background: linear-gradient(120deg, #0f766e, #0d9488);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  padding: 7px 16px;
+
+  &:hover { filter: brightness(1.08); }
+}
+
+//  Admin: tour toggle
+.tour-toggle {
+  position: relative;
+  width: 34px;
+  height: 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: var(--surface-3);
+  transition: background .2s;
+  vertical-align: middle;
+
+  &--on { background: var(--brand-500); }
+  &:disabled { opacity: 0.5; cursor: wait; }
+}
+
+.tour-toggle__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  transition: transform .2s;
+
+  .tour-toggle--on & { transform: translateX(14px); }
+}
+
+.tour-status {
+  margin-left: 8px;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+}
+
 //  Spending line chart (chart.js)
 .dash-line-chart {
   position: relative;
