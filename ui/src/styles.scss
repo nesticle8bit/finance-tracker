@@ -389,9 +389,14 @@ a { color: inherit; text-decoration: none; }
   padding: 28px;
   width: calc(100% - 32px);
   max-width: 480px;
-  animation: slideUp .25s ease;
+  max-height: 90dvh;
+  overflow-y: auto;
+  // Centering uses transform, so the entry animation must keep the -50% offsets —
+  // animating plain translateY here would drop the centering mid-animation (visible jump).
+  animation: modalIn .25s ease;
 
   @media (max-width: 639px) {
+    animation: slideUp .25s ease;
     top: auto;
     bottom: 0;
     left: 0;
@@ -520,6 +525,23 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
+// Material dialogs (transparent-dialog panels): cap height on short screens,
+// dock as bottom sheet on mobile
+.cdk-overlay-pane.transparent-dialog {
+  max-height: 92dvh;
+}
+
+@media (max-width: 639px) {
+  .cdk-global-overlay-wrapper:has(.transparent-dialog) {
+    align-items: flex-end !important;
+  }
+
+  .cdk-overlay-pane.transparent-dialog {
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
+}
+
 .cdk-overlay-dark-backdrop {
   background: rgba(0, 0, 0, 0.55) !important;
   backdrop-filter: blur(8px);
@@ -549,6 +571,19 @@ a { color: inherit; text-decoration: none; }
 }
 
 //  10. Keyframes 
+// Entry animation for transform-centered dialogs (keeps the -50% centering offsets)
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 16px));
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
 @keyframes slideUp {
   from {
     opacity: 0;
@@ -2318,6 +2353,8 @@ mat-icon.icon-lg {
   padding: 32px;
   width: 640px;
   max-width: calc(100vw - 32px);
+  max-height: 90dvh;
+  overflow-y: auto;
   animation: slideUp .25s ease;
 
   @media (max-width: 639px) {
